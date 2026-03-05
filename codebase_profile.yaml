@@ -1,0 +1,17 @@
+base_theme: custom
+build_tools:
+  - none
+package_manager: npm
+custom_patterns:
+  - "Custom sections: custom-section.liquid"
+important_paths:
+  - layout/theme.liquid
+  - config/settings_schema.json
+  - config/settings_data.json
+  - assets/
+  - sections/
+  - templates/
+  - locales/
+repo_url: https://github.com/dev-nitinrai/Base
+branch: main
+commit: 05752e723ea36a10bd2668bb7f6e396c60c24a9c
