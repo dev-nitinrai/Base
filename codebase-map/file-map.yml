@@ -1314,38 +1314,40 @@ files:
       'footer' exists in Shopify admin navigation; ensure color_scheme scheme-2 is defined in theme settings; use
       Shopify theme editor for safe modifications to avoid override issues.
   - file: sections/footer.liquid
-    responsibility: Renders the theme footer with customizable blocks for text, link lists, social icons, and brand
-      information, plus bottom content with payment icons and localization options.
+    responsibility: Renders the site footer with configurable blocks including navigation menus, social icons, brand
+      information, and newsletter signup
     owns:
-      - Footer layout structure with top content blocks and bottom wrapper
-      - Four block types (text, link_list, social_icons, brand_information)
-      - Social media icons display logic checking if any social links are configured
-      - Brand information rendering (image, headline, description)
-      - Payment icons display from shop payment methods
-      - Country/language localization selectors
-      - Copyright notice with shop name and current year
-      - Footer color scheme and padding settings
-      - Empty state detection for brand_information blocks
-    depends_on:
-      js:
-        - details-disclosure.js (for localization dropdowns)
-      snippets:
-        - component-social-icons (social media icon rendering)
-        - component-localization-form (country selector)
-        - component-language-localization (language selector)
-        - icon-caret (dropdown arrow icons)
-      sections: []
-      assets:
+      - Footer block types (text, link_list, social_icons, brand_information)
+      - Footer layout and grid structure
+      - Footer background gradient styling
+      - Payment icon display
+      - Copyright and policy links rendering
+      - Email signup form integration
+    dependencies:
+      css:
         - section-footer.css
+      snippets:
+        - component-social-icons
+        - component-newsletter
+        - component-list-payment
+      settings:
+        - social media links (social_facebook_link, social_instagram_link, etc.)
+        - brand_image, brand_headline, brand_description
+        - animations_reveal_on_scroll
+        - section.settings.color_scheme
+        - section.settings.show_social
+        - section.settings.newsletter_enable
+        - section.settings.enable_country_selector
+        - section.settings.enable_language_selector
+        - section.settings.payment_enable
     common_mistakes:
-      - Forgetting that social icons depend on global theme settings (settings.social_*_link), not section settings
-      - Not handling the only_empty_brand edge case where a single empty brand block should hide the top content
-      - Breaking the localization forms which require specific form structure for Shopify's native localization
-      - Modifying block.shopify_attributes placement which is required for theme editor functionality
-      - Hardcoding the background color style instead of using section.settings.color_scheme
-    fix_guidance: Check settings/schema.json for social_*_link settings if icons don't appear, verify component-social-icons
-      snippet exists, ensure localization forms match Shopify's required structure, and check that section schema
-      defines all block types referenced in the liquid logic
+      - Modifying footer blocks without checking section.blocks array structure
+      - Breaking conditional logic for has_social_icons or brand_empty flags
+      - Not handling newsletter snippet dependencies when newsletter_enable is true
+      - Ignoring shopify_attributes on block wrappers
+    fix_guidance: Check section.blocks loop structure first, verify snippet render calls are properly formatted, ensure
+      conditional flags (has_social_icons, brand_empty, only_empty_brand) logic is intact, verify footer-group.json
+      schema compatibility
   - file: sections/header-group.json
     responsibility: Defines the header group section configuration containing announcement bar and main header sections in a
       combined top-of-page group.
@@ -5728,34 +5730,30 @@ files:
       element with id featured-products-${sectionId} exists in sections/featured-products.liquid; verify Swiper library
       is loaded before this script
   - file: assets/section-footer.css
-    responsibility: Styles the footer section including layout, color overrides, newsletter forms, localization, social
-      links, and copyright areas with responsive design patterns.
+    responsibility: Styles the footer section with a dark blue gradient background, white text/icons, responsive layouts,
+      newsletter forms, social links, localization elements, and payment icons.
     owns:
-      - Footer color scheme overrides forcing white text on all footer elements
-      - Footer layout structure with top/bottom content areas and column arrangements
-      - Newsletter signup form styling with max-width constraints
-      - Social media link list presentation with rounded borders
-      - Footer localization dropdown positioning and styling
-      - Copyright and policy links formatting
-      - Footer block image alignment (left/center/right)
-      - Brand info section layout and typography
+      - Footer color overrides forcing white text and icons on dark background
+      - Footer layout grid and column positioning
+      - Newsletter subscription form styling
+      - Social media icon links and payment method icons with brightness/invert filters
+      - Localization dropdown positioning and styling
+      - Copyright and bottom content layout
+      - Mobile responsive breakpoints for footer blocks
+      - Footer divider borders with transparency
     depends_on:
       js: []
       snippets: []
       sections:
         - sections/footer.liquid
     common_mistakes:
-      - Modifying footer text colors without checking the aggressive !important color overrides at the top that force
-        all footer text to white
-      - Adding new footer elements without considering the color-scheme-1 conditional border logic
-      - Adjusting footer spacing without accounting for both content-top (56px padding) and content-bottom (2rem padding
-        with border) areas
-      - Changing newsletter form width without respecting the 36rem max-width constraint on
-        newsletter-form__field-wrapper
-      - Missing that localization dropdown uses absolute positioning relative to footer__localization container
-    fix_guidance: Check sections/footer.liquid for HTML structure; verify color overrides aren't conflicting with theme
-      color variables; ensure responsive breakpoints align with theme's global media query strategy; review border-top
-      logic for color-scheme-1 class toggle.
+      - Removing !important flags breaks color overrides for white-on-dark theme
+      - Modifying SVG filter (brightness/invert) breaks payment icon visibility
+      - Changing localization-list position breaks dropdown behavior
+      - Removing rgba transparency on borders conflicts with dark gradient background
+      - Not preserving .footer-block:only-child centering logic breaks single-column layouts
+    fix_guidance: Check sections/footer.liquid for HTML structure and class names; verify color-scheme-1 class usage; test
+      payment icons with filter changes; validate newsletter form field-wrapper max-width doesn't break mobile layouts.
   - file: assets/section-hero-v2.css
     responsibility: Styles the hero-v2 section with a two-column layout featuring a main hero image with overlay content and
       two promotional blocks

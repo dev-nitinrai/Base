@@ -1,4 +1,4 @@
-/* Footer Color Overrides */
+/* Footer Color Overrides — dark blue gradient background */
 .footer,
 .footer *,
 .footer a,
@@ -12,6 +12,28 @@
 .footer .copyright__content a,
 .footer .footer__localization h2 {
   color: #ffffff !important;
+}
+
+/* Make SVG icons (social + payment) appear white */
+.footer .icon,
+.footer svg {
+  color: #ffffff !important;
+  fill: #ffffff !important;
+}
+
+/* Payment type SVGs often use hardcoded fills — invert to white */
+.footer .list-payment__item svg,
+.footer .list-payment__item img {
+  filter: brightness(0) invert(1);
+}
+
+/* Soften divider lines to suit dark background */
+.footer__content-bottom {
+  border-top-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.footer {
+  border-top-color: rgba(255, 255, 255, 0.15) !important;
 }
 
 /* Base Styles */

@@ -10,6 +10,10 @@
 
 ---
 
+${shopifyGuidelines}
+
+---
+
 ## Feature → File Index
 
 
@@ -159,7 +163,7 @@
 - **sections/featured-collections.liquid**: Displays a grid of featured collection cards with customizable images, titles, and styling options
 - **sections/featured-products.liquid**: Renders a swipeable carousel of manually selected featured products with customizable headings, alignment, and view-all link
 - **sections/footer-group.json**: Defines the footer section group configuration for the theme, specifying which footer section and blocks are included in the site footer across all pages.
-- **sections/footer.liquid**: Renders the theme footer with customizable blocks for text, link lists, social icons, and brand information, plus bottom content with payment icons and localization options.
+- **sections/footer.liquid**: Renders the site footer with configurable blocks including navigation menus, social icons, brand information, and newsletter signup
 - **sections/header-group.json**: Defines the header group section configuration containing announcement bar and main header sections in a combined top-of-page group.
 - **sections/header.liquid**: Manages the site header including navigation, logo, search, cart icon, and sticky header behavior
 - **sections/hello-world.liquid**: Displays a welcome/introduction section for the Skeleton theme with educational content about Shopify theme development
@@ -240,7 +244,7 @@
 - **assets/section-featured-collections.css**: Styles the featured collections section displaying collection cards in a horizontal grid with image and text layouts
 - **assets/section-featured-products.css**: Styles the featured products section including grid layout, product cards, badges, and responsive heading/content alignment.
 - **assets/section-featured-products.js**: Initializes and manages the Swiper carousel for the featured products section with responsive breakpoints and navigation controls
-- **assets/section-footer.css**: Styles the footer section including layout, color overrides, newsletter forms, localization, social links, and copyright areas with responsive design patterns.
+- **assets/section-footer.css**: Styles the footer section with a dark blue gradient background, white text/icons, responsive layouts, newsletter forms, social links, localization elements, and payment icons.
 - **assets/section-hero-v2.css**: Styles the hero-v2 section with a two-column layout featuring a main hero image with overlay content and two promotional blocks
 - **assets/section-hero.css**: Styles the hero banner section with background media, content positioning, overlays, and responsive layouts
 - **assets/section-link-readme.css**: Styles the link-readme section component with a centered button layout and responsive behavior
