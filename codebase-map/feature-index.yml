@@ -6,10 +6,9 @@ cart_drawer:
   secondary_files:
     - snippets/component-cart-discount.liquid
     - assets/component-cart-discount.js
-    - assets/liquid-ajax-cart-v2.1.1.js
-    - layout/theme.liquid
+    - assets/component-product-price.css
   do_not_edit:
-    - assets/liquid-ajax-cart-v2.1.1.js
+    - assets/critical.css
   entry_point: snippets/component-cart-drawer.liquid
 product_form:
   primary_files:
@@ -20,9 +19,8 @@ product_form:
     - assets/component-selling-plans.js
     - snippets/component-product-price.liquid
     - assets/component-product-price.css
-    - assets/liquid-ajax-cart-v2.1.1.js
   do_not_edit:
-    - assets/liquid-ajax-cart-v2.1.1.js
+    - assets/shopify.js
   entry_point: sections/product.liquid
 collection_grid:
   primary_files:
@@ -33,24 +31,24 @@ collection_grid:
     - snippets/component-product-card.liquid
     - assets/component-product-card.css
     - assets/component-product-card.js
+    - assets/component-infinite-scroll.js
     - snippets/component-pagination.liquid
     - assets/component-pagination.css
-    - assets/component-infinite-scroll.js
-  do_not_edit: []
+  do_not_edit:
+    - templates/collection.json
   entry_point: sections/collection.liquid
 header_navigation:
   primary_files:
     - sections/header.liquid
-    - assets/section-footer.css
+    - snippets/component-nav-megamenu.liquid
+    - snippets/component-nav-dropdown.liquid
   secondary_files:
     - snippets/component-nav-drawer.liquid
-    - snippets/component-nav-dropdown.liquid
-    - snippets/component-nav-megamenu.liquid
-    - snippets/component-localization-form.liquid
     - assets/component-localization-form.js
+    - snippets/component-localization-form.liquid
     - sections/header-group.json
   do_not_edit:
-    - assets/alpinejs@3.14.8.min.js
+    - layout/theme.liquid
   entry_point: sections/header.liquid
 predictive_search:
   primary_files:
@@ -59,9 +57,10 @@ predictive_search:
     - assets/component-predictive-search.css
   secondary_files:
     - sections/predictive-results.liquid
-    - sections/search.liquid
-    - assets/section-search.css
-  do_not_edit: []
+    - snippets/component-product-card.liquid
+    - assets/component-product-card.css
+  do_not_edit:
+    - assets/theme.js
   entry_point: snippets/component-predictive-search.liquid
 quick_add:
   primary_files:
@@ -70,9 +69,10 @@ quick_add:
   secondary_files:
     - snippets/component-product-card.liquid
     - assets/component-modal-opener.js
-    - assets/liquid-ajax-cart-v2.1.1.js
+    - assets/component-cart-notification.js
+    - snippets/component-cart-notification.liquid
   do_not_edit:
-    - assets/liquid-ajax-cart-v2.1.1.js
+    - assets/shopify.js
   entry_point: assets/component-quick-add.js
 filters:
   primary_files:
@@ -85,22 +85,22 @@ filters:
     - assets/section-collection.js
     - assets/section-collection.css
   do_not_edit:
-    - assets/alpinejs@3.14.8.min.js
+    - sections/collection.liquid
+    - sections/search.liquid
   entry_point: snippets/component-filters-sidebar.liquid
 product_media:
   primary_files:
     - snippets/component-product-media-gallery.liquid
     - snippets/component-product-media.liquid
+    - assets/section-product.css
   secondary_files:
     - snippets/component-product-media-modal.liquid
     - assets/component-product-media-modal.js
     - assets/component-product-media-modal.css
     - assets/component-product-media-magnify.js
-    - assets/swiper7.4.1.min.js
-    - assets/swiper7.4.1.min.css
+    - assets/section-product.js
   do_not_edit:
-    - assets/swiper7.4.1.min.js
-    - assets/swiper7.4.1.min.css
+    - sections/product.liquid
   entry_point: snippets/component-product-media-gallery.liquid
 variant_picker:
   primary_files:
@@ -109,8 +109,10 @@ variant_picker:
   secondary_files:
     - snippets/component-product-card.liquid
     - assets/component-product-card.js
-    - snippets/component-pickup-availability.liquid
-    - assets/component-pickup-availability.js
-    - assets/component-pickup-availability.css
-  do_not_edit: []
+    - assets/component-product-card.css
+    - snippets/component-product-price.liquid
+    - assets/component-selling-plans.js
+  do_not_edit:
+    - assets/shopify.js
+    - templates/product.json
   entry_point: sections/product.liquid

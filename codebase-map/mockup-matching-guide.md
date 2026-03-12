@@ -36,7 +36,7 @@ Found a match?
 - **search** (`sections/search.liquid`) — t:sections.main-collection-product-grid.name section
 
 ### Two-Column (Image + Text)
-  None found
+- **hero-v2** (`sections/hero-v2.liquid`) — Full-width banner with headline and CTA
 
 ### Text / Content Blocks
   None found
@@ -51,6 +51,7 @@ Found a match?
 - **selling-points-v2** — Selling Points V2 section [slider]
 - **shop-categories** — Shop Categories section [slider]
 - **shop-the-look** — Shop The Look section [slider]
+- **Faq-metaobjects** — FAQ — Metaobjects section [accordion]
 
 ### Forms
 - **header** — Site navigation header
@@ -61,387 +62,395 @@ Found a match?
 
 ### 404 (`sections/404.liquid`)
 - Role: 404 section
-- Mockup keywords: 404 error page, page not found, centered message, error state, single CTA, centered layout, minimal error page, empty state
+- Mockup keywords: 404 page, error page, not found, centered text layout, single CTA button, empty state, page not found, centered message
 - Schema settings: 1 | Block types: 0
-- Use when: Use this section when you need a standard 404 error page with centered text and a single call-to-action button to redirect users back to shopping.
-- Create new if: Create a new section if the mockup requires multiple CTAs, search functionality, product recommendations, custom illustrations, multi-column layouts, or navigation elements beyond a single button.
-- Requirements that exceed this section: Multiple call-to-action buttons with different destinations; Search bar or search suggestions; Product recommendations or featured collections; Custom image or illustration upload; Multiple text blocks or customizable content areas; Navigation links or sitemap display; Editable title and description text via settings; Layout variations (left-aligned, split-screen, etc.); Background image or video support; Social media links or contact information
+- Use when: When you need a simple centered error page with a heading, subtext, and a single call-to-action button directing users back to shopping.
+- Create new if: When the mockup requires multiple CTAs, search functionality, product recommendations, navigation links, images/illustrations, or a different layout structure beyond centered vertical text.
+- Requirements that exceed this section: Multiple call-to-action buttons with different destinations; Search bar or search suggestions; Product recommendations or collections grid; Custom illustration or hero image; Navigation menu or sitemap links; Multi-column layout; Background image or video; Different text alignment (left/right); Custom form elements
 
 ### Faq (`sections/Faq.liquid`)
 - Role: FAQ section
-- Mockup keywords: faq-accordion, collapsible-faq, expandable-list, q-and-a, accordion-menu, help-section, frequently-asked-questions, toggle-content
+- Mockup keywords: faq-accordion, collapsible-content, expandable-list, question-answer, accordion-panel, toggle-content, plus-minus-icons, interactive-faq
 - Schema settings: 5 | Block types: 1
-- Use when: Use this section when the mockup shows a vertically stacked list of questions that expand/collapse to reveal answers with plus/minus icons.
-- Create new if: Create a new section if the mockup requires multi-column FAQ layout, categorized/tabbed FAQs, search functionality, or alternative expand/collapse patterns like side-by-side or card-based layouts.
-- Requirements that exceed this section: FAQ items need to be displayed in multiple columns or grid layout; Categories or tabs are needed to organize FAQ groups; Search or filter functionality is required; Questions and answers need to be displayed side-by-side instead of stacked; Card-based or boxed styling for each FAQ item is required; Icons or images need to accompany each question; Multiple FAQs need to be open simultaneously by default; Rich media (video, images) needs to be embedded within answers
+- Use when: When mockup shows a vertically stacked list of questions that expand/collapse to reveal answers with plus/minus toggle icons.
+- Create new if: When mockup requires multi-column FAQ layout, category tabs, search functionality, or always-visible answers without accordion behavior.
+- Requirements that exceed this section: FAQ items grouped into multiple columns or grid layout; Category filtering or tabbed navigation between FAQ groups; Search or filter functionality for questions; Multiple FAQs open simultaneously by default; Media content (images/videos) within answers requiring image blocks; Side-by-side layout with questions on left and answers on right; Different icon sets or custom animations beyond plus/minus toggle; Nested accordions or sub-questions within answers
 
 ### account (`sections/account.liquid`)
 - Role: t:sections.main-account.name section
-- Mockup keywords: customer-account-dashboard, order-history-table, account-overview, logged-in-portal, customer-profile, order-list, account-header, data-table, pagination-view, account-logout
+- Mockup keywords: customer-account-dashboard, order-history-table, account-overview, logged-in-user-page, transaction-list, customer-portal, account-header-logout, paginated-orders
 - Schema settings: 4 | Block types: 0
-- Use when: When the mockup shows a customer account dashboard with order history table and logout functionality for logged-in users.
-- Create new if: When the mockup requires additional account features like address management, saved payment methods, wishlists, or a completely different layout beyond order history.
-- Requirements that exceed this section: Displaying customer addresses or address management UI; Showing saved payment methods or wallet features; Including wishlist or favorites display; Requiring customer profile edit forms within the section; Needing order filtering, sorting, or search functionality; Displaying loyalty points, rewards, or subscription management; Using cards or grid layout instead of table format for orders; Including customer analytics or spending insights
+- Use when: When the mockup shows a logged-in customer's account page with order history table and logout functionality
+- Create new if: When the mockup requires additional customer data sections like address book, wishlist, subscription management, or loyalty points that go beyond basic order history
+- Requirements that exceed this section: Mockup includes saved addresses or address management UI; Design shows customer profile editing fields beyond orders; Layout includes wishlist or saved items display; Mockup requires subscription or recurring order management; Design shows loyalty points, rewards, or referral program; Layout includes order filtering, searching, or advanced sorting beyond pagination; Mockup shows order details inline without linking to separate page; Design requires multiple tabs or navigation within account area
 
 ### activate-account (`sections/activate-account.liquid`)
 - Role: t:sections.main-activate-account.name section
-- Mockup keywords: account activation form, password setup, two-field form, customer onboarding, dual password input, centered form layout, account confirmation, customer authentication
+- Mockup keywords: account activation, password setup form, dual password fields, customer onboarding, form with decline option, centered account form, password confirmation layout, customer authentication
 - Schema settings: 3 | Block types: 0
-- Use when: When a design mockup shows a customer account activation page with password creation and confirmation fields
-- Create new if: When the activation flow requires additional fields beyond password/confirmation, multi-step onboarding, social login options, or custom validation UI
-- Requirements that exceed this section: Additional input fields required (email, phone, profile info); Multi-step wizard or progress indicator needed; Social authentication buttons required; Custom password strength meter or validation UI; Terms and conditions checkbox or legal agreements; Welcome message with dynamic personalization; Inline help text or password requirements display; Different layout structure (side-by-side, card-based)
+- Use when: Use this section when a design shows a customer account activation flow with password and password confirmation fields plus submit/cancel actions.
+- Create new if: Create a new section if the activation flow requires additional fields beyond password/confirmation, multi-step onboarding, email verification UI, or terms acceptance checkboxes.
+- Requirements that exceed this section: Additional input fields beyond password and password confirmation are needed; Multi-step activation wizard or progress indicator is required; Email verification or code entry interface is part of activation; Terms of service or privacy policy checkboxes must be included; Social login or OAuth integration is part of the activation flow; Profile information collection during activation is required
 
 ### addresses (`sections/addresses.liquid`)
 - Role: t:sections.main-addresses.name section
-- Mockup keywords: customer-address-book, address-manager, account-addresses, address-form, paginated-address-list, add-new-address, customer-account-section
+- Mockup keywords: customer-addresses, account-dashboard, address-book, form-list, add-new-address, address-management, customer-portal, paginated-list, account-section
 - Schema settings: 3 | Block types: 0
-- Use when: When displaying a customer's saved addresses with add/edit functionality in their account area.
-- Create new if: If the mockup requires a different address layout (cards/grid vs list), embedded map integration, or address validation UI beyond standard form fields.
-- Requirements that exceed this section: Address display needs card-based or grid layout instead of simple list; Requires real-time address validation or autocomplete with visual feedback; Needs integrated map view showing address locations; Requires different pagination count than 5 addresses per page; Mockup shows address import/export functionality; Needs address tagging or categorization (home/work/billing); Requires inline editing without expandable forms
+- Use when: When mockup shows a customer account page for managing multiple shipping/billing addresses with add/edit capabilities
+- Create new if: When mockup requires inline address editing, map integration, address validation UI, or non-standard address field layouts beyond basic form structure
+- Requirements that exceed this section: Address cards need visual map previews or geolocation features; Inline editing without modal/expandable forms is required; Custom address field layouts beyond standard country/region dropdowns; Integration with third-party address verification UI elements; Multiple address types with visual categorization (home/work/other with icons); Drag-and-drop address reordering or priority setting; Address sharing or collaborative address book features
 
 ### animated-features-v2 (`sections/animated-features-v2.liquid`)
 - Role: Animated Features V2 section
-- Mockup keywords: animated-percentage, split-layout, image-with-stats, feature-checklist, counter-animation, hero-with-features, percentage-hero, animated-number, image-text-split, stat-highlight
+- Mockup keywords: animated-percentage, split-layout, feature-list-with-image, stats-with-checkmarks, two-column-features, percentage-hero, animated-counter, image-text-split, checklist-features
 - Schema settings: 20 | Block types: 0
-- Use when: When the mockup shows a large animated percentage or stat on one side with an image and bulleted feature list, typically for conversion or social proof messaging.
-- Create new if: When the design requires multiple statistics/numbers side-by-side, carousel functionality, video instead of static image, or more than 4 feature points.
-- Requirements that exceed this section: Multiple animated statistics or counters displayed simultaneously; More than 4 feature bullet points needed; Video or animated media instead of static image; Grid or multi-column layout instead of single split; Interactive elements like tabs or toggles for features; Progress bars or charts alongside the percentage; Background video or parallax effects; Multiple images in gallery or slideshow format
+- Use when: When mockup shows a two-column layout with an image on one side and an animated percentage/stat with a bulleted feature list on the other.
+- Create new if: When the mockup requires multiple images, more than 4 features, complex nested blocks, or different content types beyond a single percentage and checklist.
+- Requirements that exceed this section: More than 4 feature items needed; Multiple statistics or percentage counters required; Repeating block structure for unlimited features; Video or carousel instead of single static image; Icon picker or custom SVG uploads per feature; CTA buttons or links within features; Multiple columns of features; Alternating image/content layout patterns
 
 ### animated-features (`sections/animated-features.liquid`)
 - Role: Animated Features section
-- Mockup keywords: feature-grid, animated-cards, flip-cards, split-layout, icon-grid, 2-column-features, interactive-cards, 4-card-grid, feature-showcase, animated-icons
+- Mockup keywords: animated-feature-cards, flip-cards, 2-column-features, icon-grid, interactive-cards, feature-showcase, hover-flip, animated-grid, left-right-split
 - Schema settings: 30 | Block types: 0
-- Use when: When the design shows a split layout with heading/CTA on the left and a 2x2 grid of interactive flip cards with icons and images on the right, especially with animation requirements.
-- Create new if: When the design requires a different grid layout (not 2x2), non-flip card interactions, more than 4 features, or different content structure beyond image/label/flipped-text per card.
-- Requirements that exceed this section: More or fewer than 4 feature cards needed; Grid layout other than 2x2 (e.g., 3-column, single row, 3x3); Card interaction other than flip animation (e.g., slide, expand, modal); Multiple images or complex content per card beyond single image and two text fields; No split layout or full-width card grid without left sidebar; Video content instead of static images; Cards need individual CTA buttons or links; Dynamic/collection-based cards rather than fixed 4 cards
+- Use when: When the mockup shows a split layout with heading/CTA on the left and a 2x2 grid of interactive flip cards with icons and images on the right
+- Create new if: When the mockup requires more than 4 feature cards, a different grid layout (3x3, single row, etc.), or cards without flip animation
+- Requirements that exceed this section: More than 4 feature cards needed; Grid layout other than 2x2 (e.g. 3 columns, single row, 3x3); Cards need different interaction patterns (hover expand, modal, slide, etc.); Multiple buttons or complex CTA arrangements in left column; Cards need links, buttons, or multiple images per card; Right-side content needs to be something other than a card grid; Requires video content instead of static images
 
 ### announcement-bar (`sections/announcement-bar.liquid`)
 - Role: Top-of-page announcement strip
-- Mockup keywords: announcement-bar, top-bar, promo-banner, rotating-messages, alert-strip, notification-bar, carousel-banner, ticker-bar, header-announcement, auto-rotating-banner
+- Mockup keywords: announcement-bar, promo-banner, rotating-banner, top-banner, marquee-bar, notification-strip, header-announcement, message-carousel, auto-scroll-banner, promotional-header
 - Schema settings: 4 | Block types: 1
-- Use when: When mockup shows a thin horizontal bar at the top of the page with rotating promotional messages, optional links, and navigation arrows.
-- Create new if: When mockup requires multiple simultaneous announcements displayed side-by-side, vertical stacking, complex animations beyond fade-in, or embedded media like images/videos.
-- Requirements that exceed this section: Multiple announcement bars stacked vertically with different styling; Announcements with embedded images, icons (beyond emoji), or video content; Countdown timer integration or dynamic personalization per message; Horizontal scrolling ticker-tape animation instead of discrete rotation; User dismissible/closeable functionality with cookie persistence; Split layout with different content on left/right sides; Social media feed integration or live data updates
+- Use when: When the mockup shows a thin horizontal banner at the top of the page with rotating or static promotional messages, optional links, and navigation arrows.
+- Create new if: When the mockup requires multiple stacked announcement rows, complex animations beyond fade-in, embedded media/images, or full-width promotional banners with background images.
+- Requirements that exceed this section: Multiple simultaneous announcement bars displayed vertically; Background images or gradient overlays instead of solid colors; Embedded countdown timers or dynamic product pricing; Icon sets or image assets beyond simple emoji; Vertical text scrolling or marquee animations; Split-screen or multi-column announcement layouts; Interactive elements like email signup forms or dropdown menus; Video backgrounds or animated graphics
 
 ### article (`sections/article.liquid`)
 - Role: t:sections.main-article.name section
-- Mockup keywords: blog-post-detail, article-layout, featured-image-hero, post-header, article-content, back-navigation, blog-single, post-template, editorial-layout, longform-content
+- Mockup keywords: article-hero, blog-post-layout, featured-image-header, content-blocks, back-button, article-metadata, responsive-article, blog-detail-page, article-title-banner, content-typography
 - Schema settings: 4 | Block types: 5
-- Use when: When a design mockup shows a single blog post or article page with a featured image, title, metadata, and body content with standard text formatting.
-- Create new if: When the design requires multi-column article layouts, inline product embeds, table of contents navigation, author bio cards, related posts grids, or complex media galleries within the article body.
-- Requirements that exceed this section: Article needs sidebar navigation or table of contents; Design shows multiple column text layout; Requires embedded product cards or shopping features within content; Needs author biography section with custom layout; Related articles shown in grid or carousel format; Comments section with custom design; Progress bar or reading time indicator; Sticky social sharing sidebar; Article series navigation or chapter selection
+- Use when: Use this section for any blog article or editorial content page with customizable title, featured image, and rich text content blocks.
+- Create new if: Create a new section if the mockup requires multi-column article layouts, embedded video heroes, sidebar navigation, or complex author bio cards not achievable through blocks.
+- Requirements that exceed this section: Split-screen or multi-column article layout; Video hero instead of static image; Sidebar with table of contents or related articles; Author bio section with social links and profile image; Progress bar or reading time indicator; Inline product embeds within content; Comment system integration; Newsletter signup embedded mid-article; Sticky social share buttons; Breadcrumb navigation above article
 
 ### blog (`sections/blog.liquid`)
 - Role: t:sections.main-blog.name section
-- Mockup keywords: blog-grid, article-list, blog-archive, post-feed, blog-index, collage-layout, pagination, multi-column-blog
+- Mockup keywords: blog-grid, article-listing, blog-archive, post-grid, content-feed, blog-index, article-cards, paginated-blog
 - Schema settings: 9 | Block types: 0
-- Use when: When the mockup shows a main blog landing page displaying a paginated grid or collage of blog article cards with featured images, dates, authors, and excerpts.
-- Create new if: When the mockup requires filtering by tags/categories, featured articles section, sidebar navigation, search functionality, or custom article card layouts beyond the standard component-article-card.
-- Requirements that exceed this section: Blog filtering or search functionality needed; Multiple layout columns (more than 2-column collage/grid options); Featured or pinned articles at the top; Sidebar with categories, tags, or recent posts; Custom article card design that can't be modified via component-article-card; Load more or infinite scroll instead of pagination; Blog tag navigation or category filters; Different number of articles per page than 6
+- Use when: When displaying a paginated list of blog articles with optional images, dates, authors, and excerpts in either grid or collage layout
+- Create new if: When needing multiple blogs on one page, custom filtering/categories, featured posts, sidebar navigation, or non-standard article counts per page
+- Requirements that exceed this section: Multiple blogs displayed simultaneously; Category or tag filtering UI; Featured or pinned articles at top; Sidebar with widgets or navigation; Custom articles-per-page count (hardcoded to 6); Search functionality within blog; Load-more or infinite scroll instead of pagination; Mixed content types (articles + products/collections); Custom article card layouts beyond component-article-card
 
 ### blogs (`sections/blogs.liquid`)
 - Role: Blogs section
-- Mockup keywords: blog-grid, article-cards, blog-preview, content-cards, blog-feed, article-list, post-grid, blog-section, editorial-grid, content-showcase
+- Mockup keywords: blog-grid, article-cards, blog-feed, post-preview, content-grid, blog-listing, article-section, editorial-cards
 - Schema settings: 9 | Block types: 1
-- Use when: Use this section when the design shows a grid of blog articles/posts with images, titles, descriptions, and an optional section heading with navigation link.
-- Create new if: Create a new section if the design requires filtering, categories, pagination, date displays, author information, read-time indicators, or non-grid layouts like carousels or masonry.
-- Requirements that exceed this section: Blog filtering by category or tags; Pagination or load-more functionality; Date, author, or read-time metadata display; Carousel or slider layout instead of grid; Masonry or asymmetric grid layout; Multiple blog feeds from different sources; Comment counts or social sharing buttons; Featured/sticky posts with different styling
+- Use when: When design shows a grid of blog articles/posts with images, titles, descriptions, and an optional section heading with navigation link.
+- Create new if: When design requires filtering, categories, pagination, slider/carousel format, or significantly different card layouts beyond what blocks can provide.
+- Requirements that exceed this section: Multiple blogs displayed simultaneously with filtering or tabs; Carousel or slider layout instead of static grid; Complex metadata display (author, date, tags, read time) beyond basic title/description; Masonry or asymmetric grid layouts; Interactive filtering or search functionality; Pagination or load-more functionality; Different card styles per block (not uniform grid items)
 
 ### brand-story-v2 (`sections/brand-story-v2.liquid`)
 - Role: Brand Story V2 section
-- Mockup keywords: accordion-with-image, interactive-accordion, split-layout-accordion, brand-story-tabs, collapsible-content-image, image-switcher-accordion, left-text-right-image, multi-panel-story, expandable-content-sidebar
+- Mockup keywords: brand-story, accordion-image-split, tabbed-content, story-accordion, feature-tabs, vertical-accordion, split-layout, interactive-content, collapsible-features, image-switcher
 - Schema settings: 4 | Block types: 1
-- Use when: When the mockup shows an interactive accordion or collapsible list on the left that changes a corresponding image on the right side as users click through items
-- Create new if: When the mockup requires video media, multiple images per item, grid layouts, horizontal tabs instead of vertical accordion, or content positioning other than left-text-right-image split
-- Requirements that exceed this section: Video or mixed media types needed per accordion item; Multiple images or image galleries per expandable section; Horizontal tab navigation instead of vertical accordion; Image-left text-right layout instead of text-left image-right; Grid or multi-column arrangement of content items; Nested accordions or multi-level expansion; Automatic slideshow/rotation without user interaction; CTA buttons or product links within each accordion item
+- Use when: When a mockup shows an accordion or tabbed interface with text content on the left that reveals corresponding images on the right as users interact with different items.
+- Create new if: When the mockup requires multiple images per item, video content instead of static images, horizontal tabs instead of vertical accordion, or a grid layout rather than split left-right design.
+- Requirements that exceed this section: Multiple images or image galleries per accordion item; Video or animated media content instead of static images; Horizontal tab navigation instead of vertical accordion; Side-by-side comparison of multiple items simultaneously; Nested or multi-level accordion structures; Image positioned on left with content on right; Grid or card-based layout instead of split-screen; Autoplay or carousel functionality for content rotation
 
 ### brand-story (`sections/brand-story.liquid`)
 - Role: Brand Story section
-- Mockup keywords: brand-story, before-after-images, image-comparison, side-by-side-images, labeled-images, split-content, two-column-layout, image-with-labels, comparison-box, storytelling-section
+- Mockup keywords: before-after, image-comparison, split-layout, brand-story, two-column-images, labeled-images, comparison-slider, side-by-side-images, visual-comparison, story-section
 - Schema settings: 13 | Block types: 0
-- Use when: Use this section when a design mockup shows two labeled images side-by-side (typically for before/after, comparison, or contrasting visuals) with content/text on the opposite side.
-- Create new if: Create a new section if the mockup requires more than two comparison images, interactive slider/drag functionality, or a fundamentally different layout like stacked images or grid arrangements.
-- Requirements that exceed this section: More than two images in the comparison; Interactive before/after slider with drag functionality; Video comparison instead of static images; Vertical stacking layout instead of horizontal side-by-side; Multiple comparison sets in one section; Animated transitions between comparison states; Image comparison requiring overlay/fade effects
+- Use when: When mockup shows two labeled images side-by-side (typically for before/after, comparison, or brand evolution storytelling) with text content alongside.
+- Create new if: When mockup requires more than two comparison images, interactive slider functionality, video comparisons, or multiple comparison sets in one section.
+- Requirements that exceed this section: More than two images in the comparison; Interactive drag slider between images; Video content instead of static images; Multiple comparison pairs in a grid layout; Vertical stacking of comparisons; Animated transitions between states; User-controlled image reveal/overlay
 
 ### cart (`sections/cart.liquid`)
 - Role: t:sections.main-cart-items.name section
-- Mockup keywords: cart-page, shopping-cart, line-items-list, cart-summary, quantity-selector, remove-item, cart-item-details, product-variants-cart, cart-properties
+- Mockup keywords: cart-page, shopping-cart, line-items-list, cart-summary, product-thumbnail-list, quantity-selector, remove-item, cart-table, checkout-flow
 - Schema settings: 4 | Block types: 0
-- Use when: When the mockup shows a standard cart page with line items, product images, quantity controls, variant details, and item properties.
-- Create new if: When the mockup requires a significantly different cart layout (side-drawer cart, mini-cart popup, multi-step checkout cart) or custom cart item grouping/bundling UI.
-- Requirements that exceed this section: Cart items need to be displayed in a grid or card-based layout instead of list format; Requires upsell or cross-sell product recommendations embedded within cart items; Needs cart item grouping by vendor, collection, or subscription type; Requires progress bar for free shipping threshold or tiered rewards; Needs gift wrapping options or add-on selections per line item; Requires ajax drawer/slide-out cart instead of full page; Needs multi-column cart layout with sticky sidebar summary
+- Use when: When the mockup shows a standard shopping cart page with product listings, quantities, prices, and cart management functionality.
+- Create new if: When the mockup requires a multi-step cart experience, inline upsells, gift wrapping options, or significantly different layout like a slide-out cart drawer.
+- Requirements that exceed this section: Cart displayed as a drawer/modal instead of full page; Multi-column cart layout with featured products or recommendations; Advanced cart features like bundling, tiered discounts display, or gift message forms; Split cart view with sticky sidebar checkout summary; Cart requires custom shipping calculator or delivery date picker; Design needs tabbed interface between cart items and saved items
 
 ### collection (`sections/collection.liquid`)
 - Role: t:sections.main-collection-product-grid.name section
-- Mockup keywords: collection-grid, product-grid, filterable-products, sidebar-filters, horizontal-filters, collection-page, paginated-products, multi-column-grid, collection-hero
+- Mockup keywords: collection-grid, product-grid, filter-sidebar, vertical-filters, horizontal-filters, pagination, collection-hero, quick-add, multi-column-grid
 - Schema settings: 27 | Block types: 0
-- Use when: When the mockup shows a collection or product listing page with filtering options, product grid layout, and pagination.
-- Create new if: When the mockup requires a completely different product display pattern like masonry layout, list view with large images, or custom interactive filtering beyond vertical/horizontal sidebars.
-- Requirements that exceed this section: Masonry or non-grid product layouts required; Custom filter UI beyond vertical/horizontal sidebar options; Split-screen fixed product preview on scroll; Infinite scroll instead of pagination; Mixed content types (products interspersed with editorial content blocks); Multiple collection grids on same page; Advanced filtering like visual swatch filters, range sliders, or map-based filtering
+- Use when: Use this section when a design shows a collection page with product grid, filtering options (vertical sidebar or horizontal), sorting, and pagination.
+- Create new if: Create a new section if the mockup requires completely custom product card layouts, unconventional grid structures (masonry, offset), or integrated collection-specific content blocks between products.
+- Requirements that exceed this section: Non-standard grid patterns (masonry, asymmetric layouts, Pinterest-style); Inline content blocks or banners between product rows; Custom product card designs that can't use component-product-card.css; Split-screen or side-by-side collection comparison layouts; Infinite scroll instead of pagination; Custom filtering UI that doesn't match vertical/horizontal options
 
 ### collections (`sections/collections.liquid`)
 - Role: t:general.collections_grid section
-- Mockup keywords: collections-grid, category-grid, 3-column-grid, collection-list, product-category-tiles, image-grid-with-text, collections-overview, category-cards
+- Mockup keywords: collections-grid, category-grid, 3-column-grid, collection-cards, image-grid, collection-list, category-tiles, responsive-grid
 - Schema settings: 5 | Block types: 0
-- Use when: When mockup shows a grid of collection/category cards with images, titles, descriptions, and links arranged in a uniform multi-column layout
-- Create new if: When mockup requires individual collection blocks with custom content per item, slider/carousel functionality, or varied card layouts that aren't uniform grid cells
-- Requirements that exceed this section: Individual collection blocks need to be manually added/removed in theme editor rather than auto-populated from all collections; Each collection card needs unique custom fields beyond title, image, description, and URL; Layout requires carousel/slider functionality instead of static grid; Cards need different sizes, layouts, or styling per collection (featured collections vs regular); Requires filtering, sorting, or pagination controls; Needs more than 2 responsive breakpoint layouts (currently only desktop 3-col and mobile 2-col); Individual collection cards need overlay text positioning, custom buttons, or product counts
+- Use when: When mockup shows a grid of collection/category cards with images, titles, and optional descriptions in a multi-column layout
+- Create new if: When mockup requires custom card layouts, filtering options, collection selection controls, or non-grid layouts like carousels or masonry
+- Requirements that exceed this section: Need to manually select specific collections instead of showing all collections; Requires custom card content beyond image, title, description, and arrow; Layout is carousel/slider instead of static grid; Needs filtering, sorting, or pagination controls; Requires per-collection color schemes or unique card styling; Needs hover effects or animations beyond basic styling; Requires different grid columns at various breakpoints beyond 3-col/2-col; Card layout is horizontal instead of vertical stack
 
 ### custom-section (`sections/custom-section.liquid`)
 - Role: t:general.custom_section section
-- Mockup keywords: full-width-container, background-image-section, content-grid, flexible-layout, custom-container, centered-content, generic-wrapper, theme-block-holder
+- Mockup keywords: custom-section, flexible-container, background-image-section, grid-wrapper, theme-blocks, full-width-section, content-overlay, universal-container, modular-layout, wrapper-section
 - Schema settings: 1 | Block types: 1
-- Use when: Use this section when the mockup shows a flexible container with optional background image that can hold any combination of theme blocks in a centered content grid layout.
-- Create new if: Create a new section when the mockup requires a specific fixed structure, custom block types with unique settings, non-grid layouts (like flexbox rows), or predefined content areas beyond generic theme blocks.
-- Requirements that exceed this section: Mockup requires specific named block types with custom settings schemas; Layout needs non-grid structure (multi-column flex, asymmetric positioning, overlapping elements); Section needs multiple distinct content areas with different grid behaviors; Requires animation, parallax, or interactive JavaScript features; Background needs video, gradient overlays, or complex styling beyond single image; Content grid pattern differs from standard centered column layout; Section requires conditional logic or complex relationships between blocks
+- Use when: When the mockup shows a full-width section with optional background image that needs to contain any combination of existing theme blocks in a centered grid layout.
+- Create new if: When the mockup requires specific custom blocks, unique grid layouts, fixed content structure, or styling that cannot be achieved through theme blocks alone.
+- Requirements that exceed this section: Mockup requires custom block types not available in theme blocks; Layout needs specific multi-column grid patterns beyond single centered column; Design requires hardcoded content structure rather than flexible blocks; Section needs custom settings beyond background image; Specific block order, relationships, or conditional logic is required; Unique CSS styling or animations that conflict with grid-template-columns structure
 
 ### dynamic-grid (`sections/dynamic-grid.liquid`)
 - Role: Custom section
-- Mockup keywords: dynamic-grid, flexible-grid, content-grid, modular-grid, custom-grid, adaptive-layout, multi-column-grid, configurable-blocks, grid-system, responsive-grid
+- Mockup keywords: dynamic-grid, content-grid, promotional-grid, image-grid, feature-grid, modular-grid, flexible-layout, multi-column-content, grid-with-title, configurable-grid
 - Schema settings: 0 | Block types: 0
-- Use when: Use when a mockup shows a grid-based layout with customizable title, description, button, and content alignment that needs to adapt across breakpoints.
-- Create new if: Create new section if mockup requires fixed grid patterns (like always 3-column product grids), specific block types (testimonials, images with overlays), or complex nested layouts that can't be controlled through alignment and typography settings alone.
-- Requirements that exceed this section: Grid requires specific block types like image cards, product tiles, testimonial blocks, or icon features; Mockup shows fixed column counts or aspect ratios that differ from this section's grid logic; Design needs per-item styling controls (individual block colors, borders, shadows); Layout requires asymmetric grid patterns or masonry-style arrangements; Content includes interactive elements beyond a single section-level button; Needs image/video backgrounds or overlay text on grid items; Requires filtering, sorting, or dynamic content loading functionality
+- Use when: When a mockup shows a grid-based layout with customizable title, description, and button that requires flexible content alignment and typography controls.
+- Create new if: When the mockup requires specific grid column counts, image positioning, overlay text on images, or repeating block items rather than single section-level content.
+- Requirements that exceed this section: Mockup shows specific column layouts (2-col, 3-col, 4-col) with individual grid items; Grid items need individual images, titles, or descriptions (requires blocks schema); Layout includes image overlays, hover effects, or card-based designs; Grid needs to display product collections, blog posts, or other dynamic Shopify content; Responsive breakpoints require different grid arrangements (e.g., 4 columns to 2 columns to 1 column); Items within grid need individual CTAs or links; Requires filterable or sortable grid items
 
 ### featured-collections-v2 (`sections/featured-collections-v2.liquid`)
 - Role: Grid of products from a collection
-- Mockup keywords: tabbed-collections, product-carousel, multi-collection-tabs, swipeable-product-grid, collection-switcher, horizontal-scrolling-products, featured-collections-tabs, product-slider
+- Mockup keywords: tabbed-collections, product-carousel, multi-collection-slider, tabbed-product-grid, collection-tabs, swiper-collections, featured-products-tabbed
 - Schema settings: 18 | Block types: 1
-- Use when: When the mockup shows multiple collections displayed in a tabbed interface where each tab reveals a carousel/slider of products from that collection.
-- Create new if: When the mockup requires a fundamentally different layout like vertical stacking of collections, grid-only display without swiping, or integrated filtering/sorting controls within tabs.
-- Requirements that exceed this section: Collections need to display in a non-tabbed format (accordion, dropdown, or side navigation); Product cards require a completely custom layout not supported by component-product-card.js; Multiple collections need to display simultaneously on screen without tab switching; Requires filtering or sorting functionality within each collection tab; Needs pagination instead of carousel/swiper navigation; Tab interaction needs to trigger other page elements or animations outside the section
+- Use when: When the mockup shows multiple collections displayed as tabs with product carousels/sliders for each collection tab.
+- Create new if: If the mockup requires a non-tabbed layout, static grid instead of carousel, or fundamentally different navigation patterns like dropdowns or accordion-style collection switching.
+- Requirements that exceed this section: Collections need to display simultaneously without tabs; Requires vertical tab orientation or sidebar navigation; Needs filtering or sorting controls within collections; Requires pagination instead of carousel/swiper; Needs collection descriptions or metadata beyond product cards; Requires nested subcategories or hierarchical collection display; Mockup shows masonry or Pinterest-style grid layout
 
 ### featured-collections (`sections/featured-collections.liquid`)
 - Role: Grid of products from a collection
-- Mockup keywords: collection grid, category grid, featured collections, collection cards, image grid with titles, shop by collection, collection showcase, multi-column collections
+- Mockup keywords: featured-collections, collection-grid, collection-cards, multi-collection-showcase, category-grid, image-grid-with-labels, collection-tiles, shop-by-category
 - Schema settings: 7 | Block types: 1
-- Use when: When mockup shows a grid of clickable collection/category cards with images and titles, optionally with heading/subheading above
-- Create new if: When mockup requires product grids, unique card layouts with complex content beyond image+title, or interactive filtering/sorting functionality
-- Requirements that exceed this section: Cards need multiple images, product counts, pricing, or complex metadata display; Layout requires masonry/asymmetric grid or carousel/slider functionality; Needs dynamic filtering, search, or tag-based collection selection; Requires hover states with significant content overlays beyond basic link behavior; Demands video backgrounds or parallax effects on collection cards; Collection cards need CTAs with different destinations than the collection URL
+- Use when: When the mockup shows multiple collection cards in a grid layout with images and titles, optionally with a section heading and configurable card styles.
+- Create new if: When the mockup requires product listings instead of collections, complex multi-row layouts with different card sizes, or interactive filtering/sorting functionality.
+- Requirements that exceed this section: Cards need to display product counts, prices, or other collection metadata beyond title and image; Layout requires asymmetric grid patterns or masonry-style arrangements; Cards need hover states with multiple CTAs or overlay content; Section needs carousel/slider functionality instead of static grid; Interactive filters or category navigation is required; Cards must link to pages other than collection URLs; Custom card dimensions or aspect ratios per block are needed
 
 ### featured-products (`sections/featured-products.liquid`)
 - Role: Single product showcase with form
-- Mockup keywords: featured-products, product-carousel, product-slider, swiper-gallery, product-showcase, curated-products, product-grid-slider, horizontal-scroll-products
+- Mockup keywords: product-carousel, featured-products-slider, product-swiper, product-showcase, horizontal-product-scroll, product-grid-slider, curated-products, shop-collection-carousel
 - Schema settings: 11 | Block types: 1
-- Use when: When mockup shows a curated set of individual products with heading, optional subheading, and horizontal carousel/slider navigation arrows.
-- Create new if: When mockup requires automatic collection fetching, filtering logic, or non-carousel layouts like static grids or masonry.
-- Requirements that exceed this section: Products need to be dynamically pulled from a collection instead of manually selected; Layout requires a static grid without carousel/swiper functionality; Design needs product filtering, sorting, or pagination controls; Mockup shows tabbed product categories or multi-collection display; Requires product quick-view modals or comparison features; Design needs masonry or asymmetric product layouts
+- Use when: When the mockup shows a horizontal scrolling/sliding display of individual products with navigation arrows, optional heading/subheading, and a view-all link.
+- Create new if: When the mockup requires a static grid layout without carousel functionality, vertical product stacking, or fundamentally different product card structures like comparison tables or bundled product displays.
+- Requirements that exceed this section: Products must display in a static multi-column grid without horizontal scrolling; Product cards need complex interactive elements like quick-add variants or comparison checkboxes; Layout requires products from a dynamic collection rather than manually selected individual products; Design shows products in a masonry or Pinterest-style layout; Product display needs filtering, sorting, or search functionality; Cards require video content or 3D model viewers as primary media
 
 ### footer (`sections/footer.liquid`)
 - Role: Site footer with links and info
-- Mockup keywords: footer, multi-column footer, footer links, social icons, brand information, footer menu, site footer, bottom navigation, footer widget areas
+- Mockup keywords: footer, multi-column footer, footer links, social icons, brand information, footer menu, site footer, bottom navigation, newsletter footer
 - Schema settings: 11 | Block types: 4
-- Use when: When a design mockup shows a site-wide footer with any combination of text blocks, link menus, social icons, or brand information arranged in columns.
-- Create new if: When the footer requires unique layouts like inline newsletter signup forms, complex multi-row structures, payment icons, trust badges, or footer-specific announcement bars not supported by the existing block types.
-- Requirements that exceed this section: Footer requires newsletter subscription form with custom styling; Design shows payment method icons or trust badges; Footer needs location/contact information in structured format; Layout requires horizontal/inline arrangement instead of grid blocks; Footer includes accordion/collapsible menus for mobile; Design shows footer-specific announcement or promo bar; Requires image galleries or product showcases in footer; Needs customer service chat widget integration
+- Use when: When the mockup shows a site footer with any combination of link lists, text blocks, social media icons, or brand information arranged in columns
+- Create new if: When the mockup requires footer-specific features like newsletter signup forms, payment icons, language/currency selectors, or complex multi-row layouts not supported by basic text and link blocks
+- Requirements that exceed this section: Newsletter subscription form with email input; Payment method icons or trust badges; Country/language selector dropdown; Multi-row footer with distinct top/middle/bottom sections; Footer with embedded maps or contact forms; Copyright text with dynamic year; Custom footer navigation with mega-menu style dropdowns; Product or collection links with images
 
 ### header (`sections/header.liquid`)
 - Role: Site navigation header
-- Mockup keywords: header, navigation bar, sticky header, top nav, logo header, main menu, site navigation, cart icon, account icon, menu bar
+- Mockup keywords: sticky header, top navigation, logo center, cart icon, account icon, menu dropdown, horizontal nav, announcement bar, persistent header, site navigation
 - Schema settings: 22 | Block types: 1
-- Use when: When the mockup shows a top navigation bar with logo, menu links, and utility icons (cart/account) in various layout configurations.
-- Create new if: When the mockup requires a completely different header structure like a sidebar navigation, mega menu with complex multi-column dropdowns, or header with integrated search bar and promotional banner.
-- Requirements that exceed this section: Mega menu with product previews, images, or multi-level nested dropdowns beyond simple link lists; Header with integrated promotional announcement bar as part of the same component; Vertical sidebar navigation instead of horizontal top bar; Header with inline search bar as primary element rather than icon; Multi-row header with distinct top and bottom sections containing different content types; Header requiring custom icon sets or social media links beyond cart and account
+- Use when: When the mockup shows a horizontal navigation bar at the top with logo, menu links, and utility icons (cart/account) in a standard layout configuration
+- Create new if: When the mockup requires a mega menu with custom content blocks, full-width promotional banners within the header, or completely custom icon arrangements not supported by the grid layout
+- Requirements that exceed this section: Header needs embedded promotional content blocks or banners within the navigation area; Mockup shows a mega menu with product images, multi-column layouts, or rich media content; Design requires a vertical sidebar navigation instead of horizontal; Header includes complex search with autocomplete and product suggestions; Layout needs hamburger menu on desktop (not just mobile drawer); Design requires multiple rows of navigation with different styling per row; Header needs animated transitions between menu states beyond simple dropdowns
 
 ### hello-world (`sections/hello-world.liquid`)
 - Role: Hello World section
-- Mockup keywords: hero-with-icon, feature-grid, three-column-features, icon-illustration-hero, informational-section, educational-landing, intro-content-cards, welcome-section, documentation-layout, split-hero-content
+- Mockup keywords: welcome-hero, split-content, text-with-icon, three-column-features, info-cards, feature-grid, educational-content, onboarding-section
 - Schema settings: 4 | Block types: 0
-- Use when: Use this for educational landing pages with a hero message and a grid of 3 feature/informational cards with external links.
-- Create new if: Create new section if you need customizable content (headings, descriptions, links), image uploads, varied column counts, blocks for dynamic cards, or image positioning controls.
-- Requirements that exceed this section: Content needs to be editable via theme editor (currently all hardcoded); Number of highlight cards needs to vary (2, 4, or responsive column counts); Each card needs unique icons or images uploadable by merchant; Links should be internal navigation rather than external documentation; Hero illustration needs to be merchant-customizable or positioned differently; Layout needs to support single-column mobile stacking with custom breakpoints; Requires block-based architecture for adding/removing/reordering cards; Needs button CTAs instead of text links; Requires background images or overlay options
+- Use when: Use for welcome/educational content with a hero message paired with an illustration and a three-column feature grid below
+- Create new if: Create new if mockup requires different column counts, carousel functionality, interactive elements, video, or significantly different layout structure
+- Requirements that exceed this section: More or fewer than 3 feature columns needed; Content needs to be dynamically editable via blocks instead of hardcoded; Requires image upload instead of SVG asset reference; Needs button CTAs with customizable links; Requires different mobile layout (currently only has basic responsive padding); Needs background images or overlays; Requires accordion or tab functionality for content
 
 ### hero-v2 (`sections/hero-v2.liquid`)
 - Role: Full-width banner with headline and CTA
-- Mockup keywords: hero, split-layout, hero-with-image, text-image-split, video-background-hero, content-media-section, banner-v2, left-right-layout, hero-banner
+- Mockup keywords: hero, split-layout, hero-banner, video-background, image-with-text, content-left-media-right, full-width-hero, CTA-hero, vertical-split
 - Schema settings: 19 | Block types: 1
-- Use when: When the mockup shows a prominent hero/banner section with text content (heading, description, button) alongside an image or video background in a split or overlapping layout.
-- Create new if: When the mockup requires multiple images/media in a carousel, complex multi-column layouts, or interactive elements beyond a single CTA button.
-- Requirements that exceed this section: Multiple media items in a slideshow or carousel; More than one CTA button with different actions; Form inputs or interactive elements beyond a link button; Grid-based content layout with 3+ columns; Testimonials, reviews, or user-generated content blocks; Integrated countdown timer or dynamic pricing display; Side-by-side comparison or before/after slider
+- Use when: When mockup shows a hero section with left-aligned text content (heading, description, CTA button) and right-aligned image or video background with alignment controls
+- Create new if: When mockup requires multiple images/videos simultaneously, overlapping content layers, animated text effects, carousel/slider functionality, or form inputs within the hero
+- Requirements that exceed this section: Multiple media items displayed at once (not just background vs main image); Text overlay directly on media instead of separate content column; Carousel or slider functionality with multiple hero slides; Form fields embedded in hero (email capture, search bar); Animated or staggered text entrance effects; Parallax scrolling effects; Content positioned center or right instead of left column; Multiple CTA buttons with different styles; Background shapes or decorative elements beyond image/video
 
 ### hero (`sections/hero.liquid`)
 - Role: Full-width banner with headline and CTA
-- Mockup keywords: hero, banner, hero-banner, video-background, image-background, full-width-hero, headline-cta, overlay-hero, endorsement-block, signature-banner
+- Mockup keywords: hero banner, full-width hero, video background hero, image banner, headline overlay, CTA banner, above-the-fold, endorsement signature, star rating hero, splash banner
 - Schema settings: 22 | Block types: 0
-- Use when: Use for full-width top-of-page hero banners with a single background (image or video), heading, subheading, CTA button, and optional endorsement signature block.
-- Create new if: Create new if mockup requires multiple CTAs, side-by-side images, split-screen layouts, slideshow/carousel functionality, multiple content blocks, or complex grid-based hero arrangements.
-- Requirements that exceed this section: Multiple call-to-action buttons with different styles or destinations; Split-screen or side-by-side image/content layout; Slideshow or carousel of multiple hero slides; Form embedded directly in hero (newsletter, quiz, search); Multiple endorsements or testimonial blocks in a grid; Product picker or collection selector within hero; Parallax scrolling effects on multiple layers; Animated text sequences or typewriter effects; Hero with tabbed content sections
+- Use when: Use this section for full-width homepage or landing page heroes with a single headline, subheading, CTA button, optional star rating text, and optional endorsement signature block over an image or video background.
+- Create new if: Create a new section if the mockup requires split layouts, multiple columns of content, carousels/slideshows, multiple CTAs, form inputs, product cards, or side-by-side image-text arrangements.
+- Requirements that exceed this section: Multiple slides or carousel functionality; Split-screen or two-column layout with image on one side; Multiple call-to-action buttons with different styles; Embedded forms or email capture fields; Product tiles, grids, or featured collections within the hero; Parallax scrolling effects beyond basic overlay; Dynamic content blocks that can be reordered or repeated; Image galleries or before/after sliders
 
 ### link-readme (`sections/link-readme.liquid`)
 - Role: Link Readme section
-- Mockup keywords: call-to-action, cta-button, single-button, action-link, centered-button, readme-link, simple-cta, standalone-button
+- Mockup keywords: call-to-action, cta-button, single-button, link-banner, simple-cta, centered-button, action-prompt, readme-link, standalone-button
 - Schema settings: 7 | Block types: 0
-- Use when: When the mockup shows a simple, centered call-to-action button within its own section with configurable padding and color scheme.
-- Create new if: When the mockup requires multiple buttons, additional text content, icons, images, or a more complex layout than a single centered button.
-- Requirements that exceed this section: Multiple buttons or links are needed in the same section; Heading, subheading, or descriptive text is required alongside the button; Icon or image needs to accompany the button; Button needs different styling options beyond the standard button class; Layout requires non-centered alignment or multi-column arrangement; Additional interactive elements like forms or modals are needed
+- Use when: When the mockup shows a simple, standalone call-to-action button centered on the page with optional background color scheme and padding controls.
+- Create new if: When the design requires multiple buttons, accompanying text/headings, icons, images, or complex layout arrangements beyond a single centered button.
+- Requirements that exceed this section: Multiple buttons or links needed; Heading, subheading, or descriptive text required alongside the button; Icons or images needed in the CTA area; Multi-column or split layout design; Background image or video required; Complex button styling beyond basic button class; Conditional visibility rules or dynamic content blocks
 
 ### login (`sections/login.liquid`)
 - Role: t:sections.main-login.name section
-- Mockup keywords: login-form, password-recovery, customer-authentication, email-input-fields, two-column-form-layout, shop-login-button, form-error-messages, account-access
+- Mockup keywords: customer-login-form, password-recovery, account-sign-in, email-input-fields, shop-login-button, form-validation, two-column-auth, login-page, account-access, customer-portal-entry
 - Schema settings: 5 | Block types: 0
-- Use when: When you need a customer login page with password recovery functionality and optional Shop Pay login integration.
-- Create new if: If the mockup requires multi-step authentication, social login options beyond Shop Pay, registration form on same page, or split-screen layout with imagery.
-- Requirements that exceed this section: Login and registration forms need to appear side-by-side or in tabs; Social login providers beyond Shop Pay are required (Google, Facebook, etc.); Custom authentication flows like OTP or magic links are needed; Background images, hero imagery, or split-screen layouts are part of the design; Additional content blocks like testimonials or marketing copy need to be interspersed; Multi-step or progressive disclosure patterns for authentication
+- Use when: When the design shows a customer authentication page with standard login and password recovery forms.
+- Create new if: When the design requires split layouts, social login providers beyond Shop, multi-step authentication, or embedded registration forms on the same page.
+- Requirements that exceed this section: Side-by-side login/register layout instead of sequential forms; Social login buttons (Google, Facebook, Apple) beyond Shopify's Shop login; Custom registration fields visible on login page; Multi-step authentication or OTP verification; Promotional content, images, or marketing copy alongside forms; Tabbed interface switching between login and register; Guest checkout option embedded in login flow
 
 ### logos (`sections/logos.liquid`)
 - Role: Logos section
-- Mockup keywords: logo-carousel, logo-slider, brand-logos, partner-logos, trust-bar, logo-marquee, client-logos, infinite-scroll-logos, logo-ticker, brand-strip
+- Mockup keywords: logo-carousel, brand-slider, logo-marquee, partner-logos, trust-badges, logo-strip, infinite-scroll-logos, client-showcase, brand-grid, logo-ticker
 - Schema settings: 9 | Block types: 1
-- Use when: When the mockup shows a horizontal row or scrolling strip of brand/partner logos, typically used for social proof or showcasing clients/partners.
-- Create new if: When the mockup requires logos in a static grid layout, multi-row arrangement, logos with links/CTAs, or logos paired with testimonials/descriptions.
-- Requirements that exceed this section: Logos need clickable links to external partner sites; Each logo requires accompanying text, descriptions, or captions; Layout is a static grid (2x3, 3x4, etc.) rather than a horizontal scrolling track; Logos need hover effects that reveal additional content; Multi-row layout is required; Individual logo filtering or categorization is needed; Logos should appear in a masonry or varied-size layout
+- Use when: When the mockup shows a horizontal scrolling or static row of brand/partner logos, typically used for social proof or showcasing clients/partners.
+- Create new if: When the design requires logos in a multi-row grid layout, filterable categories, individual logo links to different URLs, or complex hover interactions beyond simple logo display.
+- Requirements that exceed this section: Logos need different destination URLs or clickable links per logo; Design shows multi-row grid instead of single horizontal track; Requires category filtering or tabbed logo groups; Needs individual logo captions or descriptions beneath each image; Requires stacked or masonry layout instead of linear arrangement; Logos need complex hover effects like color overlays or animations beyond scroll
 
 ### order (`sections/order.liquid`)
 - Role: t:sections.main-order.name section
-- Mockup keywords: order-details-table, customer-account-order, transaction-history, order-summary-page, purchase-details, order-line-items, account-portal, order-status-table
+- Mockup keywords: order-history-table, customer-account-order, order-details-page, product-line-items-table, order-summary-layout, tabular-order-view, account-dashboard-order, order-status-page
 - Schema settings: 3 | Block types: 0
-- Use when: When displaying detailed order information for logged-in customers viewing a specific past order including line items, SKUs, prices, quantities, and order metadata.
-- Create new if: When the design requires a dashboard-style order listing, multi-order comparison, order tracking timeline, or significantly different layout beyond a table structure.
-- Requirements that exceed this section: Order listing/grid view instead of single order details; Visual order tracking timeline or shipment map; Reorder functionality with bulk product selection; Invoice download or print-optimized layout; Custom order filtering or search interface; Side-by-side order comparison view; Integrated returns/exchange workflow UI
+- Use when: When the mockup shows a customer's individual order details page with a table of purchased items, SKUs, prices, quantities, and totals.
+- Create new if: When the mockup requires a completely different order display format (e.g., card-based layout, timeline view, or visual product gallery instead of tabular data).
+- Requirements that exceed this section: Order details need to be displayed in a non-tabular format (cards, tiles, timeline); Requires embedded tracking maps or interactive shipment visualization; Needs multi-column responsive layout with product images prominently featured; Requires inline reorder functionality or product review sections within order details; Design calls for collapsible/expandable order item groups or custom filtering; Mockup shows split-screen layout with order tracking on one side and items on the other
 
 ### page (`sections/page.liquid`)
 - Role: t:sections.main-page.name section
-- Mockup keywords: basic page, static content, single column text, centered content, page title, text page, simple layout, rich text page, content page
+- Mockup keywords: page-content, static-page, simple-text-page, centered-content, single-column-text, basic-page-layout, narrow-content, cms-page
 - Schema settings: 5 | Block types: 0
-- Use when: Use this section for basic static pages with a title and body content in a single centered column with configurable width and padding.
-- Create new if: Create a new section when the mockup requires multiple columns, media elements, custom blocks, interactive components, or any layout beyond a simple title and text content area.
-- Requirements that exceed this section: Multiple columns or grid layouts are needed; Images, videos, or other media need to be embedded outside of the rich text editor; Repeatable blocks or dynamic content sections are required; Side-by-side content arrangements; Custom form elements or interactive components; Background images or overlays; Asymmetric or complex layouts; Tabbed or accordion content structures
+- Use when: Use this section for simple static pages with a title and text content in a single centered column layout with minimal styling.
+- Create new if: Create a new section when the page requires multiple columns, media elements, custom blocks, repeatable content modules, or complex layout patterns beyond a single text column.
+- Requirements that exceed this section: Multiple column layouts or grid structures are needed; Images, videos, or other media need to be interspersed with content; Repeatable blocks or modular content sections are required; Custom CTAs, buttons, or interactive elements beyond basic rich text; Side-by-side content arrangements or asymmetric layouts; Accordion, tabs, or other content organization patterns; Background images or overlays on the content area; Custom typography controls beyond basic rich text editor
 
 ### password (`sections/password.liquid`)
 - Role: Password Page section
-- Mockup keywords: password-gate, coming-soon, centered-form, login-splash, brand-intro, unlock-page, pre-launch, access-control, storefront-lock, email-capture
+- Mockup keywords: password-page, coming-soon, splash-screen, login-gate, email-capture, store-access, maintenance-mode, pre-launch, centered-form, brand-lockup
 - Schema settings: 7 | Block types: 0
-- Use when: When a mockup shows a centered password/access gate page with logo, heading, message, and single password input field before store launch or for exclusive access.
-- Create new if: When the mockup requires multi-step authentication, social login, email signup forms, countdown timers, background video, or complex layout with multiple columns/sections.
-- Requirements that exceed this section: Multiple form fields beyond password (email capture, name, phone); Social media login buttons or OAuth integration; Countdown timer to launch date; Video or animated background instead of gradient; Side-by-side split layout with imagery; Newsletter signup separate from password entry; Multi-step wizard or progressive disclosure; Gallery or carousel of product teasers; Social media feed or testimonials; Age verification or terms acceptance checkboxes
+- Use when: When implementing a password-protected storefront page with centered branding, message, and password form before store launch or during maintenance.
+- Create new if: If the mockup requires multiple content blocks, media backgrounds, newsletter signup, social sharing, countdown timer, or multi-step authentication beyond a single password input.
+- Requirements that exceed this section: Video or image background slider instead of gradient; Newsletter signup form in addition to password; Social media login options or OAuth integration; Multiple input fields or multi-step verification; Countdown timer to launch date; Product previews or gallery carousel; Multiple CTAs or navigation links; Split-screen layout with media on one side; Customer testimonials or feature highlights
 
 ### pickup-availability (`sections/pickup-availability.liquid`)
 - Role: Custom section
-- Mockup keywords: pickup-availability, store-locator, in-store-pickup, location-drawer, availability-list, modal-overlay, nearest-store, bopis, click-and-collect
+- Mockup keywords: store pickup, local availability, BOPIS, click-and-collect, store locator drawer, inventory checker, location selector, pickup drawer modal, store availability list, location-based pickup
 - Schema settings: 0 | Block types: 0
-- Use when: When a mockup shows product availability at physical store locations with a toggle/drawer to view multiple pickup points
-- Create new if: When the design requires appointment booking, map integration, distance calculation, inventory counts, or non-product pickup scenarios
-- Requirements that exceed this section: Interactive map view of store locations; Real-time inventory quantities displayed per location; Distance/radius filtering from user's location; Appointment or time-slot booking functionality; Multi-product pickup bundling; Location comparison or favoriting features; Non-product content (events, services, appointments); Embedded store hours or amenities beyond basic pickup info
+- Use when: When the mockup shows product-level store pickup availability with a preview of the closest location and an expandable drawer/modal listing all available store locations for in-store collection.
+- Create new if: When the design requires map integration, real-time inventory sync display, distance calculations, store filtering by distance/features, or appointment booking for pickup.
+- Requirements that exceed this section: Interactive map showing store locations visually; Distance calculation or geolocation-based sorting; Advanced filtering by store amenities or hours; Appointment/time slot selection for pickup; Integration with third-party inventory management displays; Multi-product pickup availability comparison; Standalone page layout (not product-level component); Custom store information cards with photos/ratings
 
 ### predictive-results (`sections/predictive-results.liquid`)
 - Role: Custom section
-- Mockup keywords: predictive-search, autocomplete-dropdown, search-suggestions, live-search-results, typeahead-search, search-overlay, instant-search, search-flyout, ajax-search-results, search-preview
+- Mockup keywords: predictive-search, autocomplete-dropdown, search-suggestions, instant-search-results, layered-search-panels, product-search-preview, search-overlay, typeahead-search
 - Schema settings: 0 | Block types: 0
-- Use when: When a mockup shows live search results appearing as users type, displaying categorized suggestions (queries, collections, pages, articles, products) in a dropdown or overlay format.
-- Create new if: When the mockup requires a fundamentally different search UI pattern like a full-page search experience, faceted filtering interface, or search results that need pagination and advanced sorting options.
-- Requirements that exceed this section: Search results need grid/card layouts instead of list-based display; Product results require variant selection, add-to-cart functionality, or quick-view modals; Search needs filtering by price, availability, tags, or custom metafields; Design requires image galleries or multiple images per product result; Search should show more than basic product info (reviews, ratings, stock levels); Results need pagination or infinite scroll instead of limited preview; Custom resource types beyond products, articles, pages, collections, and queries; Advanced typography or layout customization per result type
+- Use when: When a mockup shows live search results appearing as the user types, with categorized sections for suggestions, products, articles, pages, and collections in a dropdown or overlay format.
+- Create new if: If the mockup requires advanced filtering, faceted search, grid-based product layouts with add-to-cart buttons, or a full-page search results experience rather than a predictive dropdown.
+- Requirements that exceed this section: Search results need filtering or sorting controls; Products require interactive elements like quick-view or add-to-cart buttons; Design calls for a paginated full-page search results layout; Mockup shows tabbed navigation between result categories; Custom card layouts with ratings, badges, or variant swatches are needed; Results require a masonry or multi-column grid instead of lists
 
 ### product-details (`sections/product-details.liquid`)
 - Role: Product Details section
-- Mockup keywords: accordion, collapsible-details, product-specs, tabbed-content, expandable-panels, faq-accordion, content-tabs, image-text-accordion, two-column-accordion, product-information
+- Mockup keywords: accordion, collapsible-details, product-specs, tabbed-content, expandable-panels, faq-style, details-section, image-text-accordion, split-content-blocks
 - Schema settings: 5 | Block types: 1
-- Use when: When a mockup shows collapsible/expandable content blocks with titles, text content, and optional accompanying images in an accordion pattern.
-- Create new if: When the design requires non-accordion layouts (always-visible content, true tabs with navigation, grid layouts) or interactive elements beyond simple expand/collapse.
-- Requirements that exceed this section: Content must be displayed in true tabs with tab navigation instead of accordion; Multiple detail blocks need to be open simultaneously; Requires video or interactive media instead of static images; Needs dynamic content from product metafields or structured data; Design shows side-by-side layout instead of stacked accordion; Requires more than 2 images per block or image galleries; Needs filterable or searchable content blocks
+- Use when: When a mockup shows collapsible/expandable content blocks with text and optional images, typically for product specifications, care instructions, or detailed information organized in accordion format.
+- Create new if: When the mockup requires always-visible content without accordion interaction, tab navigation instead of vertical accordions, or fundamentally different interaction patterns like modals or side-drawers.
+- Requirements that exceed this section: Content must be displayed in horizontal tabs instead of vertical accordion; Multiple accordions need to be open simultaneously by default; Requires video embeds or interactive elements beyond static images and text; Needs table or comparison chart layout for specifications; Requires filtering or search functionality within the content blocks; Content must be displayed as always-visible cards without collapse functionality
 
 ### product-highlights (`sections/product-highlights.liquid`)
 - Role: Product Highlights section
-- Mockup keywords: product-features, icon-list, split-layout, image-text, feature-highlights, benefits-section, two-column-features, icon-with-text
+- Mockup keywords: feature-list-with-image, product-features-split, icon-list-image-layout, benefit-highlights, two-column-features, image-text-features, icon-feature-grid, product-usp-section
 - Schema settings: 9 | Block types: 1
-- Use when: When a mockup shows product features or benefits listed with icons alongside a single supporting image in a two-column layout.
-- Create new if: When the design requires multiple images, alternating layouts, video support, carousel functionality, or features arranged in a grid rather than a vertical list.
-- Requirements that exceed this section: Multiple product images or image gallery needed; Features must be displayed in a multi-column grid layout; Video or animated media support required; Alternating image/text positions per feature; Interactive elements like tabs or accordions for features; Integration with product metafields or dynamic product data; Carousel or slider functionality for features; Features require links/buttons to different pages
+- Use when: When mockup shows product features or benefits as an icon list paired with a single image in a two-column layout.
+- Create new if: When mockup requires multiple images per feature, carousel functionality, video content, or complex grid layouts with more than one media column.
+- Requirements that exceed this section: Multiple images required (not just one main image); Features need individual images per item instead of shared icons; Carousel or slider functionality for features or images; Three-column or complex grid layout instead of two-column split; Video or interactive media instead of static image; Expandable/collapsible feature descriptions or accordion behavior; Feature items need CTAs or links with buttons; Alternating image-text layouts or multiple content blocks
 
 ### product (`sections/product.liquid`)
 - Role: t:sections.main-product.name section
-- Mockup keywords: product-detail-page, pdp-layout, split-product-layout, product-media-gallery, buy-box, variant-selector, complementary-products, product-info-sidebar
+- Mockup keywords: product-detail-page, pdp-layout, product-gallery, product-info, media-gallery, variant-selector, add-to-cart, product-description, complementary-products, split-layout
 - Schema settings: 18 | Block types: 15
-- Use when: When the mockup shows a standard product detail page with media gallery on one side and product information (title, price, variants, add-to-cart) on the other
-- Create new if: When the mockup requires a completely custom product layout like interactive 3D configurators, split-screen comparison views, or non-standard media arrangements that don't follow left/right gallery-info patterns
-- Requirements that exceed this section: Custom interactive product builders or configurators beyond standard variant selection; Multiple products displayed simultaneously in comparison layout; Non-standard media arrangements like floating overlays, full-bleed backgrounds, or mosaic grids; Embedded AR/VR experiences beyond Shopify's native 3D model support; Custom bundling UI with multiple independent add-to-cart flows; Split-screen or parallax scroll effects between media and content
+- Use when: Use this section for any standard product detail page layout with image gallery, product info, pricing, variants, and optional complementary product recommendations.
+- Create new if: Create a new section if the mockup requires a fundamentally different product page structure like a lookbook-style layout, virtual try-on interface, or multi-column comparison view.
+- Requirements that exceed this section: Product page needs multiple products displayed side-by-side for comparison; Design requires a fullscreen immersive experience or non-standard navigation; Layout needs integrated AR/3D viewer as primary media instead of standard gallery; Design calls for horizontally scrolling product variants with large preview images; Page requires tabbed content sections for specifications, reviews, and related products in equal hierarchy
 
 ### promo-banner (`sections/promo-banner.liquid`)
 - Role: Banner image with text overlay
-- Mockup keywords: promo-banner, product-banner, split-layout, two-column-product, featured-product-banner, image-text-promo, cta-banner, product-highlight, asymmetric-layout, promotional-card
+- Mockup keywords: promo-banner, product-highlight, split-layout, featured-product, image-text-banner, product-callout, two-column-promo, cta-banner
 - Schema settings: 13 | Block types: 0
-- Use when: Use this section when the mockup shows a promotional banner with a product image on one side and product details (title, description, price, CTA button) on the other side in a two-column layout.
-- Create new if: Create a new section if the mockup requires multiple products in the banner, video backgrounds, overlay text on the image, or complex multi-block content like testimonials or selling points integrated into the layout.
-- Requirements that exceed this section: Multiple products or product comparisons in one banner; Video or animated backgrounds instead of static images; Text overlay directly on the product image; Icon/feature list or selling points blocks integrated into the banner; Multiple CTAs or form inputs (email capture, variant selectors); Carousel or slideshow functionality for multiple banners; Product variant selector or add-to-cart functionality; Complex grid layouts (3+ columns or asymmetric arrangements)
+- Use when: Use this section when the mockup shows a single product promotion with an image on one side and product details (title, description, price, CTA button) on the other side in a split layout.
+- Create new if: Create a new section if the mockup requires multiple products displayed simultaneously, interactive product options/variants, carousel/slideshow functionality, or complex grid layouts beyond a simple two-column split.
+- Requirements that exceed this section: Multiple products need to be displayed in the same banner; Product variant selector or add-to-cart functionality is required; Carousel or slideshow of multiple promo items; Grid layout with more than two columns; Video content instead of static images; Multiple CTAs or button groups; Dynamic content blocks that users can add/remove; Complex overlay effects or parallax scrolling
 
 ### register (`sections/register.liquid`)
 - Role: t:sections.main-register.name section
-- Mockup keywords: customer registration form, sign-up form, account creation, user registration, vertical form layout, input fields with floating labels, form validation, error messaging, customer account form
+- Mockup keywords: registration form, account signup, customer create, vertical form layout, labeled input fields, form validation, error messaging, customer authentication
 - Schema settings: 3 | Block types: 0
-- Use when: Use this section when implementing a standard customer account registration page with first name, last name, email, and password fields with built-in validation and error handling.
-- Create new if: Create a new section if the registration requires additional custom fields, multi-step registration flow, social login options, different layout (horizontal/multi-column), or integration with third-party registration systems.
-- Requirements that exceed this section: Custom fields beyond first name, last name, email, password are required; Multi-step or wizard-style registration flow is needed; Social login buttons (Google, Facebook, Apple) must be integrated; Side-by-side layout with promotional content or imagery is required; Terms and conditions checkbox or newsletter opt-in is mandatory; Third-party authentication or SSO integration is needed; Different visual treatment beyond padding customization is specified
+- Use when: When the design shows a customer registration/signup form with first name, last name, email, and password fields in a standard vertical layout.
+- Create new if: When the design requires multi-step registration, social login buttons, additional custom fields beyond name/email/password, horizontal form layouts, or embedded marketing content within the registration flow.
+- Requirements that exceed this section: Multi-column or split-screen layout with imagery or promotional content; Social authentication buttons (Google, Facebook, Apple login); Additional customer fields like phone, company, address during registration; Multi-step wizard or progressive disclosure pattern; Marketing opt-ins, checkboxes, or terms acceptance beyond default; Custom success/confirmation messaging or redirect logic; Embedded promo codes or referral fields
 
 ### related-products (`sections/related-products.liquid`)
 - Role: Related products section
-- Mockup keywords: related-products, product-recommendations, product-carousel, product-grid, you-may-also-like, product-slider, recommended-products, cross-sell, upsell-products, similar-products
+- Mockup keywords: related-products, product-recommendations, product-carousel, product-grid, you-may-also-like, recommended-items, product-slider, cross-sell, upsell-section, similar-products
 - Schema settings: 22 | Block types: 0
-- Use when: When the mockup shows a product recommendation section below product details with either a grid or carousel layout of product cards.
-- Create new if: When the mockup requires custom recommendation logic beyond Shopify's algorithm, manual product selection, or completely custom card layouts with non-standard product information.
-- Requirements that exceed this section: Custom filtering or sorting logic for recommendations; Manual product selection instead of algorithmic recommendations; Integration with third-party recommendation engines; Custom product card layouts requiring additional metadata or custom fields; Mixed content types (products + blog posts + collections); Tabbed interfaces showing different recommendation types; Comparison tables or side-by-side product features; Non-product page contexts requiring different data sources
+- Use when: Use this section when mockups show product recommendations, related items, or cross-sell products on product pages with either grid or carousel layout.
+- Create new if: Create a new section if the mockup requires manual product selection, custom recommendation logic, bundling features, or non-standard layouts like masonry or asymmetric grids.
+- Requirements that exceed this section: Manual product curation instead of automatic recommendations; Product bundles with combined pricing; Mixed content types (products + collections + blog posts); Custom recommendation algorithms or filters beyond Shopify's native engine; Interactive comparison features or side-by-side product views; Masonry, asymmetric, or highly custom grid layouts; Integration with third-party recommendation engines; Add-to-cart functionality directly in the carousel/grid; Customizable product card layouts beyond standard component; Tab-based or category-filtered product recommendations
 
 ### reset-password (`sections/reset-password.liquid`)
 - Role: t:sections.main-reset-password.name section
-- Mockup keywords: password reset form, two-field form, customer authentication, password confirmation, centered form layout, error message display, simple form container, account security
+- Mockup keywords: password-reset-form, two-field-form, customer-authentication, password-confirmation, centered-form-layout, account-security-page, form-validation-errors, inline-error-messaging
 - Schema settings: 3 | Block types: 0
-- Use when: When the design shows a password reset page with two password fields (new password and confirmation) with error handling and submit button
-- Create new if: When the design requires additional fields beyond password/confirmation, alternative layouts (split-screen, multi-step), social login options, or significantly different form structures
-- Requirements that exceed this section: Additional form fields beyond password and password confirmation are needed; Multi-step password reset flow is required; Side-by-side layout with imagery or promotional content; Integration with third-party authentication providers; Password strength indicator or custom validation UI; Alternative form layouts that aren't single-column centered
+- Use when: When mockup shows a simple two-field password reset form with error handling for customer account password recovery
+- Create new if: If mockup requires additional fields, password strength indicators, multi-step verification, social login options, or complex custom layouts beyond basic centered form structure
+- Requirements that exceed this section: More than two password input fields are needed; Password strength meter or validation requirements display is required; Multi-step password reset flow with email verification UI; Side-by-side layout with educational content or security tips; Integration with third-party authentication providers; Custom branding elements or complex header/footer within the form; Additional user profile fields to update during password reset
 
 ### search (`sections/search.liquid`)
 - Role: t:sections.main-collection-product-grid.name section
-- Mockup keywords: search-results-grid, product-search-page, filtered-product-grid, search-with-filters, product-listing, sortable-grid, paginated-results, quick-add-grid, vertical-horizontal-filters, multi-column-grid
+- Mockup keywords: search-results, product-grid, filterable-search, vertical-filters, horizontal-filters, paginated-results, quick-add, columns-layout, color-scheme
 - Schema settings: 31 | Block types: 0
-- Use when: When the mockup shows a search results page with product grid, optional filtering (vertical or horizontal), sorting, and pagination.
-- Create new if: If the mockup requires a non-product search layout (articles, pages, mixed content types) or a completely different visual structure beyond grid display.
-- Requirements that exceed this section: Search results need to display content types other than products (blog posts, pages, collections); Layout requires masonry, list view, or non-grid arrangements; Needs inline filtering without page reload beyond quick-add functionality; Requires search autocomplete/suggestions as primary interface rather than results grid; Custom card designs that can't be achieved through product-card component modification
+- Use when: When the design shows a search results page with product grid, optional filtering (vertical or horizontal), sorting, and pagination.
+- Create new if: When the design requires non-product search results (articles, pages, collections only), custom result cards beyond standard product cards, or a completely different layout paradigm like masonry or list view.
+- Requirements that exceed this section: Search results must display multiple content types in a unified layout (products, blog posts, pages mixed); Custom filtering UI beyond vertical/horizontal filter types; Non-grid layouts like list view, masonry, or carousel presentation; Inline filtering without page reload required; Custom product card layouts that component-product-card.css cannot accommodate; Search suggestions or autocomplete within results page itself; Faceted search with drill-down navigation
 
 ### selling-points-v2 (`sections/selling-points-v2.liquid`)
 - Role: Selling Points V2 section
-- Mockup keywords: selling-points, feature-grid, icon-cards, benefit-tiles, value-props, service-highlights, feature-carousel, mobile-slider, clickable-cards, icon-grid
+- Mockup keywords: selling-points, feature-cards, horizontal-cards, icon-cards, info-blocks, mobile-carousel, swipeable-features, benefit-tiles
 - Schema settings: 6 | Block types: 1
-- Use when: When the mockup shows a grid or carousel of text-based selling points/features with optional links and icons, especially if mobile slider functionality is needed
-- Create new if: When the mockup requires custom icons per block, images, different layouts beyond grid/slider, or complex content beyond title and description
-- Requirements that exceed this section: Custom or different icons per selling point block; Images or media content within each selling point; More than two text fields per block (currently title + description); Complex layouts like alternating orientations or multi-column text; Button CTAs instead of card-level links; Background images or overlays per item; Custom icon upload capability; Video or animated content; Non-grid layouts like staggered or masonry
+- Use when: Use this section when the mockup shows multiple selling points, features, or benefits displayed as horizontal cards with titles, descriptions, and icons, especially if mobile needs a swipeable carousel.
+- Create new if: Create a new section if the design requires custom icons per block, images instead of SVG icons, vertical layout, alternating layouts, or more than three content fields per item.
+- Requirements that exceed this section: Each selling point needs a unique custom icon upload instead of the shared icon-details.svg; Design requires images, badges, or media content beyond simple text and icon; Layout needs vertical stacking, alternating left/right alignment, or grid patterns beyond horizontal flow; Additional content fields needed like subheadings, buttons, prices, or multi-paragraph descriptions; Desktop also requires carousel/slider functionality; Different icon positions (left, top, bottom) or sizes per block
 
 ### selling-points (`sections/selling-points.liquid`)
 - Role: Selling Points section
-- Mockup keywords: icon-row, feature-grid, selling-points, icon-with-text, benefits-list, features-grid, icon-columns, trust-badges, value-props
+- Mockup keywords: icon-grid, feature-list, selling-points, benefits-grid, icon-row, feature-blocks, usp-section, value-props, icon-with-text, trust-badges
 - Schema settings: 6 | Block types: 1
-- Use when: When mockup shows a grid of items with icons/images paired with titles and descriptions (common for features, benefits, or trust indicators)
-- Create new if: When mockup requires links/buttons on each item, different layouts per breakpoint, alternating image positions, or animations beyond simple display
-- Requirements that exceed this section: Individual items need CTAs or clickable links; Layout requires asymmetric or masonry grid patterns; Items need hover states with content reveals; Design includes progress bars, ratings, or interactive elements; Icons need to be SVG code rather than uploaded images; Content needs to be pulled from metafields or dynamic sources; Mobile layout requires carousel/slider instead of stacked grid
+- Use when: When the mockup shows a grid or row of features/benefits with icons and text descriptions, typically for USPs or product advantages
+- Create new if: When the design requires interactive elements, animations, links/CTAs per item, or complex layouts beyond icon-title-description blocks
+- Requirements that exceed this section: Each selling point needs a button or link; Requires alternating layouts or card-style containers with borders/shadows; Needs background images per item instead of icons; Requires different icon sizes per block rather than section-wide setting; Needs slider/carousel functionality for mobile; Requires counters, stats, or dynamic data integration; Needs hover states with animations or content reveals
 
 ### shop-by-category-v2 (`sections/shop-by-category-v2.liquid`)
 - Role: Shop By Category V2 section
-- Mockup keywords: category grid, shop by category, image card grid, category tiles, collection navigator, category browser, clickable image cards, product category showcase
+- Mockup keywords: category-grid, image-card-grid, shop-by-category, category-tiles, image-link-cards, category-navigation, product-category-cards, clickable-image-grid
 - Schema settings: 5 | Block types: 1
-- Use when: When mockup shows a grid of clickable image cards with titles and arrows for navigating to different product categories or collections
-- Create new if: When mockup requires subcategories, product counts, category descriptions, hover overlays, video cards, or a different grid layout than the standard responsive grid
-- Requirements that exceed this section: Multiple images per card or image carousels within cards; Category descriptions or body text below titles; Product counts or pricing information on cards; Filterable or sortable category grid; Nested subcategories or hierarchical navigation; Video content instead of static images; Custom grid layouts beyond standard responsive behavior; Interactive hover states with additional content reveal; Badge or tag overlays on category images
+- Use when: When the mockup shows a grid of clickable image cards with titles and arrows, typically used for navigating to different product categories or collections.
+- Create new if: When the design requires significantly different card layouts (e.g., overlay text instead of below-image text), video content, multiple images per card, or complex interactive elements beyond simple linking.
+- Requirements that exceed this section: Cards need video backgrounds or animated content; Multiple images per card (e.g., hover state image swaps); Text overlay positioning on images rather than separate content area; Subcategory dropdowns or nested navigation within cards; Product count badges or dynamic metadata display; Filter or sort functionality integrated into the section; Carousel/slider behavior instead of static grid; Cards require multiple CTAs or button styles beyond the arrow icon
 
 ### shop-by-category (`sections/shop-by-category.liquid`)
 - Role: Shop By Category section
-- Mockup keywords: category-navigation, split-layout, featured-image-left, vertical-link-list, shop-by-category, two-column-grid, collection-browser, category-menu, sidebar-navigation
+- Mockup keywords: category-grid, collection-list, featured-image-sidebar, category-navigation, split-layout, image-with-list, category-browser, shop-by-collection, two-column-category, sidebar-navigation
 - Schema settings: 8 | Block types: 1
-- Use when: When the design shows a category browsing interface with a large featured image on one side and a vertical list of collection/category links on the other side.
-- Create new if: When the design requires a grid of category cards, horizontal scrolling categories, or multi-column category layouts instead of a single featured image with a vertical list.
-- Requirements that exceed this section: Multiple featured images displayed simultaneously; Grid layout with category cards in rows and columns; Horizontal scrolling or carousel of categories; Nested subcategory dropdowns or accordions; Category tiles with overlay text on each image; More than one featured image section visible at once; Interactive hover states that change the main featured image; Category filtering or search functionality
+- Use when: When the mockup shows a featured image on one side with a list of category/collection links on the other side, typically in a two-column split layout.
+- Create new if: When the mockup requires multiple featured images displayed simultaneously, a grid of category cards with individual images per category, or carousel/slider functionality.
+- Requirements that exceed this section: Multiple category images displayed in a grid or carousel format; Individual images shown for each category link rather than one featured image; Interactive filtering or search functionality within categories; Multi-column category list layout (3+ columns); Nested subcategory navigation or dropdown menus; Product counts or pricing displayed per category; Video or animated media instead of static image; Horizontal scrolling or swipeable category cards
 
 ### shop-categories (`sections/shop-categories.liquid`)
 - Role: Shop Categories section
-- Mockup keywords: category-carousel, collection-slider, horizontal-scroll-categories, product-category-grid, image-card-slider, collection-showcase, category-navigation, swiper-carousel, shop-by-category, collection-tiles
+- Mockup keywords: collection-carousel, category-slider, horizontal-scroll-categories, shop-by-category, collection-grid-swiper, category-tiles, image-carousel, collection-showcase
 - Schema settings: 5 | Block types: 1
-- Use when: When the mockup shows a horizontal scrolling or carousel display of product categories or collections with images and titles that link to collection pages.
-- Create new if: When the mockup requires a static grid layout without carousel functionality, vertical stacking, nested subcategories, or significantly different card designs like overlays with multiple CTAs.
-- Requirements that exceed this section: Static grid layout required instead of swiper/carousel; Multiple images per category card; Video backgrounds for categories; Category filtering or search functionality; Nested subcategory display; Product count or pricing displayed on cards; Multiple call-to-action buttons per card; Masonry or asymmetric layout; Tab-based category switching; Vertical carousel orientation
+- Use when: When the mockup shows a horizontal scrolling or swipeable row of collection/category cards with images and titles that link to collection pages
+- Create new if: When the design requires vertical grid layout without carousel behavior, multiple rows of categories, filterable category navigation, or nested subcategories with dropdowns
+- Requirements that exceed this section: Categories need to be displayed in a static multi-row grid instead of a carousel; Design includes product counts, pricing, or other metadata beyond image and title; Requires category filtering or search functionality; Needs nested/hierarchical category navigation with expandable subcategories; Design shows categories with multiple images or image galleries per category; Requires different layout patterns like masonry, bento-box, or asymmetric grid
 
 ### shop-the-look (`sections/shop-the-look.liquid`)
 - Role: Shop The Look section
-- Mockup keywords: shop-the-look, shoppable-image-slider, hotspot-carousel, product-tagging-gallery, lookbook-slider, interactive-image-carousel, swiper-gallery, tagged-product-images, lifestyle-image-slider, clickable-product-hotspots
+- Mockup keywords: shop-the-look, shoppable-image-slider, hotspot-carousel, product-pinpoints, lookbook-slider, interactive-image-gallery, tagged-product-slider, image-hotspot-swiper
 - Schema settings: 10 | Block types: 1
-- Use when: When a design shows a carousel/slider of lifestyle images with interactive hotspot dots that reveal product information or links, typically used for outfit styling or room decor showcases.
-- Create new if: When the design requires a static grid layout instead of a slider, multi-image comparisons, video content with hotspots, or fundamentally different interaction patterns like hover-reveal instead of click-reveal.
-- Requirements that exceed this section: Non-slider layout required (static grid, masonry, split-screen); Video content with hotspots instead of images; More than 3 hotspots per image needed; Hover interactions instead of click-to-reveal; Embedded product quick-buy instead of simple links; Before/after image comparisons; Vertical slider orientation required; Synchronized multi-carousel layout
+- Use when: When the design shows a carousel/slider of lifestyle images with clickable hotspots or product pins that reveal product information overlays.
+- Create new if: When the design requires a grid layout instead of a slider, video backgrounds, or fundamentally different hotspot interactions like full-screen product modals.
+- Requirements that exceed this section: Grid layout instead of carousel/slider format; Video content with hotspots instead of static images; More than 3 hotspots per image (current limit is hotspot_1, hotspot_2, hotspot_3); Hotspots that link to collections or pages instead of products; Split-screen layout with permanent product list beside image; Vertical slider orientation; Multi-image hotspots (one pin showing multiple products); Zoom or lightbox functionality for the main image
+
+### Faq-metaobjects (`sections/Faq-metaobjects.liquid`)
+- Role: FAQ — Metaobjects section
+- Mockup keywords: FAQ, accordion, collapsible, questions and answers, Q&A, help section, expandable content, plus minus icons, metaobject, support
+- Schema settings: 6 | Block types: 0
+- Use when: Use this section when the mockup shows an accordion-style FAQ with questions that expand to reveal answers, sourced from Shopify metaobjects.
+- Create new if: Create a new section if the FAQ design requires tabs, search functionality, categories, side-by-side layout, or static (non-collapsible) content.
+- Requirements that exceed this section: FAQ items need to be manually entered in section settings instead of metaobjects; Design shows FAQ in a grid or multi-column layout; Questions should be displayed with answers visible by default; FAQ needs filtering, search, or category navigation; Content should use rich text editor instead of plain text; Design requires card-based or boxed individual items; Animations or interactions differ from x-transition collapse
 
 
 ---
