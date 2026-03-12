@@ -6,7 +6,7 @@ cart_drawer:
   secondary_files:
     - snippets/component-cart-discount.liquid
     - assets/component-cart-discount.js
-    - assets/component-product-price.css
+    - sections/cart.liquid
   do_not_edit:
     - assets/critical.css
   entry_point: snippets/component-cart-drawer.liquid
@@ -21,6 +21,7 @@ product_form:
     - assets/component-product-price.css
   do_not_edit:
     - assets/shopify.js
+    - assets/critical.css
   entry_point: sections/product.liquid
 collection_grid:
   primary_files:
@@ -31,24 +32,25 @@ collection_grid:
     - snippets/component-product-card.liquid
     - assets/component-product-card.css
     - assets/component-product-card.js
-    - assets/component-infinite-scroll.js
     - snippets/component-pagination.liquid
     - assets/component-pagination.css
+    - assets/component-infinite-scroll.js
   do_not_edit:
     - templates/collection.json
   entry_point: sections/collection.liquid
 header_navigation:
   primary_files:
     - sections/header.liquid
-    - snippets/component-nav-megamenu.liquid
-    - snippets/component-nav-dropdown.liquid
+    - assets/section-footer.css
   secondary_files:
     - snippets/component-nav-drawer.liquid
-    - assets/component-localization-form.js
-    - snippets/component-localization-form.liquid
+    - snippets/component-nav-dropdown.liquid
+    - snippets/component-nav-megamenu.liquid
     - sections/header-group.json
+    - snippets/component-localization-form.liquid
+    - assets/component-localization-form.js
   do_not_edit:
-    - layout/theme.liquid
+    - assets/critical.css
   entry_point: sections/header.liquid
 predictive_search:
   primary_files:
@@ -57,8 +59,8 @@ predictive_search:
     - assets/component-predictive-search.css
   secondary_files:
     - sections/predictive-results.liquid
-    - snippets/component-product-card.liquid
-    - assets/component-product-card.css
+    - sections/search.liquid
+    - assets/section-search.css
   do_not_edit:
     - assets/theme.js
   entry_point: snippets/component-predictive-search.liquid
@@ -68,26 +70,24 @@ quick_add:
     - assets/component-quick-add.css
   secondary_files:
     - snippets/component-product-card.liquid
-    - assets/component-modal-opener.js
     - assets/component-cart-notification.js
     - snippets/component-cart-notification.liquid
   do_not_edit:
-    - assets/shopify.js
+    - assets/component-modal-opener.js
   entry_point: assets/component-quick-add.js
 filters:
   primary_files:
     - snippets/component-filters-sidebar.liquid
     - snippets/component-filters-horizontal.liquid
-    - snippets/component-filters-drawer.liquid
+    - assets/section-collection.css
   secondary_files:
+    - snippets/component-filters-drawer.liquid
     - snippets/component-filters-price-range.liquid
     - assets/component-filters-price-range.js
     - assets/section-collection.js
-    - assets/section-collection.css
   do_not_edit:
-    - sections/collection.liquid
-    - sections/search.liquid
-  entry_point: snippets/component-filters-sidebar.liquid
+    - assets/shopify.js
+  entry_point: assets/section-collection.js
 product_media:
   primary_files:
     - snippets/component-product-media-gallery.liquid
@@ -100,7 +100,7 @@ product_media:
     - assets/component-product-media-magnify.js
     - assets/section-product.js
   do_not_edit:
-    - sections/product.liquid
+    - assets/critical.css
   entry_point: snippets/component-product-media-gallery.liquid
 variant_picker:
   primary_files:
@@ -109,10 +109,8 @@ variant_picker:
   secondary_files:
     - snippets/component-product-card.liquid
     - assets/component-product-card.js
-    - assets/component-product-card.css
-    - snippets/component-product-price.liquid
     - assets/component-selling-plans.js
+    - snippets/component-product-price.liquid
   do_not_edit:
     - assets/shopify.js
-    - templates/product.json
-  entry_point: sections/product.liquid
+  entry_point: assets/section-product.js

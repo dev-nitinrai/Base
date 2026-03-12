@@ -10,7 +10,52 @@
 
 ---
 
-${shopifyGuidelines}
+## Shopify Theme Development Guidelines
+
+### Liquid Best Practices
+- Load CSS: `{{ 'file.css' | asset_url | stylesheet_tag }}` — never use inline `<style>` in new code
+- Load JS: `<script src="{{ 'file.js' | asset_url }}" defer="defer"></script>`
+- Use `{% render 'snippet' %}` (not `{% include %}`) for snippet isolation
+- Section schema: always include `name`, `settings[]`, optional `blocks[]` with `presets[]`
+- Use `{{ 'string_key' | t }}` for user-facing text (i18n from locales/)
+
+### Schema Best Practices
+- Settings types: text, textarea, richtext, image_picker, url, color, range, select, checkbox, number, font_picker, collection, product, blog, page, link_list, video_url
+- Block types must have unique `type` identifier and clear `name`
+- Include `presets` with at least one default for theme editor
+- Use `templates` array to restrict where sections appear
+- Max blocks: set `max_blocks` when the layout has a fixed number of slots
+
+### Theme Check Compliance
+- Never hardcode absolute URLs — use `asset_url`, `img_url`, or `routes` object
+- Always add `alt` attribute to images: `alt="{{ image.alt | escape }}"`
+- Don't use deprecated tags (`{% include %}` → `{% render %}`)
+- Escape user input: `{{ string | escape }}` in attributes
+- Don't reference `content_for_header` outside layout files
+
+### CSS Variables (This Theme)
+- This theme uses CSS custom properties (defined in css-variables.liquid or similar)
+- Always reference theme tokens: `color: var(--color-primary)`, `font-family: var(--font-body-family)`
+- For brand-wide color/font changes, update the variables file — not individual sections
+
+### CSS Naming Convention: BEM
+- This theme follows BEM naming: `.block__element--modifier`
+- Block = section or component name: `.footer`, `.product-card`
+- Element = child: `.footer__links`, `.product-card__image`
+- Modifier = variant: `.footer--dark`, `.product-card--featured`
+- Never use ID selectors for styling
+
+### JavaScript: Alpine.js
+- This theme uses Alpine.js for interactivity
+- Use `x-data`, `x-show`, `x-bind`, `@click` directives
+- Store component state in `x-data="{ open: false }"`
+- For shared state use Alpine.store()
+
+### File Organization
+- Section CSS goes in: `assets/section-{name}.css`
+- Component CSS goes in: `assets/component-{name}.css`
+- Section JS goes in: `assets/section-{name}.js`
+- Load CSS at top of section: `{{ 'section-name.css' | asset_url | stylesheet_tag }}`
 
 ---
 
@@ -22,55 +67,55 @@ ${shopifyGuidelines}
 
 ## Available Sections (49)
 
-- **`sections/404.liquid`** — 404 section | keywords: 404 page, error page, not found, centered text layout, single CTA button, empty state, page not found, centered message
-- **`sections/Faq.liquid`** — FAQ section | keywords: faq-accordion, collapsible-content, expandable-list, question-answer, accordion-panel, toggle-content, plus-minus-icons, interactive-faq
-- **`sections/account.liquid`** — t:sections.main-account.name section | keywords: customer-account-dashboard, order-history-table, account-overview, logged-in-user-page, transaction-list, customer-portal, account-header-logout, paginated-orders
-- **`sections/activate-account.liquid`** — t:sections.main-activate-account.name section | keywords: account activation, password setup form, dual password fields, customer onboarding, form with decline option, centered account form, password confirmation layout, customer authentication
-- **`sections/addresses.liquid`** — t:sections.main-addresses.name section | keywords: customer-addresses, account-dashboard, address-book, form-list, add-new-address, address-management, customer-portal, paginated-list, account-section
-- **`sections/animated-features-v2.liquid`** — Animated Features V2 section | keywords: animated-percentage, split-layout, feature-list-with-image, stats-with-checkmarks, two-column-features, percentage-hero, animated-counter, image-text-split, checklist-features
-- **`sections/animated-features.liquid`** — Animated Features section | keywords: animated-feature-cards, flip-cards, 2-column-features, icon-grid, interactive-cards, feature-showcase, hover-flip, animated-grid, left-right-split
-- **`sections/announcement-bar.liquid`** — Top-of-page announcement strip | keywords: announcement-bar, promo-banner, rotating-banner, top-banner, marquee-bar, notification-strip, header-announcement, message-carousel, auto-scroll-banner, promotional-header
-- **`sections/article.liquid`** — t:sections.main-article.name section | keywords: article-hero, blog-post-layout, featured-image-header, content-blocks, back-button, article-metadata, responsive-article, blog-detail-page, article-title-banner, content-typography
-- **`sections/blog.liquid`** — t:sections.main-blog.name section | keywords: blog-grid, article-listing, blog-archive, post-grid, content-feed, blog-index, article-cards, paginated-blog
-- **`sections/blogs.liquid`** — Blogs section | keywords: blog-grid, article-cards, blog-feed, post-preview, content-grid, blog-listing, article-section, editorial-cards
-- **`sections/brand-story-v2.liquid`** — Brand Story V2 section | keywords: brand-story, accordion-image-split, tabbed-content, story-accordion, feature-tabs, vertical-accordion, split-layout, interactive-content, collapsible-features, image-switcher
-- **`sections/brand-story.liquid`** — Brand Story section | keywords: before-after, image-comparison, split-layout, brand-story, two-column-images, labeled-images, comparison-slider, side-by-side-images, visual-comparison, story-section
-- **`sections/cart.liquid`** — t:sections.main-cart-items.name section | keywords: cart-page, shopping-cart, line-items-list, cart-summary, product-thumbnail-list, quantity-selector, remove-item, cart-table, checkout-flow
-- **`sections/collection.liquid`** — t:sections.main-collection-product-grid.name section | keywords: collection-grid, product-grid, filter-sidebar, vertical-filters, horizontal-filters, pagination, collection-hero, quick-add, multi-column-grid
-- **`sections/collections.liquid`** — t:general.collections_grid section | keywords: collections-grid, category-grid, 3-column-grid, collection-cards, image-grid, collection-list, category-tiles, responsive-grid
-- **`sections/custom-section.liquid`** — t:general.custom_section section | keywords: custom-section, flexible-container, background-image-section, grid-wrapper, theme-blocks, full-width-section, content-overlay, universal-container, modular-layout, wrapper-section
-- **`sections/dynamic-grid.liquid`** — Custom section | keywords: dynamic-grid, content-grid, promotional-grid, image-grid, feature-grid, modular-grid, flexible-layout, multi-column-content, grid-with-title, configurable-grid
-- **`sections/featured-collections-v2.liquid`** — Grid of products from a collection | keywords: tabbed-collections, product-carousel, multi-collection-slider, tabbed-product-grid, collection-tabs, swiper-collections, featured-products-tabbed
-- **`sections/featured-collections.liquid`** — Grid of products from a collection | keywords: featured-collections, collection-grid, collection-cards, multi-collection-showcase, category-grid, image-grid-with-labels, collection-tiles, shop-by-category
-- **`sections/featured-products.liquid`** — Single product showcase with form | keywords: product-carousel, featured-products-slider, product-swiper, product-showcase, horizontal-product-scroll, product-grid-slider, curated-products, shop-collection-carousel
-- **`sections/footer.liquid`** — Site footer with links and info | keywords: footer, multi-column footer, footer links, social icons, brand information, footer menu, site footer, bottom navigation, newsletter footer
-- **`sections/header.liquid`** — Site navigation header | keywords: sticky header, top navigation, logo center, cart icon, account icon, menu dropdown, horizontal nav, announcement bar, persistent header, site navigation
-- **`sections/hello-world.liquid`** — Hello World section | keywords: welcome-hero, split-content, text-with-icon, three-column-features, info-cards, feature-grid, educational-content, onboarding-section
-- **`sections/hero-v2.liquid`** — Full-width banner with headline and CTA | keywords: hero, split-layout, hero-banner, video-background, image-with-text, content-left-media-right, full-width-hero, CTA-hero, vertical-split
-- **`sections/hero.liquid`** — Full-width banner with headline and CTA | keywords: hero banner, full-width hero, video background hero, image banner, headline overlay, CTA banner, above-the-fold, endorsement signature, star rating hero, splash banner
-- **`sections/link-readme.liquid`** — Link Readme section | keywords: call-to-action, cta-button, single-button, link-banner, simple-cta, centered-button, action-prompt, readme-link, standalone-button
-- **`sections/login.liquid`** — t:sections.main-login.name section | keywords: customer-login-form, password-recovery, account-sign-in, email-input-fields, shop-login-button, form-validation, two-column-auth, login-page, account-access, customer-portal-entry
-- **`sections/logos.liquid`** — Logos section | keywords: logo-carousel, brand-slider, logo-marquee, partner-logos, trust-badges, logo-strip, infinite-scroll-logos, client-showcase, brand-grid, logo-ticker
-- **`sections/order.liquid`** — t:sections.main-order.name section | keywords: order-history-table, customer-account-order, order-details-page, product-line-items-table, order-summary-layout, tabular-order-view, account-dashboard-order, order-status-page
-- **`sections/page.liquid`** — t:sections.main-page.name section | keywords: page-content, static-page, simple-text-page, centered-content, single-column-text, basic-page-layout, narrow-content, cms-page
-- **`sections/password.liquid`** — Password Page section | keywords: password-page, coming-soon, splash-screen, login-gate, email-capture, store-access, maintenance-mode, pre-launch, centered-form, brand-lockup
-- **`sections/pickup-availability.liquid`** — Custom section | keywords: store pickup, local availability, BOPIS, click-and-collect, store locator drawer, inventory checker, location selector, pickup drawer modal, store availability list, location-based pickup
-- **`sections/predictive-results.liquid`** — Custom section | keywords: predictive-search, autocomplete-dropdown, search-suggestions, instant-search-results, layered-search-panels, product-search-preview, search-overlay, typeahead-search
-- **`sections/product-details.liquid`** — Product Details section | keywords: accordion, collapsible-details, product-specs, tabbed-content, expandable-panels, faq-style, details-section, image-text-accordion, split-content-blocks
-- **`sections/product-highlights.liquid`** — Product Highlights section | keywords: feature-list-with-image, product-features-split, icon-list-image-layout, benefit-highlights, two-column-features, image-text-features, icon-feature-grid, product-usp-section
-- **`sections/product.liquid`** — t:sections.main-product.name section | keywords: product-detail-page, pdp-layout, product-gallery, product-info, media-gallery, variant-selector, add-to-cart, product-description, complementary-products, split-layout
-- **`sections/promo-banner.liquid`** — Banner image with text overlay | keywords: promo-banner, product-highlight, split-layout, featured-product, image-text-banner, product-callout, two-column-promo, cta-banner
-- **`sections/register.liquid`** — t:sections.main-register.name section | keywords: registration form, account signup, customer create, vertical form layout, labeled input fields, form validation, error messaging, customer authentication
-- **`sections/related-products.liquid`** — Related products section | keywords: related-products, product-recommendations, product-carousel, product-grid, you-may-also-like, recommended-items, product-slider, cross-sell, upsell-section, similar-products
-- **`sections/reset-password.liquid`** — t:sections.main-reset-password.name section | keywords: password-reset-form, two-field-form, customer-authentication, password-confirmation, centered-form-layout, account-security-page, form-validation-errors, inline-error-messaging
-- **`sections/search.liquid`** — t:sections.main-collection-product-grid.name section | keywords: search-results, product-grid, filterable-search, vertical-filters, horizontal-filters, paginated-results, quick-add, columns-layout, color-scheme
-- **`sections/selling-points-v2.liquid`** — Selling Points V2 section | keywords: selling-points, feature-cards, horizontal-cards, icon-cards, info-blocks, mobile-carousel, swipeable-features, benefit-tiles
-- **`sections/selling-points.liquid`** — Selling Points section | keywords: icon-grid, feature-list, selling-points, benefits-grid, icon-row, feature-blocks, usp-section, value-props, icon-with-text, trust-badges
-- **`sections/shop-by-category-v2.liquid`** — Shop By Category V2 section | keywords: category-grid, image-card-grid, shop-by-category, category-tiles, image-link-cards, category-navigation, product-category-cards, clickable-image-grid
-- **`sections/shop-by-category.liquid`** — Shop By Category section | keywords: category-grid, collection-list, featured-image-sidebar, category-navigation, split-layout, image-with-list, category-browser, shop-by-collection, two-column-category, sidebar-navigation
-- **`sections/shop-categories.liquid`** — Shop Categories section | keywords: collection-carousel, category-slider, horizontal-scroll-categories, shop-by-category, collection-grid-swiper, category-tiles, image-carousel, collection-showcase
-- **`sections/shop-the-look.liquid`** — Shop The Look section | keywords: shop-the-look, shoppable-image-slider, hotspot-carousel, product-pinpoints, lookbook-slider, interactive-image-gallery, tagged-product-slider, image-hotspot-swiper
-- **`sections/Faq-metaobjects.liquid`** — FAQ — Metaobjects section | keywords: FAQ, accordion, collapsible, questions and answers, Q&A, help section, expandable content, plus minus icons, metaobject, support
+- **`sections/404.liquid`** — 404 section | keywords: 404 error page, page not found, error state, centered text layout, call-to-action button, minimal error page, full-width centered content, error message
+- **`sections/Faq-metaobjects.liquid`** — FAQ — Metaobjects section | keywords: faq-accordion, collapsible-faq, accordion-list, expandable-questions, metaobject-faq, q&a-section, faq-dropdown, single-column-accordion
+- **`sections/Faq.liquid`** — FAQ section | keywords: faq-accordion, collapsible-content, expandable-list, question-answer, accordion-section, toggle-content, plus-minus-icons, faq-list
+- **`sections/account.liquid`** — t:sections.main-account.name section | keywords: account-dashboard, customer-portal, order-history-table, logged-in-view, my-account, order-list, user-profile, account-overview, transaction-history, customer-orders
+- **`sections/activate-account.liquid`** — t:sections.main-activate-account.name section | keywords: account activation form, password setup, two-field form, dual password input, customer onboarding, account confirmation, submit-cancel buttons, form error messaging, centered form layout, customer authentication
+- **`sections/addresses.liquid`** — t:sections.main-addresses.name section | keywords: customer account addresses, address book, form layout, add new address, edit address, paginated address list, customer portal, account management, address form fields, customer dashboard
+- **`sections/animated-features-v2.liquid`** — Animated Features V2 section | keywords: animated-percentage, split-layout, image-with-stats, feature-checklist, stat-highlight, percentage-counter, animated-features, benefit-list, two-column-features, image-text-split
+- **`sections/animated-features.liquid`** — Animated Features section | keywords: animated-features-grid, flip-card-grid, interactive-cards, 2-column-split-layout, features-with-images, hover-flip-cards, icon-feature-showcase, animated-grid-section
+- **`sections/announcement-bar.liquid`** — Top-of-page announcement strip | keywords: announcement-bar, top-banner, promo-banner, rotating-message-bar, alert-banner, sticky-header-banner, rotating-announcements, carousel-banner, notification-strip, promotional-header
+- **`sections/article.liquid`** — t:sections.main-article.name section | keywords: article-hero, blog-post-layout, featured-image, article-content, back-button, blog-single, post-template, author-meta, share-buttons, pagination
+- **`sections/blog.liquid`** — t:sections.main-blog.name section | keywords: blog-grid, article-list, blog-posts, collage-layout, blog-archive, post-grid, article-feed, blog-listing, paginated-blog
+- **`sections/blogs.liquid`** — Blogs section | keywords: blog-grid, article-cards, blog-preview, content-grid, editorial-grid, blog-section, article-listing, post-preview-cards
+- **`sections/brand-story-v2.liquid`** — Brand Story V2 section | keywords: accordion-image-split, expandable-content-layout, interactive-story-section, tab-image-toggle, two-column-accordion, content-image-switcher, brand-narrative, story-blocks
+- **`sections/brand-story.liquid`** — Brand Story section | keywords: brand-story, image-comparison, before-after, side-by-side-images, two-column-layout, labeled-images, comparison-box, split-content, image-with-text, brand-narrative
+- **`sections/cart.liquid`** — t:sections.main-cart-items.name section | keywords: shopping-cart, cart-page, line-items-list, cart-summary, quantity-selector, cart-item-row, product-thumbnail-cart, cart-totals, cart-variant-options
+- **`sections/collection.liquid`** — t:sections.main-collection-product-grid.name section | keywords: product-grid, collection-layout, filter-sidebar, horizontal-filters, vertical-filters, pagination, product-card-grid, collection-hero, quick-add-buttons, multi-column-grid
+- **`sections/collections.liquid`** — t:general.collections_grid section | keywords: collection-grid, category-grid, collections-list, 3-column-grid, collection-cards, featured-collections, category-tiles, collections-overview
+- **`sections/custom-section.liquid`** — t:general.custom_section section | keywords: custom-content, flexible-container, background-image-section, grid-layout, modular-blocks, full-width-banner, theme-blocks-container, configurable-section
+- **`sections/dynamic-grid.liquid`** — Custom section | keywords: dynamic-grid, content-grid, flexible-grid, multi-column-layout, grid-section, masonry-layout, tile-grid, grid-showcase
+- **`sections/featured-collections-v2.liquid`** — Grid of products from a collection | keywords: tabbed-collections, product-carousel, collection-tabs, multi-collection-slider, swiper-products, tabbed-product-grid, collection-switcher
+- **`sections/featured-collections.liquid`** — Grid of products from a collection | keywords: featured collections grid, collection cards, collection showcase, multi-collection display, collection gallery, category grid, collection thumbnails, collection grid layout
+- **`sections/featured-products.liquid`** — Single product showcase with form | keywords: featured-products, product-carousel, product-slider, swiper-products, highlighted-products, curated-collection, product-showcase, horizontal-scroll-products
+- **`sections/footer.liquid`** — Site footer with links and info | keywords: footer, site-footer, multi-column-footer, footer-menu, footer-links, social-icons, brand-footer, newsletter-footer, footer-blocks, meganav-footer
+- **`sections/header.liquid`** — Site navigation header | keywords: header, top-navigation, sticky-header, logo-nav-cart, mega-menu, utility-nav, site-header, horizontal-menu, drawer-menu, cart-icon
+- **`sections/hello-world.liquid`** — Hello World section | keywords: welcome-hero, split-layout, icon-illustration, three-column-highlights, feature-grid, informational-section, text-image-split, benefit-cards, educational-layout
+- **`sections/hero-v2.liquid`** — Full-width banner with headline and CTA | keywords: hero, split-layout, hero-banner, video-hero, image-text-split, hero-with-cta, left-content-right-media, video-background-hero, featured-hero, homepage-hero
+- **`sections/hero.liquid`** — Full-width banner with headline and CTA | keywords: hero banner, full-width hero, video background hero, image background hero, CTA banner, landing hero, endorsement banner, signature hero, star rating hero, overlay hero
+- **`sections/link-readme.liquid`** — Link Readme section | keywords: call-to-action button, single CTA, centered button, standalone link, simple action section, button-only section, minimal CTA, isolated button
+- **`sections/login.liquid`** — t:sections.main-login.name section | keywords: login-form, customer-login, password-recovery, email-input, auth-page, sign-in, shop-login-button, single-column-form, customer-account, recover-password
+- **`sections/logos.liquid`** — Logos section | keywords: logo-marquee, logo-carousel, logo-strip, brand-logos, partner-logos, trust-badges, client-logos, infinite-scroll-logos, logo-ticker, brand-bar
+- **`sections/order.liquid`** — t:sections.main-order.name section | keywords: order-details-table, customer-account-order, order-history-detail, transactional-table, line-item-table, purchase-summary, order-confirmation-layout, tabular-data, account-dashboard-child, ecommerce-order-view
+- **`sections/page.liquid`** — t:sections.main-page.name section | keywords: static page, about page, policy page, content page, centered text, single column, narrow width, text-only layout, simple page, information page
+- **`sections/password.liquid`** — Password Page section | keywords: password-gate, coming-soon-page, store-lock-screen, centered-form-landing, email-capture-splash, launch-page, pre-launch-portal, storefront-unlock, access-restricted-landing
+- **`sections/pickup-availability.liquid`** — Custom section | keywords: pickup-availability, store-locator, in-store-pickup, location-list, availability-drawer, modal-dialog, stock-status, product-availability, store-info
+- **`sections/predictive-results.liquid`** — Custom section | keywords: predictive-search, autocomplete-dropdown, search-suggestions, product-quick-results, live-search, typeahead-results, search-overlay, instant-search
+- **`sections/product-details.liquid`** — Product Details section | keywords: accordion, collapsible-content, product-details, expandable-sections, faq-style, details-accordion, tabbed-content, image-text-blocks, split-content, multi-block-accordion
+- **`sections/product-highlights.liquid`** — Product Highlights section | keywords: split-layout, product-features, icon-list, two-column, feature-highlights, icon-with-text, product-showcase, benefit-list, image-text-split, feature-grid
+- **`sections/product.liquid`** — t:sections.main-product.name section | keywords: product-detail-page, pdp, split-layout, product-gallery, buy-box, variant-selector, add-to-cart, product-info, media-sidebar, product-hero
+- **`sections/promo-banner.liquid`** — Banner image with text overlay | keywords: promo-banner, product-spotlight, featured-product, split-layout, image-text-cta, promotional-card, product-callout, hero-product, image-beside-content, single-product-promo
+- **`sections/register.liquid`** — t:sections.main-register.name section | keywords: registration-form, account-signup, customer-register, user-creation-form, sign-up-page, new-account-form, customer-onboarding, input-fields-vertical, error-messaging-form, centered-form-layout
+- **`sections/related-products.liquid`** — Related products section | keywords: related-products, product-recommendations, product-carousel, product-grid, you-may-also-like, recommended-products, product-slider, swiper-carousel, product-upsell, cross-sell
+- **`sections/reset-password.liquid`** — t:sections.main-reset-password.name section | keywords: password-reset-form, two-field-form, customer-account-form, centered-form-layout, error-messaging-form, password-confirmation-input, single-column-form, account-security-page
+- **`sections/search.liquid`** — t:sections.main-collection-product-grid.name section | keywords: search-results-grid, product-grid, filterable-search, paginated-results, search-bar, multi-column-grid, product-card-layout, sort-filter-search, vertical-horizontal-filters, responsive-product-grid
+- **`sections/selling-points-v2.liquid`** — Selling Points V2 section | keywords: selling-points, feature-grid, icon-cards, benefits-grid, highlights-row, info-cards, feature-blocks, mobile-slider-cards
+- **`sections/selling-points.liquid`** — Selling Points section | keywords: icon-grid, features-grid, selling-points, icon-text-blocks, benefits-section, usp-grid, icon-list, trust-badges, feature-highlights
+- **`sections/shop-by-category-v2.liquid`** — Shop By Category V2 section | keywords: category-grid, image-cards-with-links, shop-by-category, category-tiles, category-navigation, clickable-image-grid, product-category-cards, image-grid-with-arrows
+- **`sections/shop-by-category.liquid`** — Shop By Category section | keywords: category-grid, collection-list, split-layout, featured-image-sidebar, category-navigation, image-with-list, two-column-categories, category-links, shop-by-category
+- **`sections/shop-categories.liquid`** — Shop Categories section | keywords: category-carousel, collection-slider, shop-by-category, horizontal-scroll-cards, image-card-carousel, category-grid-slider, collection-tiles, swiper-categories, product-category-navigation, filtered-collection-showcase
+- **`sections/shop-the-look.liquid`** — Shop The Look section | keywords: shop-the-look, shoppable-image, product-hotspots, interactive-slider, image-carousel-with-products, lookbook, tagged-products, clickable-hotspots, product-showcase-slider, swiper-carousel
 
 ## Available Snippets (29)
 
@@ -140,210 +185,209 @@ ${shopifyGuidelines}
 
 ## File Responsibilities
 
-- **layout/password.liquid**: Provides the minimal HTML layout wrapper for the password-protected storefront page before store launch
-- **layout/theme.liquid**: Root HTML layout wrapper that defines the document structure, loads global assets, and orchestrates header/footer sections for all non-password pages
-- **sections/404.liquid**: undefined
-- **sections/Faq.liquid**: Renders an accordion-style FAQ section with expandable question/answer blocks using Alpine.js for state management
-- **sections/account.liquid**: Customer account dashboard displaying order history with pagination and logout functionality
-- **sections/activate-account.liquid**: Renders the customer account activation form where new customers set their password
-- **sections/addresses.liquid**: Renders the customer account addresses page with add/edit/delete address forms and pagination
-- **sections/animated-features-v2.liquid**: Renders an animated features section with image, percentage heading, and feature list with checkmarks
-- **sections/animated-features.liquid**: Renders an animated features section with a left content area (heading, subheading, button, notes) and a right grid of four flippable cards showing images/labels on front and custom text on back.
-- **sections/announcement-bar.liquid**: Renders a rotating announcement bar at the top of the site with customizable messages, links, and emojis
-- **sections/article.liquid**: Renders the blog article page layout with configurable blocks for featured image, title, content, sharing, and pagination
-- **sections/blog.liquid**: Renders the main blog listing page with paginated article cards and customizable layout options.
-- **sections/blogs.liquid**: Displays a grid of blog article cards with customizable heading, navigation link, and color scheme settings
-- **sections/brand-story-v2.liquid**: Renders an interactive brand story section with accordion-style content items paired with synchronized image display
-- **sections/brand-story.liquid**: Renders a brand story section with two side-by-side labeled images and accompanying heading/description text
-- **sections/cart.liquid**: Renders the main cart page UI with line items, quantities, discounts, and checkout flow using Liquid Ajax Cart for dynamic updates
-- **sections/collection.liquid**: Renders the main collection page layout including product grid, filtering UI, sorting, pagination, and hero section
-- **sections/collections.liquid**: Renders a grid layout displaying all Shopify collections with featured images, titles, and descriptions on the list-collections page
-- **sections/custom-section.liquid**: Provides a flexible container section with optional background image that can host any theme blocks through content_for 'blocks'
-- **sections/dynamic-grid.liquid**: Renders a customizable grid layout section with configurable title, description, button, and grid items supporting text-on-image or text-below-image styles
-- **sections/featured-collections-v2.liquid**: Renders a tabbed interface displaying multiple featured product collections with swiper carousels and product cards
-- **sections/featured-collections.liquid**: Renders a customizable grid of featured collection cards with images, titles, and optional shop links
-- **sections/featured-products.liquid**: Renders a swiper carousel of manually selected featured products with customizable heading, navigation arrows, and product cards
-- **sections/footer-group.json**: Defines the footer section group configuration and layout structure for the Shopify theme footer area
-- **sections/footer.liquid**: Renders the site-wide footer section with navigation blocks, brand information, social icons, payment methods, and localization forms.
-- **sections/header-group.json**: Defines the header group section configuration containing announcement bar and main header with their content blocks and settings
-- **sections/header.liquid**: Renders the site header with logo, navigation, search, cart, and account icons with support for sticky positioning and mobile drawer menu.
-- **sections/hello-world.liquid**: Welcome/introduction section that displays getting started information and educational content about Shopify theme development
-- **sections/hero-v2.liquid**: Renders a hero banner section with content on left and image/video background on right with configurable alignment and styling
-- **sections/hero.liquid**: Renders a customizable hero banner section with image or video background, overlay text content, optional star rating, and endorsement block
-- **sections/link-readme.liquid**: Renders a simple call-to-action section with a single button link and configurable padding/color scheme
-- **sections/login.liquid**: Renders the customer login page with password recovery, email/password login forms, and optional guest checkout
-- **sections/logos.liquid**: Renders an animated horizontal scrolling logo carousel with configurable animation speed, logo height, and color scheme
-- **sections/order.liquid**: Renders the customer order details page displaying order information, line items, billing/shipping addresses, and order totals.
-- **sections/page.liquid**: Renders standard Shopify page content with customizable width, padding, and color scheme settings
-- **sections/password.liquid**: Renders the password-protected storefront page with authentication form and branding
-- **sections/pickup-availability.liquid**: Renders in-store pickup availability UI showing closest store availability and drawer with all pickup locations for a product variant
-- **sections/predictive-results.liquid**: Renders the dropdown results UI for predictive search including suggestions, collections, articles, pages, and products
-- **sections/product-details.liquid**: Renders an accordion-style product details section displaying expandable blocks with title, content, and optional images
-- **sections/product-highlights.liquid**: Renders a two-column product highlights section with customizable title, description, feature list with icons, and a featured image.
-- **sections/product.liquid**: Renders the main product detail page (PDP) layout with media gallery, product info, variant selectors, and add-to-cart functionality
-- **sections/promo-banner.liquid**: Renders a promotional banner section displaying a single product with image, title, description, price, and call-to-action button
-- **sections/register.liquid**: Renders the customer registration form page with first name, last name, email, and password fields
+- **layout/password.liquid**: Provides the minimal HTML layout wrapper for the password-protected storefront page when the store is locked
+- **layout/theme.liquid**: Defines the main HTML document structure and orchestrates global assets, scripts, and sections for all non-password pages
+- **sections/404.liquid**: Renders the 404 error page with styled message and continue shopping button
+- **sections/Faq-metaobjects.liquid**: Renders an accordion-style FAQ section populated from Shopify metaobjects of type faq_item with dynamic padding and color scheme support
+- **sections/Faq.liquid**: Renders an accordion-style FAQ section with expandable question/answer blocks using Alpine.js
+- **sections/account.liquid**: Renders the customer account dashboard page showing order history and account navigation
+- **sections/activate-account.liquid**: Renders the customer account activation form where new customers set their password for the first time
+- **sections/addresses.liquid**: Renders the customer addresses management page with forms for adding, editing, and deleting shipping addresses
+- **sections/animated-features-v2.liquid**: Renders an animated features section with a percentage heading, feature list with checkmarks, and an accompanying image with configurable animation speeds.
+- **sections/animated-features.liquid**: Renders an animated features section with left content area and right grid of 4 flippable cards showing images/text with customizable animation speed
+- **sections/announcement-bar.liquid**: Displays a rotating, auto-scrolling announcement bar with customizable messages, links, and emojis at the top of the site
+- **sections/article.liquid**: Renders the individual blog article page layout with customizable blocks for featured image, title, content, sharing, and navigation
+- **sections/blog.liquid**: Renders the main blog listing page with pagination and configurable article card layout
+- **sections/blogs.liquid**: Renders a grid display of blog articles with configurable heading, navigation link, and customizable article blocks showing images and excerpts
+- **sections/brand-story-v2.liquid**: Interactive accordion-style brand story section with clickable items that display corresponding images
+- **sections/brand-story.liquid**: Renders a brand story section with side-by-side image comparison and text content
+- **sections/cart.liquid**: Renders the main cart page UI with line items, quantity controls, discount codes, and checkout functionality
+- **sections/collection.liquid**: Renders the collection page layout with product grid, filtering, sorting, and pagination controls
+- **sections/collections.liquid**: Renders a grid layout displaying all Shopify collections with featured images, titles, descriptions, and navigation links
+- **sections/custom-section.liquid**: Provides a reusable container section with optional background image that accepts any theme blocks for flexible content composition
+- **sections/dynamic-grid.liquid**: Configurable grid section for displaying content blocks with customizable layout, styling, and responsive behavior
+- **sections/featured-collections-v2.liquid**: Renders a tabbed product carousel displaying multiple collections with swipeable product grids
+- **sections/featured-collections.liquid**: Displays a grid of featured collection cards with customizable images, titles, and layout styles
+- **sections/featured-products.liquid**: Renders a swiper carousel of manually selected featured products with navigation arrows and optional view-all link
+- **sections/footer-group.json**: Defines the footer section group configuration including layout blocks for link lists, brand information, and text content with localization settings.
+- **sections/footer.liquid**: Renders the site footer with configurable blocks for text, navigation menus, social icons, and brand information
+- **sections/header-group.json**: Configures the header group combining announcement bar and header sections with their settings and display order
+- **sections/header.liquid**: Renders and styles the site-wide header including logo, navigation menu, search, cart, and account icons with configurable sticky behavior and layout options.
+- **sections/hello-world.liquid**: Renders a welcome/onboarding section for developers new to the Skeleton theme with educational content and links.
+- **sections/hero-v2.liquid**: Renders a hero banner section with configurable content, image or video backgrounds, and flexible alignment options
+- **sections/hero.liquid**: Renders a hero banner section with image or video background, customizable text content, optional star rating, CTA button, and endorsement block.
+- **sections/link-readme.liquid**: Renders a simple call-to-action section with a single customizable button link
+- **sections/login.liquid**: Renders the customer login page with password recovery form and optional Shop Pay login integration
+- **sections/logos.liquid**: Renders an animated horizontal scrolling logo carousel with configurable animation speed, logo height, and color scheme settings.
+- **sections/order.liquid**: Renders the customer order details page showing purchased items, pricing, shipping, and fulfillment information
+- **sections/page.liquid**: Renders static Shopify page content with customizable layout, color scheme, width constraints, and spacing controls.
+- **sections/password.liquid**: Renders the password-protected storefront landing page with login form and branding
+- **sections/pickup-availability.liquid**: Renders in-store pickup availability information for a product variant, showing the closest location preview and a drawer with all pickup locations.
+- **sections/predictive-results.liquid**: Renders the dropdown results for predictive search showing suggestions, articles/pages, and products based on search query input.
+- **sections/product-details.liquid**: Renders an accordion-style product details section with expandable blocks containing text content and optional images
+- **sections/product-highlights.liquid**: Renders a marketing section displaying product highlights with an icon-based feature list and accompanying image
+- **sections/product.liquid**: Main product detail page (PDP) section that orchestrates the product media gallery, variant selection, pricing, add-to-cart form, and all product information blocks
+- **sections/promo-banner.liquid**: Renders a promotional banner section displaying a selected product with image, title, description, price and CTA button with configurable layout and styling options
+- **sections/register.liquid**: Renders the customer registration form page with form validation and error handling
 - **sections/related-products.liquid**: Displays product recommendations on product pages using Shopify's recommendation algorithm with grid or carousel layout options
-- **sections/reset-password.liquid**: undefined
-- **sections/search.liquid**: Renders the search results page with filtering, sorting, and product grid display capabilities
-- **sections/selling-points-v2.liquid**: Renders a flexible selling points section with title, description, and icon blocks that can optionally be links and display as a mobile slider
-- **sections/selling-points.liquid**: Renders a grid of selling points with icons, titles, and descriptions to showcase product or brand benefits
-- **sections/shop-by-category-v2.liquid**: Renders a grid of clickable category cards with images, titles, and arrow icons for shop navigation
-- **sections/shop-by-category.liquid**: Renders an interactive shop-by-category section with a featured image on one side and a list of collection links on the other
-- **sections/shop-categories.liquid**: Renders a horizontal slider carousel showcasing product collection categories with images and titles
-- **sections/shop-the-look.liquid**: Renders a shop-the-look slider section with image hotspots that display product information and quick-add functionality
-- **assets/cart.css**: Styles the cart drawer, cart page, cart items, quantity selectors, and cart footer elements across the theme
-- **assets/component-article-card.css**: Styles the article card component used to display blog posts in grids and lists across blog-related sections
-- **assets/component-cart-discount.js**: Manages the application and removal of discount codes in the Shopify cart with real-time validation and UI updates
-- **assets/component-cart-drawer.js**: Manages cart drawer opening behavior by listening to AJAX cart events and dispatching custom events to trigger the drawer UI
-- **assets/component-cart-notification.js**: Manages the cart notification drawer that appears when products are added to cart via AJAX
-- **assets/component-complementary-products.css**: Styles the complementary/recommended products list display on product pages with grid layout and card styling
-- **assets/component-data-layer.js**: Manages Google Analytics 4 / GTM ecommerce data layer events for product tracking and analytics
-- **assets/component-filters-price-range.js**: Manages the interactive price range filter UI with dual range sliders and number inputs that sync values and update URL parameters for product filtering
-- **assets/component-infinite-scroll.js**: Manages infinite scroll pagination for product grids by automatically loading and appending next page content when scroll anchor becomes visible
-- **assets/component-localization-form.js**: Manages language and country selection forms by handling click events on selector links and submitting the form with the selected locale value
-- **assets/component-modal-opener.js**: Defines the modal-opener custom element that handles button clicks to open modals and manage loading spinner states
-- **assets/component-pagination.css**: Styles the pagination component UI for navigating through paginated content like collections, blogs, and search results.
-- **assets/component-pickup-availability.css**: Styles the pickup availability component including the preview display and drawer overlay for showing in-store pickup locations
-- **assets/component-pickup-availability.js**: Manages store pickup availability display and drawer interactions for product variants
-- **assets/component-predictive-search.css**: Styles the predictive search dropdown interface including layout, product results, loading states, and overlay backdrop
-- **assets/component-predictive-search.js**: Manages predictive search functionality with debounced input, fetching search suggestions from Shopify's search API, and handling results display
-- **assets/component-product-card.css**: Styles product cards, article cards, color swatches, pricing display, badges, and product media presentation across collection and product grids
-- **assets/component-product-card.js**: Manages color swatch interactions on product cards to swap product images when variant swatches are clicked
-- **assets/component-product-media-magnify.js**: Provides image magnification/zoom functionality for product media using a hover overlay with enhanced view
-- **assets/component-product-media-modal.css**: Styles the product media lightbox modal overlay with zoom functionality and responsive behavior for product image viewing
-- **assets/component-product-media-modal.js**: Manages the modal dialog for displaying product media in fullscreen/lightbox mode when users click on product images
-- **assets/component-product-price.css**: Styles the product price display component including sale prices, regular prices, availability badges, and unit pricing across the theme
+- **sections/reset-password.liquid**: Renders the customer password reset form where users create a new password after requesting a reset
+- **sections/search.liquid**: Renders the search results page with optional filtering, sorting, and pagination for products and articles
+- **sections/selling-points-v2.liquid**: Renders a grid or mobile slider of selling point cards with optional titles, descriptions, icons, and links
+- **sections/selling-points.liquid**: Renders a grid of selling points with icons, titles, and descriptions to highlight product or brand benefits
+- **sections/shop-by-category-v2.liquid**: Renders a grid-based category showcase section with image cards, titles, and links
+- **sections/shop-by-category.liquid**: Renders an interactive category navigation section with a featured image and collection list that updates the image on hover
+- **sections/shop-categories.liquid**: Renders a horizontally scrollable carousel of collection category cards with images and custom titles
+- **sections/shop-the-look.liquid**: Renders a Shop The Look section with swipeable slides featuring images with interactive hotspots overlaid on product images and associated product lists
+- **assets/cart.css**: Styles the cart drawer UI, cart items display, quantity controls, and cart footer sections for both drawer and page contexts
+- **assets/component-article-card.css**: Styles the article card component used to display blog posts in grid layouts and blog sections
+- **assets/component-cart-discount.js**: Manages discount code application and removal in the cart interface with pill-based UI display
+- **assets/component-cart-drawer.js**: Manages the cart drawer custom element that automatically opens when products are successfully added to cart via AJAX
+- **assets/component-cart-notification.js**: Manages the cart notification drawer that appears after adding products to cart via AJAX requests
+- **assets/component-complementary-products.css**: Styles the complementary/recommended products display grid and product cards shown on product detail pages
+- **assets/component-data-layer.js**: Manages Google Analytics 4 / Google Tag Manager ecommerce data layer events for product tracking throughout the Shopify theme
+- **assets/component-filters-price-range.js**: Manages the interactive dual-handle price range filter slider UI component and synchronizes URL parameters with range/number inputs
+- **assets/component-infinite-scroll.js**: Manages automatic loading of additional products when scrolling to the bottom of product grids using Intersection Observer API
+- **assets/component-localization-form.js**: Manages language and country/region selection form interactions by capturing clicks on selection links and submitting hidden form inputs
+- **assets/component-modal-opener.js**: Defines the ModalOpener custom element that handles button clicks to open modals and toggle loading spinners
+- **assets/component-pagination.css**: Styles the pagination component used for navigating through paginated collections, blogs, and search results
+- **assets/component-pickup-availability.css**: Styles the pickup availability component that displays store pickup information for products, including a preview widget and a slide-out drawer with detailed location information.
+- **assets/component-pickup-availability.js**: Manages in-store pickup availability display and drawer interaction for product variants
+- **assets/component-predictive-search.css**: Styles the predictive search dropdown UI including results layout, loading states, product cards, and overlay backdrop
+- **assets/component-predictive-search.js**: Manages live search functionality with debounced input, fetching and displaying predictive search results from Shopify's suggest API
+- **assets/component-product-card.css**: Styles product cards and article cards across collection grids, featured product sections, and search results
+- **assets/component-product-card.js**: Manages color swatch interaction and dynamic image switching on product cards
+- **assets/component-product-media-magnify.js**: Implements image zoom/magnification functionality for product media on click with mouse-follow behavior
+- **assets/component-product-media-modal.css**: Styles the product media modal/lightbox overlay with zoom functionality and responsive behavior for viewing product images in fullscreen
+- **assets/component-product-media-modal.js**: Manages the modal dialog that displays product media in full-screen/lightbox view when users click on product images
+- **assets/component-product-price.css**: Styles the product price component including regular prices, sale prices, badges, and unit pricing across different display states
 - **assets/component-product-share-button.css**: Styles the product share button component including the dropdown fallback UI for copying share links
-- **assets/component-product-share-button.js**: Manages product share functionality with native Web Share API fallback to manual copy-to-clipboard
-- **assets/component-quick-add.css**: Styles the quick-add modal component that displays product details in an overlay when clicking quick-add buttons on product cards
-- **assets/component-quick-add.js**: Manages the quick-add modal functionality for adding products to cart without visiting the product page
-- **assets/component-selling-plans.js**: Manages subscription/selling plan selection UI and synchronizes selling plan choices with product variants and cart forms
-- **assets/component-splash-screen.js**: Manages the splash screen component that displays on first visit and hides after page load with a configurable delay.
-- **assets/critical.css**: Provides base CSS reset, critical layout styles, and utility classes that are loaded on every page for consistent foundational styling across the entire theme.
-- **assets/customer.css**: Defines all CSS styling for customer account pages including login, register, account dashboard, order details, and address management
-- **assets/customer.js**: Manages customer address management functionality including add/edit/delete operations and country/province selection integration
-- **assets/product-recommendations.js**: Lazy-loads product recommendations using Intersection Observer when the element becomes visible in the viewport
-- **assets/section-animated-features-v2.css**: undefined
-- **assets/section-animated-features-v2.js**: Manages scroll-triggered animations and animated digit counter for the animated-features-v2 section
-- **assets/section-animated-features.css**: Styles the animated features section with card flip animations, scroll-triggered reveal effects, and responsive layout for displaying product features in a grid.
-- **assets/section-animated-features.js**: Manages interactive card flip behavior and scroll-triggered animations for the animated features section
-- **assets/section-article.css**: Styles the blog article template layout, hero images, content typography, back navigation, comments section, and comment form
-- **assets/section-blog.css**: Styles the blog section including blog title, article grid layouts (standard and collage), and responsive article card sizing
-- **assets/section-blogs.css**: Styles the blogs listing section displaying multiple blog articles in a horizontal grid layout with navigation
-- **assets/section-brand-story-v2.css**: Styles the brand story v2 section with a sticky left sidebar containing accordion items and a right-side image gallery with slide animations
-- **assets/section-brand-story-v2.js**: Manages interactive brand story section with clickable/hoverable items that toggle active states and animated media displays
-- **assets/section-brand-story.css**: Styles the brand story section that displays a before/after comparison grid with images and descriptive content in a two-column layout.
-- **assets/section-collection.css**: Styles the collection page layout including product grid, filtering UI, sorting controls, and loading states
-- **assets/section-collection.js**: Manages collection/search page filtering, sorting, and dynamic content updates via AJAX without page reload
-- **assets/section-faq.css**: Styles the FAQ accordion section with collapsible question/answer blocks, including icons, transitions, responsive layout, and theme editor empty state notices.
-- **assets/section-featured-collections-v2.css**: Styles the featured collections section v2 with tabbed navigation and Swiper carousel layout for displaying product cards
-- **assets/section-featured-collections-v2.js**: Manages tabbed collection carousels with Swiper integration for the featured-collections-v2 section
-- **assets/section-featured-collections.css**: Styles the featured-collections section displaying collection cards in horizontal grid or stacked mobile layout
-- **assets/section-featured-products.css**: Styles the featured products section layout, product cards, and view-all button with responsive grid and alignment options
-- **assets/section-featured-products.js**: Initializes and manages the Swiper carousel for featured product sections
-- **assets/section-footer.css**: Styles the footer section layout, navigation, newsletter signup, localization elements, social icons, and copyright area
-- **assets/section-hero-v2.css**: undefined
-- **assets/section-hero.css**: Styles the hero banner section with background media, overlays, content positioning, and responsive layouts
-- **assets/section-link-readme.css**: Styles the link-readme section with a centered button component using theme color variables
-- **assets/section-logos.css**: Styles the infinite scrolling logo carousel with animation and responsive behavior for the logos section
-- **assets/section-page.css**: Styles the page template section including page title, content typography, and placeholder graphics.
-- **assets/section-product-details.css**: Styles the collapsible product details accordion section displaying product information with text and image grids
-- **assets/section-product-highlights.css**: Styles the product highlights section displaying feature list with icons alongside product media in a two-column layout
-- **assets/section-product.css**: Styles the product page layout, media gallery, product info, variants, quantity selector, and add-to-cart functionality
-- **assets/section-product.js**: Manages product variant selection, image gallery navigation, and quantity updates on product detail pages
-- **assets/section-promo-banner.css**: Styles the promo-banner section with responsive layout, image placement controls, and content/CTA styling.
-- **assets/section-related-products.js**: Initializes and manages Swiper carousel for related products section that loads dynamically via AJAX
-- **assets/section-search.css**: Styles the search template page header including the search input form, reset button, and predictive search results dropdown container.
-- **assets/section-selling-points-v2.css**: Styles the selling-points-v2 section with responsive grid layout that transforms to a Swiper carousel on mobile devices
-- **assets/section-selling-points-v2.js**: Manages a responsive carousel/slider for selling points that conditionally initializes Swiper on mobile devices
-- **assets/section-selling-points.css**: Styles the selling points section grid layout displaying icon-text feature cards
-- **assets/section-shop-by-category-v2.css**: Styles the shop-by-category-v2 section with expandable category cards that have hover animations on desktop and a 2-column grid on mobile
-- **assets/section-shop-by-category.css**: Styles the shop-by-category section layout with a split image/content design featuring collection links with hover animations
+- **assets/component-product-share-button.js**: Implements a custom web component for sharing product URLs using native Web Share API or fallback copy-to-clipboard functionality
+- **assets/component-quick-add.css**: Styles the quick-add button and modal dialog that allows customers to add products to cart from collection pages without navigating to the full product page
+- **assets/component-quick-add.js**: Manages the quick-add modal functionality for adding products to cart directly from product cards without navigating to the full product page
+- **assets/component-selling-plans.js**: Manages subscription/selling plan selection and pricing display for product variants
+- **assets/component-splash-screen.js**: Manages a one-time splash screen overlay that displays on first visit and auto-hides after page load with a fade animation
+- **assets/critical.css**: Provides critical CSS reset, base styles, layout utilities, and core accessibility features loaded on every page for initial render performance.
+- **assets/customer.css**: Styles all customer account pages including login, registration, account dashboard, order history, and address management
+- **assets/customer.js**: Manages customer address book functionality including add/edit/delete address forms and country/province selection dropdowns
+- **assets/product-recommendations.js**: Lazy-loads product recommendations on product pages using Intersection Observer to defer fetching until the element is near viewport
+- **assets/section-animated-features-v2.css**: Styles the animated features section v2 with a two-column layout featuring animated counter digits, feature list with checkmarks, and image with scroll-triggered animations.
+- **assets/section-animated-features-v2.js**: Implements scroll-triggered animations and animated digit counter for the animated-features-v2 section with IntersectionObserver-based visibility detection.
+- **assets/section-animated-features.css**: Styles the animated features section with flip card animations, responsive layout, and fade-in transitions.
+- **assets/section-animated-features.js**: Manages interactive card flipping and scroll-triggered reveal animations for the animated features section
+- **assets/section-article.css**: Styles the article template page including hero images, content layout, comments section, and back navigation
+- **assets/section-blog.css**: Styles the blog listing page layout including title, article grid, and collage layout variations
+- **assets/section-blogs.css**: Styles the blogs listing section that displays multiple blog articles in a grid layout with navigation
+- **assets/section-brand-story-v2.css**: Styles for the brand story v2 section featuring an interactive accordion list with synchronized image transitions
+- **assets/section-brand-story-v2.js**: Manages interactive brand story section with accordion-style content items and synchronized media display that responds differently on mobile vs desktop
+- **assets/section-brand-story.css**: Styles the brand story section that displays a before/after image comparison with accompanying text content
+- **assets/section-collection.css**: Styles the collection page layout, product grid, filtering UI, sorting controls, and active filter display
+- **assets/section-collection.js**: Manages collection page filtering, sorting, and URL state synchronization via AJAX requests without page reload
+- **assets/section-faq.css**: Styles the FAQ accordion section with expandable question/answer blocks and setup instructions for metaobject integration
+- **assets/section-featured-collections-v2.css**: Styles the featured collections v2 section with tabbed navigation, swiper carousel integration, and placeholder product cards
+- **assets/section-featured-collections-v2.js**: Manages tabbed collection carousels with Swiper sliders that show/hide based on radio button selection
+- **assets/section-featured-collections.css**: Styles the featured collections section with card layouts supporting both overlay and below-image text positioning
+- **assets/section-featured-products.css**: Styles the featured products section grid layout, product cards, headings, and view-all button with responsive alignment options.
+- **assets/section-featured-products.js**: Initializes and manages Swiper carousel for featured product displays with responsive breakpoints and navigation controls
+- **assets/section-footer.css**: Styles the footer section including layout, color overrides, newsletter form, localization selectors, social links, and copyright information.
+- **assets/section-hero-v2.css**: Styles the hero-v2 section with a split-layout design featuring a main content area with overlay text and two promotional blocks
+- **assets/section-hero.css**: Styles the hero banner section with background media, content positioning, overlay effects, and responsive layout adjustments
+- **assets/section-link-readme.css**: Styles the link-readme section component with a centered button layout and responsive design
+- **assets/section-logos.css**: Styles the infinite horizontal scrolling logo carousel section with animation and responsive behavior
+- **assets/section-page.css**: Styles the page section template including page titles, rich text content, and page placeholders
+- **assets/section-product-details.css**: Styles the accordion-style product details section with expandable/collapsible blocks containing text and image grids
+- **assets/section-product-highlights.css**: Styles the product highlights section displaying product features with icons and media in a two-column layout
+- **assets/section-product.css**: Styles the product detail page layout, media gallery (Swiper carousel), product info section, variant selectors, quantity inputs, and add-to-cart functionality
+- **assets/section-product.js**: Manages product detail page interactions including variant selection, quantity updates, media gallery navigation, and dynamic section rendering
+- **assets/section-promo-banner.css**: Styles the promotional banner section with responsive layout, image positioning, and content arrangement controls.
+- **assets/section-related-products.js**: Initializes and manages Swiper carousel for related products section, waiting for AJAX-loaded product recommendations before setup
+- **assets/section-search.css**: Styles the search page template header including search form, predictive search wrapper, and reset button
+- **assets/section-selling-points-v2.css**: Styles the selling-points-v2 section with responsive grid layout (desktop 4-column, mobile slider/stack) and custom element color scheme support
+- **assets/section-selling-points-v2.js**: Manages a responsive carousel/slider for selling points that conditionally initializes Swiper only on mobile devices when enabled
+- **assets/section-selling-points.css**: Styles the selling points section displaying grid of features/benefits with icons, titles, and descriptions
+- **assets/section-shop-by-category-v2.css**: Styles the shop-by-category-v2 section with animated expanding cards that feature images, titles, and interactive hover effects on desktop
+- **assets/section-shop-by-category.css**: Styles the shop-by-category section with a two-column layout featuring a large image and collection links with animated hover effects.
 - **assets/section-shop-by-category.js**: Manages interactive image swapping on hover/focus for collection items in the shop-by-category section
-- **assets/section-shop-categories.css**: Styles the shop categories section with carousel/grid layout, category cards, navigation controls, and progress bar
+- **assets/section-shop-categories.css**: Styles the shop categories section with image cards, overlay titles, and carousel navigation controls including progress bar
 - **assets/section-shop-categories.js**: Initializes and manages Swiper carousel functionality for the shop categories section with navigation and progress bar
-- **assets/section-shop-the-look.css**: Styles the "Shop The Look" section including slider layout, interactive hotspots with tooltips, and product card grid presentation
-- **assets/section-shop-the-look.js**: Manages interactive shop-the-look section with Swiper slider, image hotspots, product tooltips, and navigation controls
-- **assets/shopify.js**: Provides core Shopify utility functions for form submission, event handling, and country/province selector functionality
-- **assets/theme.js**: Provides shared utility functions used across the entire theme, currently containing a debounce function for performance optimization
-- **snippets/component-article-card.liquid**: Renders a single article card component with optional image, date, author, excerpt, and badge display
-- **snippets/component-cart-discount.liquid**: Renders the discount code input form and displays active discount codes applied to the cart with removal functionality
-- **snippets/component-cart-drawer.liquid**: Renders the slide-out cart drawer UI with line items, quantities, totals, discount codes, and checkout actions
-- **snippets/component-cart-notification.liquid**: Renders a popup notification panel that appears after adding items to cart, displaying product details and cart action buttons
-- **snippets/component-data-layer.liquid**: Conditionally renders Google Tag Manager data layer tracking components based on theme settings and template context
-- **snippets/component-filters-drawer.liquid**: Renders a slide-in mobile drawer for collection/search filtering and sorting with Alpine.js state management
-- **snippets/component-filters-horizontal.liquid**: Renders horizontal filter UI for collection/search results with dropdowns for facet selection
-- **snippets/component-filters-price-range.liquid**: Renders a dual-slider price range filter component with synchronized number inputs and range sliders for collection filtering
-- **snippets/component-filters-sidebar.liquid**: Renders a sticky sidebar filter panel for collection pages with collapsible filter groups, checkboxes, price range, and show more/less functionality
-- **snippets/component-gtm-body.liquid**: Renders the Google Tag Manager noscript iframe fallback in the document body for users with JavaScript disabled
-- **snippets/component-gtm-head.liquid**: Initializes Google Tag Manager by injecting the GTM script in the document head when a container ID is configured
-- **snippets/component-hotspot.liquid**: Renders an interactive hotspot marker with tooltip for shop-the-look functionality
-- **snippets/component-localization-form.liquid**: Renders country and language selector dropdowns using Shopify's localization form with Alpine.js-powered toggle functionality
-- **snippets/component-nav-drawer.liquid**: Renders the mobile navigation drawer with toggle button, slide-in panel, nested menu navigation, and optional localization/account links.
-- **snippets/component-nav-dropdown.liquid**: Renders a multi-level dropdown navigation menu with support for nested child and grandchild links, adaptable for both desktop header and mobile drawer layouts.
-- **snippets/component-nav-megamenu.liquid**: Renders a desktop megamenu navigation layout with expandable dropdowns and support for three-level nested menu structures
-- **snippets/component-pagination.liquid**: Renders pagination controls for paginated collections, blogs, and search results with previous/next navigation and page number links
-- **snippets/component-predictive-search.liquid**: Renders the predictive search form UI with input field, clear/search buttons, and results container that is populated dynamically via JavaScript
-- **snippets/component-product-card.liquid**: Renders individual product cards with image, pricing, badges, quick-add functionality, and optional variant swatches for product grid displays
-- **snippets/component-product-media-gallery.liquid**: Renders product media gallery with multiple layout modes (carousel, thumbnail, 2-column) using Swiper.js and integrates zoom/lightbox functionality
-- **snippets/component-product-media-modal.liquid**: Renders a full-screen modal dialog for displaying product media (images, videos) with navigation controls
-- **snippets/component-product-media.liquid**: Renders product media (images, videos, external videos, 3D models) with appropriate Shopify filters and tags based on media type.
+- **assets/section-shop-the-look.css**: Styles the Shop The Look section featuring image hotspots with product tooltips and a slider layout
+- **assets/section-shop-the-look.js**: Manages Swiper carousel initialization, navigation, progress tracking, and interactive image hotspot tooltips for the shop-the-look section
+- **assets/shopify.js**: Provides core Shopify utility functions for DOM manipulation, event handling, form posting, and country/province address selector functionality
+- **assets/theme.js**: Provides shared utility functions (debounce) used across the entire theme codebase
+- **snippets/component-article-card.liquid**: Renders a blog article card component with optional image, date, author, badge, and excerpt display
+- **snippets/component-cart-discount.liquid**: Renders the discount code input form and displays applied cart-level and item-level discount codes with removal buttons
+- **snippets/component-cart-drawer.liquid**: Renders the slide-out cart drawer UI with line items, totals, discount codes, and checkout actions using Alpine.js for state management.
+- **snippets/component-cart-notification.liquid**: Renders a dropdown notification panel that appears after adding items to cart, showing product details and links to cart/checkout
+- **snippets/component-data-layer.liquid**: Conditionally renders custom web components for Google Tag Manager data layer event tracking based on theme settings.
+- **snippets/component-filters-drawer.liquid**: Renders a slide-in drawer for collection/search filtering and sorting on mobile devices
+- **snippets/component-filters-horizontal.liquid**: Renders a horizontal filter bar with dropdown menus for product collection filtering (desktop only)
+- **snippets/component-filters-price-range.liquid**: Renders an interactive dual-range price filter slider with numeric inputs for collection filtering
+- **snippets/component-filters-sidebar.liquid**: Renders a sticky sidebar filter interface for collection/search pages with expandable filter groups, checkboxes, price range inputs, and show more/less functionality
+- **snippets/component-gtm-body.liquid**: Renders the Google Tag Manager noscript iframe fallback that must be placed immediately after the opening body tag for tracking when JavaScript is disabled.
+- **snippets/component-gtm-head.liquid**: Initializes Google Tag Manager by injecting the GTM container script into the document head when a GTM container ID is configured
+- **snippets/component-hotspot.liquid**: Renders interactive hotspot markers with tooltips for shop-the-look style image overlays
+- **snippets/component-localization-form.liquid**: Renders country and language selector dropdowns using Shopify's localization form API
+- **snippets/component-nav-drawer.liquid**: Renders a mobile navigation drawer that slides in from the left with menu items, localization options, and optional account link
+- **snippets/component-nav-dropdown.liquid**: Renders a dropdown navigation list with support for nested child links (up to 3 levels deep) with Alpine.js interactivity for both drawer and inline header styles
+- **snippets/component-nav-megamenu.liquid**: Renders a full-width megamenu dropdown with multi-level navigation links triggered by Alpine.js click interactions
+- **snippets/component-pagination.liquid**: Renders pagination UI for paginated results with previous/next navigation and page number links
+- **snippets/component-predictive-search.liquid**: Renders the predictive search form UI with input field, clear/search buttons, loading state, and results container that gets populated via JavaScript.
+- **snippets/component-product-card.liquid**: Renders individual product cards with image, pricing, badges, variant swatches, and quick-add functionality for product collections and grids
+- **snippets/component-product-media-gallery.liquid**: Renders product media gallery with Swiper.js carousel integration supporting multiple layouts (thumbnail, carousel, 2-column) and zoom modes.
+- **snippets/component-product-media-modal.liquid**: Renders a modal dialog for displaying product media (images, videos) in fullscreen overlay
+- **snippets/component-product-media.liquid**: Renders individual product media items (images, videos, external videos, 3D models) with appropriate Shopify filters and tags based on media type
 - **snippets/component-product-price.liquid**: Renders product pricing display including regular price, sale price, compare-at price, unit pricing, volume pricing, and optional sale/sold-out badges
-- **snippets/component-product-share-button.liquid**: Renders a share button component with Web Share API support and copy-to-clipboard fallback for sharing product URLs
-- **snippets/component-social-icons.liquid**: Renders a list of social media icon links based on URLs configured in theme settings
-- **snippets/component-splash-screen-head.liquid**: Checks sessionStorage on page load to determine if splash screen has been seen and adds CSS class to skip it for returning visitors
-- **snippets/component-splash-screen.liquid**: Renders the splash screen overlay component that displays on initial page load with configurable timing and persistence behavior
-- **snippets/css-variables.liquid**: Generates global CSS custom properties for typography (font families, weights) and color schemes used throughout the theme
-- **snippets/meta-tags.liquid**: Generates SEO and social sharing meta tags including Open Graph, Twitter cards, structured data, and page title for all page types.
-- **templates/404.json**: Defines the template structure and section configuration for the 404 error page displayed when users navigate to non-existent URLs.
-- **templates/article.json**: Defines the layout and content structure for individual blog article pages
-- **templates/blog.json**: Defines the template structure and settings for the blog listing page in the Shopify theme
-- **templates/cart.json**: Defines the JSON template structure for the cart page by configuring which sections are rendered and in what order.
-- **templates/collection.json**: Configures the layout and settings for the collection page template that displays product grids with filtering and sorting.
-- **templates/customers/account.json**: Defines the layout structure and section configuration for the customer account page template.
-- **templates/customers/activate_account.json**: undefined
-- **templates/customers/addresses.json**: Defines the JSON template structure for the customer addresses page where users manage their shipping/billing addresses.
-- **templates/customers/login.json**: Defines the layout and configuration for the customer login page template in Shopify
-- **templates/customers/order.json**: undefined
-- **templates/customers/register.json**: undefined
-- **templates/customers/reset_password.json**: Defines the layout and section composition for the customer password reset page
-- **templates/gift_card.liquid**: Renders the standalone gift card page that customers receive when they are issued a digital gift card, displaying the balance, code, and expiration details
-- **templates/index.json**: Defines the homepage layout and configuration by composing sections with specific settings and block content.
-- **templates/list-collections.json**: Defines the template structure for the all-collections listing page by including the collections section.
-- **templates/password.json**: Defines the page structure and configuration for the password-protected storefront page that displays before public store access is enabled.
-- **templates/product.json**: Defines the layout and configuration for product detail pages (PDPs) including content blocks, media display, and section ordering
-- **templates/search.json**: Defines the layout and configuration settings for the search results page template
-- **blocks/group.liquid**: Renders a flexible container block that organizes child blocks in either horizontal or vertical layout with configurable alignment and padding
-- **blocks/text.liquid**: Renders a configurable text block with styling options and alignment for use within sections via content_for blocks
-- **config/settings_data.json**: Stores the current theme settings values including typography, layout, colors, social links, GTM tracking configuration, and color scheme definitions
-- **config/settings_schema.json**: Defines the theme-wide customizer settings structure and schema for the Shopify admin panel
-- **locales/en.default.json**: Provides English language translations and user-facing text strings for all theme components, sections, and customer interactions.
-- **locales/en.default.schema.json**: Provides English translations for theme editor settings, labels, and schema elements displayed in Shopify admin
-- **sections/Faq-metaobjects.liquid**: Renders an FAQ accordion section populated from Shopify metaobjects of type faq_item with Alpine.js interactivity
-- **assets/faq-metaobjects-setup.graphql**: Provides GraphQL mutations to initialize the faq_item metaobject definition and seed sample FAQ entries in Shopify Admin API for use by the FAQ section.
+- **snippets/component-product-share-button.liquid**: Renders a progressive enhancement share button that uses native Web Share API when available and falls back to copy-to-clipboard UI
+- **snippets/component-social-icons.liquid**: Renders a list of social media icons with links to URLs configured in theme settings
+- **snippets/component-splash-screen-head.liquid**: Checks sessionStorage on page load to determine if splash screen has been seen and adds CSS class for returning visitors
+- **snippets/component-splash-screen.liquid**: Renders the splash screen overlay component with configurable display duration and fade settings
+- **snippets/css-variables.liquid**: Defines global CSS custom properties for typography, color schemes, and layout dimensions used throughout the theme
+- **snippets/meta-tags.liquid**: Outputs SEO meta tags, Open Graph tags, Twitter cards, structured data, and page title with automatic adaptation for different page types
+- **templates/404.json**: Defines the layout and section composition for the 404 error page displayed when a page is not found
+- **templates/article.json**: Defines the layout and configuration for individual blog article pages in the Shopify theme
+- **templates/blog.json**: Defines the layout and configuration for the blog listing page template in Shopify
+- **templates/cart.json**: Defines the cart page template structure by referencing the cart section.
+- **templates/collection.json**: Defines the layout and configuration for collection pages, controlling product display, filtering, sorting, and pagination settings.
+- **templates/customers/account.json**: Defines the layout and section configuration for the customer account dashboard page in Shopify.
+- **templates/customers/activate_account.json**: Defines the page layout and section composition for the customer account activation page
+- **templates/customers/addresses.json**: Defines the page structure and section configuration for the customer addresses management page where users view and edit their saved shipping/billing addresses.
+- **templates/customers/login.json**: Defines the customer login page template structure and configuration for the Shopify theme
+- **templates/customers/order.json**: Defines the layout and section composition for the customer order details page in the Shopify theme.
+- **templates/customers/register.json**: Defines the layout and configuration for the customer registration page template in Shopify
+- **templates/customers/reset_password.json**: Defines the page structure and layout for the customer password reset page in the Shopify theme.
+- **templates/gift_card.liquid**: Renders the standalone gift card display page with balance, code, expiration, and Apple Wallet integration
+- **templates/index.json**: Defines the homepage layout and section configuration with their settings and block order
+- **templates/list-collections.json**: Defines the page template structure for the collections list page displaying all store collections
+- **templates/password.json**: Defines the structure and content for the password-protected storefront page when the store is locked
+- **templates/product.json**: Defines the layout and configuration for the product detail page (PDP) including block composition, section ordering, and visual settings
+- **templates/search.json**: Configures the search results page layout and display settings for products, articles, and filtering options
+- **blocks/group.liquid**: Renders a reusable layout container block that groups child blocks in horizontal or vertical direction with configurable spacing and alignment
+- **blocks/text.liquid**: Renders a configurable text block with customizable styling and alignment for use within Shopify sections
+- **config/settings_data.json**: Stores the current theme configuration and global settings including typography, colors, layout dimensions, cart behavior, search settings, social media links, GTM tracking options, and color schemes.
+- **config/settings_schema.json**: Defines theme-level customization settings and color schemes accessible through Shopify's theme editor admin interface
+- **locales/en.default.json**: Stores English language translations for all user-facing text and labels throughout the Shopify theme.
+- **locales/en.default.schema.json**: Provides default English translations for all Shopify theme editor schema settings, labels, and section configurations
 
 ---
 
 ## Common Mistakes
 
-- [layout/password.liquid] Confusing this with layout/theme.liquid which is the main store layout
-- [layout/password.liquid] Adding full site navigation or header/footer elements meant for the main theme
-- [layout/password.liquid] Attempting to load Alpine.js or theme.js assets that are only needed in the main store
-- [layout/password.liquid] Forgetting this is only rendered when the store is password-protected
-- [layout/password.liquid] Modifying this file when changes should be made to layout/theme.liquid instead
-- [layout/theme.liquid] Adding new JavaScript libraries without considering load order relative to Alpine.js and theme.js
-- [layout/theme.liquid] Forgetting that Swiper is conditionally loaded only for specific templates (collection, product, index, page, search)
-- [layout/theme.liquid] Not recognizing that settings.predictive_search_enabled gates both CSS and JS loading
-- [layout/theme.liquid] Attempting to use Alpine.js features before Alpine is initialized (defer attribute)
-- [layout/theme.liquid] Assuming all assets are loaded on all pages (many are conditional)
-- [layout/theme.liquid] Modifying asset loading order without understanding Alpine.js must load before theme.js
-- [sections/Faq.liquid] Forgetting that Alpine.js must be loaded globally for x-data/x-show directives to work
-- [sections/Faq.liquid] Not understanding that openBlock uses forloop.index0 (zero-based) for comparison
-- [sections/Faq.liquid] Removing x-cloak without ensuring Alpine.js loads, causing FOUC (flash of unstyled content)
-- [sections/Faq.liquid] [object Object]
-- [sections/Faq.liquid] Assuming multiple FAQs can be open simultaneously (current implementation only allows one)
-- [sections/account.liquid] Assuming JavaScript is needed for pagination (it's server-side via Liquid paginate tag)
-- [sections/account.liquid] Modifying table structure without updating ARIA roles and headers associations
-- [sections/account.liquid] Changing pagination limit from 20 without considering performance implications
-- [sections/account.liquid] Not maintaining responsive data-label attributes when modifying table columns
+- [layout/password.liquid] Adding header/footer sections here (they won't work on password page)
+- [layout/password.liquid] Expecting this to render when store is not password-protected
+- [layout/password.liquid] Forgetting that content_for_layout renders the template defined in templates/password.json
+- [layout/password.liquid] Adding interactive JavaScript without including required libraries
+- [layout/password.liquid] Not understanding this is completely separate from layout/theme.liquid
+- [layout/theme.liquid] Adding section-specific CSS/JS here instead of in section files
+- [layout/theme.liquid] Not checking template.name before conditionally loading Swiper
+- [layout/theme.liquid] Forgetting that changes affect all pages except password page
+- [layout/theme.liquid] Modifying script loading order breaking Alpine.js or liquid-ajax-cart dependencies
+- [layout/theme.liquid] Adding blocking scripts that delay page rendering
+- [sections/404.liquid] Assuming this file handles routing logic when it only renders the error page UI
+- [sections/404.liquid] Modifying hardcoded color values without considering the color_scheme setting
+- [sections/404.liquid] Breaking translation keys (templates.404.subtext, templates.404.title, general.continue_shopping)
+- [sections/404.liquid] Not testing responsive breakpoint at 768px when making style changes
+- [sections/Faq-metaobjects.liquid] Assuming faq_items is an array of simple objects instead of metaobject drops requiring .question and .answer field access
+- [sections/Faq-metaobjects.liquid] Forgetting that metaobject_list can be empty/null if merchant hasn't configured metaobjects yet
+- [sections/Faq-metaobjects.liquid] Not understanding that empty state (faq__setup-notice) only renders when request.design_mode is true AND faq_items is blank
+- [sections/Faq-metaobjects.liquid] Modifying Alpine.js state variable names without updating all @click and x-show bindings consistently
+- [sections/Faq-metaobjects.liquid] Expecting answer text to have HTML formatting when it's a multi_line_text_field that requires newline_to_br filter
+- [sections/Faq-metaobjects.liquid] Breaking responsive padding by modifying section.id which is used in dynamic style tag
