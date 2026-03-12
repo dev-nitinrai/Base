@@ -9390,3 +9390,54 @@ files:
     fix_guidance: When customizer text is wrong, check if schema keys in section files match translation keys here; if
       translations are missing, add them via Shopify admin language editor or ensure schema keys exist in corresponding
       section files
+  - file: sections/store-locator.liquid
+    error: parse_failed
+  - file: assets/section-store-locator.css
+    responsibility: Styles the store locator section using BEM methodology with search functionality, card grid layouts, and
+      responsive design following theme CSS custom properties.
+    owns:
+      - Store locator component styles (.store-locator block)
+      - Search bar UI with icon, input field, and clear button
+      - Grid layout for store cards with configurable columns (--store-locator-columns variable)
+      - Individual store card styling with header, body, and detail sections
+      - Hover states and transitions for cards and interactive elements
+      - Icon positioning for search and store detail icons
+      - Typography using theme font custom properties (--font-heading-family, --font-body-family)
+      - Color scheme using theme color custom properties (--color-foreground, --color-background, --color-shadow)
+    depends_on:
+      js:
+        - Likely depends on JavaScript for search input filtering and clear button functionality
+      snippets: []
+      sections:
+        - sections/store-locator.liquid (implied section file not in provided list)
+    common_mistakes:
+      - Not setting the --store-locator-columns CSS custom property causing grid layout to fail
+      - Forgetting to include icon SVGs for search and detail sections
+      - Overriding theme color custom properties causing inconsistent appearance
+      - Not accounting for address element default italic styling which is explicitly reset
+    fix_guidance: Check that --store-locator-columns variable is defined in the corresponding section file, verify theme
+      color custom properties are properly set in theme.liquid or global CSS, and ensure SVG icons are properly rendered
+      in the markup
+  - file: templates/page.store-locator.json
+    responsibility: Template configuration for the store locator page that defines layout and default settings for
+      displaying physical store locations with search functionality.
+    owns:
+      - Store locator page structure and section ordering
+      - Default heading and subheading text for store finder
+      - Search placeholder text configuration
+      - Cards per row display setting (3 columns)
+      - Color scheme assignment (scheme-1)
+      - Vertical padding values (60px top and bottom)
+    depends_on:
+      js: []
+      snippets: []
+      sections:
+        - sections/store-locator.liquid
+    common_mistakes:
+      - Assuming the store-locator section file exists when it's not in the provided file list
+      - Modifying search functionality here instead of in the actual section file
+      - Changing cards_per_row without considering responsive breakpoints defined in the section
+      - Not understanding this is only configuration data, not rendering logic
+    fix_guidance: The referenced section "sections/store-locator.liquid" is missing from the theme files list - verify this
+      section exists or needs to be created; all rendering logic and actual store data handling will be in that section
+      file, not this template JSON.

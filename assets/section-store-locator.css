@@ -1,0 +1,298 @@
+/* /assets/section-store-locator.css */
+
+/* ============================================================
+   STORE LOCATOR — BEM Component Styles
+   Block: .store-locator
+   ============================================================ */
+
+/* ── Section wrapper ──────────────────────────────────────── */
+
+.store-locator {
+  display: block;
+  width: 100%;
+  background-color: rgb(var(--color-background));
+}
+
+/* ── Heading ──────────────────────────────────────────────── */
+
+.store-locator__heading {
+  font-family: var(--font-heading-family);
+  font-style: var(--font-heading-style);
+  font-weight: var(--font-heading-weight);
+  font-size: clamp(2.4rem, 3.5vw, 3.6rem);
+  color: rgba(var(--color-foreground), 1);
+  margin: 0 0 0.8rem;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.store-locator__subheading {
+  font-size: 1.6rem;
+  color: rgba(var(--color-foreground), 0.7);
+  text-align: center;
+  margin: 0 0 3.2rem;
+  line-height: 1.5;
+}
+
+/* ── Search bar ──────────────────────────────────────────── */
+
+.store-locator__search {
+  margin: 0 0 3.2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.store-locator__search-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+}
+
+.store-locator__search-icon {
+  position: absolute;
+  top: 50%;
+  left: 1.4rem;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: rgba(var(--color-foreground), 0.5);
+  display: flex;
+  align-items: center;
+}
+
+.store-locator__search-input {
+  width: 100%;
+  padding: 1.2rem 4rem 1.2rem 4.4rem;
+  border: 1px solid rgba(var(--color-foreground), 0.3);
+  border-radius: 0.6rem;
+  background-color: rgb(var(--color-background));
+  color: rgba(var(--color-foreground), 1);
+  font-family: var(--font-body-family);
+  font-size: 1.5rem;
+  line-height: 1.4;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.store-locator__search-input::placeholder {
+  color: rgba(var(--color-foreground), 0.45);
+}
+
+.store-locator__search-input:focus {
+  outline: none;
+  border-color: rgba(var(--color-foreground), 0.7);
+  box-shadow: 0 0 0 3px rgba(var(--color-foreground), 0.08);
+}
+
+.store-locator__search-clear {
+  position: absolute;
+  top: 50%;
+  right: 1.2rem;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(var(--color-foreground), 0.5);
+  border-radius: 50%;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.store-locator__search-clear:hover {
+  color: rgba(var(--color-foreground), 1);
+  background-color: rgba(var(--color-foreground), 0.08);
+}
+
+/* ── Cards grid ──────────────────────────────────────────── */
+
+.store-locator__grid {
+  display: grid;
+  grid-template-columns: repeat(var(--store-locator-columns, 3), 1fr);
+  gap: 2.4rem;
+}
+
+/* ── Individual card ─────────────────────────────────────── */
+
+.store-locator__card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(var(--color-foreground), 0.15);
+  border-radius: 0.8rem;
+  overflow: hidden;
+  background-color: rgb(var(--color-background));
+  box-shadow: 0 2px 8px rgba(var(--color-shadow), 0.06);
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.store-locator__card:hover {
+  box-shadow: 0 6px 20px rgba(var(--color-shadow), 0.12);
+  transform: translateY(-2px);
+}
+
+/* ── Card header ─────────────────────────────────────────── */
+
+.store-locator__card-header {
+  padding: 2rem 2rem 1.2rem;
+  border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.store-locator__card-name {
+  font-family: var(--font-heading-family);
+  font-style: var(--font-heading-style);
+  font-weight: var(--font-heading-weight);
+  font-size: 1.8rem;
+  color: rgba(var(--color-foreground), 1);
+  margin: 0;
+  line-height: 1.25;
+}
+
+.store-locator__card-city {
+  display: inline-block;
+  font-size: 1.2rem;
+  font-weight: var(--font-body-weight-bold, 700);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(var(--color-foreground), 0.5);
+}
+
+/* ── Card body ───────────────────────────────────────────── */
+
+.store-locator__card-body {
+  padding: 1.6rem 2rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.store-locator__detail {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.store-locator__detail-icon {
+  flex-shrink: 0;
+  color: rgba(var(--color-foreground), 0.5);
+  display: flex;
+  align-items: flex-start;
+  padding-top: 0.15em;
+}
+
+.store-locator__detail-text {
+  font-size: 1.4rem;
+  line-height: 1.55;
+  color: rgba(var(--color-foreground), 0.8);
+  margin: 0;
+  font-style: normal; /* reset <address> italics */
+}
+
+.store-locator__detail-link {
+  text-decoration: none;
+  color: rgba(var(--color-foreground), 0.8);
+  transition: color 0.2s ease;
+}
+
+.store-locator__detail-link:hover {
+  color: rgba(var(--color-foreground), 1);
+  text-decoration: underline;
+}
+
+/* ── Card footer ─────────────────────────────────────────── */
+
+.store-locator__card-footer {
+  padding: 1.2rem 2rem 1.6rem;
+  border-top: 1px solid rgba(var(--color-foreground), 0.1);
+}
+
+.store-locator__directions-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.4rem;
+  font-weight: var(--font-body-weight-bold, 700);
+  color: rgba(var(--color-button), 1);
+  text-decoration: none;
+  transition: gap 0.2s ease, opacity 0.2s ease;
+  letter-spacing: 0.02em;
+}
+
+.store-locator__directions-link:hover {
+  gap: 0.8rem;
+  opacity: 0.85;
+  text-decoration: underline;
+}
+
+/* ── No results message ──────────────────────────────────── */
+
+.store-locator__no-results {
+  text-align: center;
+  margin-top: 4rem;
+  font-size: 1.6rem;
+  color: rgba(var(--color-foreground), 0.6);
+}
+
+/* ── Setup notice (editor only) ──────────────────────────── */
+
+.store-locator__setup-notice {
+  border: 2px dashed rgba(var(--color-foreground), 0.25);
+  border-radius: 0.8rem;
+  padding: 3.2rem 2.4rem;
+  text-align: center;
+  color: rgba(var(--color-foreground), 0.6);
+  font-size: 1.5rem;
+  line-height: 1.6;
+}
+
+/* ============================================================
+   RESPONSIVE BREAKPOINTS
+   ============================================================ */
+
+/* Tablet: max 2 columns */
+@media screen and (max-width: 989px) {
+  .store-locator__grid {
+    grid-template-columns: repeat(
+      min(var(--store-locator-columns, 3), 2),
+      1fr
+    );
+    gap: 2rem;
+  }
+}
+
+/* Mobile: single column */
+@media screen and (max-width: 749px) {
+  .store-locator__grid {
+    grid-template-columns: 1fr;
+    gap: 1.6rem;
+  }
+
+  .store-locator__heading {
+    font-size: 2.4rem;
+    text-align: left;
+  }
+
+  .store-locator__subheading {
+    text-align: left;
+    margin-bottom: 2.4rem;
+  }
+
+  .store-locator__search {
+    justify-content: stretch;
+    margin-bottom: 2.4rem;
+  }
+
+  .store-locator__search-wrapper {
+    max-width: 100%;
+  }
+
+  .store-locator__card:hover {
+    transform: none;
+  }
+}

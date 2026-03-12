@@ -33,39 +33,89 @@
 - Escape user input: `{{ string | escape }}` in attributes
 - Don't reference `content_for_header` outside layout files
 
-### CSS Variables (This Theme)
-- This theme uses CSS custom properties (defined in css-variables.liquid or similar)
-- Always reference theme tokens: `color: var(--color-primary)`, `font-family: var(--font-body-family)`
-- For brand-wide color/font changes, update the variables file — not individual sections
-
-### CSS Naming Convention: BEM
-- This theme follows BEM naming: `.block__element--modifier`
-- Block = section or component name: `.footer`, `.product-card`
-- Element = child: `.footer__links`, `.product-card__image`
-- Modifier = variant: `.footer--dark`, `.product-card--featured`
-- Never use ID selectors for styling
-
-### JavaScript: Alpine.js
-- This theme uses Alpine.js for interactivity
-- Use `x-data`, `x-show`, `x-bind`, `@click` directives
-- Store component state in `x-data="{ open: false }"`
-- For shared state use Alpine.store()
-
-### File Organization
-- Section CSS goes in: `assets/section-{name}.css`
-- Component CSS goes in: `assets/component-{name}.css`
-- Section JS goes in: `assets/section-{name}.js`
-- Load CSS at top of section: `{{ 'section-name.css' | asset_url | stylesheet_tag }}`
-
 ---
 
 ## Feature → File Index
 
+### 0
+- **Start here**: sections/product.liquid
+- **Primary**: sections/product.liquid, assets/section-product.css, assets/section-product.js, templates/product.json
+- **Do not edit**: none
+
+### 1
+- **Start here**: sections/collection.liquid
+- **Primary**: sections/collection.liquid, assets/section-collection.css, assets/section-collection.js, templates/collection.json
+- **Do not edit**: none
+
+### 2
+- **Start here**: assets/section-collection.js
+- **Primary**: snippets/component-filters-sidebar.liquid, snippets/component-filters-horizontal.liquid, snippets/component-filters-drawer.liquid, assets/section-collection.js
+- **Do not edit**: none
+
+### 3
+- **Start here**: sections/cart.liquid
+- **Primary**: sections/cart.liquid, assets/cart.css
+- **Do not edit**: none
+
+### 4
+- **Start here**: sections/search.liquid
+- **Primary**: sections/search.liquid, assets/section-search.css, templates/search.json
+- **Do not edit**: none
+
+### 5
+- **Start here**: sections/header.liquid
+- **Primary**: sections/header.liquid, assets/section-footer.css, sections/header-group.json
+- **Do not edit**: none
+
+### 6
+- **Start here**: sections/footer.liquid
+- **Primary**: sections/footer.liquid, assets/section-footer.css, sections/footer-group.json
+- **Do not edit**: none
+
+### 7
+- **Start here**: sections/blog.liquid
+- **Primary**: sections/blog.liquid, assets/section-blog.css, sections/article.liquid, assets/section-article.css, templates/blog.json, templates/article.json
+- **Do not edit**: none
+
+### 8
+- **Start here**: assets/customer.css
+- **Primary**: assets/customer.css, assets/customer.js
+- **Do not edit**: none
+
+### 9
+- **Start here**: sections/hero.liquid
+- **Primary**: sections/hero.liquid, assets/section-hero.css, sections/hero-v2.liquid, assets/section-hero-v2.css
+- **Do not edit**: none
+
+### 10
+- **Start here**: sections/featured-collections.liquid
+- **Primary**: sections/featured-collections.liquid, assets/section-featured-collections.css, sections/featured-collections-v2.liquid, assets/section-featured-collections-v2.css, assets/section-featured-collections-v2.js
+- **Do not edit**: none
+
+### 11
+- **Start here**: sections/featured-products.liquid
+- **Primary**: sections/featured-products.liquid, assets/section-featured-products.css, assets/section-featured-products.js
+- **Do not edit**: none
+
+### 12
+- **Start here**: sections/Faq.liquid
+- **Primary**: sections/Faq.liquid, sections/Faq-metaobjects.liquid, assets/section-faq.css
+- **Do not edit**: none
+
+### 13
+- **Start here**: sections/shop-by-category.liquid
+- **Primary**: sections/shop-by-category.liquid, assets/section-shop-by-category.css, assets/section-shop-by-category.js, sections/shop-by-category-v2.liquid, assets/section-shop-by-category-v2.css
+- **Do not edit**: none
+
+### 14
+- **Start here**: undefined
+- **Primary**: sections/animated-features.liquid, assets/section-animated-features.css, assets/section-animated-features.js, sections/animated-features-v2.liquid, assets/section-animated-features-v2
+- **Do not edit**: none
 
 
 ---
 
-## Available Sections (49)
+## Available Sections (50)
 
 - **`sections/404.liquid`** — 404 section | keywords: 404 error page, page not found, error state, centered text layout, call-to-action button, minimal error page, full-width centered content, error message
 - **`sections/Faq-metaobjects.liquid`** — FAQ — Metaobjects section | keywords: faq-accordion, collapsible-faq, accordion-list, expandable-questions, metaobject-faq, q&a-section, faq-dropdown, single-column-accordion
@@ -116,6 +166,7 @@
 - **`sections/shop-by-category.liquid`** — Shop By Category section | keywords: category-grid, collection-list, split-layout, featured-image-sidebar, category-navigation, image-with-list, two-column-categories, category-links, shop-by-category
 - **`sections/shop-categories.liquid`** — Shop Categories section | keywords: category-carousel, collection-slider, shop-by-category, horizontal-scroll-cards, image-card-carousel, category-grid-slider, collection-tiles, swiper-categories, product-category-navigation, filtered-collection-showcase
 - **`sections/shop-the-look.liquid`** — Shop The Look section | keywords: shop-the-look, shoppable-image, product-hotspots, interactive-slider, image-carousel-with-products, lookbook, tagged-products, clickable-hotspots, product-showcase-slider, swiper-carousel
+- **`sections/store-locator.liquid`** — Store Locator section | keywords: store locator, location finder, store locations, map pins, address cards, city search, store directory, branch locations, retail locations, find stores
 
 ## Available Snippets (29)
 
@@ -366,6 +417,9 @@
 - **config/settings_schema.json**: Defines theme-level customization settings and color schemes accessible through Shopify's theme editor admin interface
 - **locales/en.default.json**: Stores English language translations for all user-facing text and labels throughout the Shopify theme.
 - **locales/en.default.schema.json**: Provides default English translations for all Shopify theme editor schema settings, labels, and section configurations
+- **sections/store-locator.liquid**: undefined
+- **assets/section-store-locator.css**: Styles the store locator section using BEM methodology with search functionality, card grid layouts, and responsive design following theme CSS custom properties.
+- **templates/page.store-locator.json**: Template configuration for the store locator page that defines layout and default settings for displaying physical store locations with search functionality.
 
 ---
 

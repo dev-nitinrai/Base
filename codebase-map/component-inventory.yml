@@ -3655,6 +3655,74 @@ sections:
       - slideshow.liquid
       - product-recommendations.liquid
       - multicolumn.liquid
+  - file: sections/store-locator.liquid
+    name: store-locator
+    label: Store Locator
+    visual_role: Store Locator section
+    settings:
+      - id: heading
+        type: text
+        label: Heading
+      - id: subheading
+        type: text
+        label: Subheading
+      - id: search_placeholder
+        type: text
+        label: Search placeholder text
+      - id: cards_per_row
+        type: select
+        label: Cards per row (desktop)
+      - id: color_scheme
+        type: color_scheme
+        label: t:sections.all.colors.label
+      - type: header
+      - id: padding_top
+        type: range
+        label: Padding top
+      - id: padding_bottom
+        type: range
+        label: Padding bottom
+    blocks: []
+    max_blocks: null
+    templates_allowed:
+      - "*"
+    presets:
+      - Store Locator
+    uses_image: false
+    uses_video: false
+    uses_slider: false
+    uses_grid: true
+    uses_tabs: false
+    uses_accordion: false
+    uses_form: false
+    layout_type: grid
+    mockup_keywords:
+      - store locator
+      - location finder
+      - store locations
+      - map pins
+      - address cards
+      - city search
+      - store directory
+      - branch locations
+      - retail locations
+      - find stores
+    when_to_use: Use when mockup shows a grid of physical store locations with search/filter functionality, addresses, phone
+      numbers, and operating hours displayed as cards.
+    when_to_create_new: Create new section if mockup requires interactive maps with embedded Google Maps, dealer locators
+      with distance calculation, or appointment booking functionality integrated with locations.
+    requires_new_section_if:
+      - Interactive embedded map view (Google Maps, Mapbox) required
+      - Geolocation or distance-based sorting needed
+      - Appointment scheduling or booking system integration
+      - Multiple location types with category filters beyond city search
+      - Real-time availability or inventory by location
+      - Single location detail page instead of grid layout
+    similar_sections:
+      - contact-template.liquid
+      - store-directory.liquid
+      - location-list.liquid
+      - dealer-locator.liquid
 snippets:
   - file: snippets/component-article-card.liquid
     name: component-article-card
@@ -4487,3 +4555,6 @@ assets:
     - file: assets/swiper7.4.1.min.css
       name: swiper7.4.1.min.css
       size_lines: 13
+    - file: assets/section-store-locator.css
+      name: section-store-locator.css
+      size_lines: 299

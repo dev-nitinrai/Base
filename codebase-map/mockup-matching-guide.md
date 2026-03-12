@@ -34,6 +34,7 @@ Found a match?
 - **product** (`sections/product.liquid`) — t:sections.main-product.name section
 - **related-products** (`sections/related-products.liquid`) — Related products section
 - **search** (`sections/search.liquid`) — t:sections.main-collection-product-grid.name section
+- **store-locator** (`sections/store-locator.liquid`) — Store Locator section
 
 ### Two-Column (Image + Text)
 - **brand-story** (`sections/brand-story.liquid`) — Brand Story section
@@ -452,6 +453,14 @@ Found a match?
 - Use when: When the mockup shows an image carousel/slider with interactive hotspot dots that reveal product information overlaid on lifestyle or styled product photography.
 - Create new if: When the design requires a static grid layout without slider functionality, video content instead of images, or fundamentally different interaction patterns like hover cards or modal popups.
 - Requirements that exceed this section: Video or animated content instead of static images; Grid layout without carousel/slider functionality; More than 3 hotspots per image (current limit appears to be 3); Hotspots triggering full-page modals or cart drawers; Multi-column simultaneous image display; Before/after image comparison functionality; Integration with quiz or product recommendation logic
+
+### store-locator (`sections/store-locator.liquid`)
+- Role: Store Locator section
+- Mockup keywords: store locator, location finder, store locations, map pins, address cards, city search, store directory, branch locations, retail locations, find stores
+- Schema settings: 8 | Block types: 0
+- Use when: Use when mockup shows a grid of physical store locations with search/filter functionality, addresses, phone numbers, and operating hours displayed as cards.
+- Create new if: Create new section if mockup requires interactive maps with embedded Google Maps, dealer locators with distance calculation, or appointment booking functionality integrated with locations.
+- Requirements that exceed this section: Interactive embedded map view (Google Maps, Mapbox) required; Geolocation or distance-based sorting needed; Appointment scheduling or booking system integration; Multiple location types with category filters beyond city search; Real-time availability or inventory by location; Single location detail page instead of grid layout
 
 
 ---
