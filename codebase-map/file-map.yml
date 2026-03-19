@@ -1386,81 +1386,33 @@ files:
     fix_guidance: Check sections/footer.liquid for actual rendering logic; this file only stores configuration data that
       footer.liquid consumes via section.blocks and section.settings.
   - file: sections/footer.liquid
-    responsibility: Renders the site footer with configurable blocks for text, navigation menus, social icons, and brand information
+    responsibility: Renders the footer section with configurable blocks for text, menus, social icons, and brand
+      information, plus bottom content area for localization and payment icons.
     owns:
-      - Footer section layout and content structure
-      - Footer blocks rendering (text, link_list, social_icons, brand_information)
-      - Newsletter signup form integration
-      - Payment icons display
-      - Localization forms for country/language selection
-      - Footer policies and copyright text display
-      - Social media icon visibility logic
+      - Footer layout with top content blocks and bottom wrapper
+      - Social media icons visibility logic based on settings
+      - Brand information display (image, headline, description)
+      - Footer block types (text, link_list, social_icons, brand_information)
+      - Color scheme and padding styling
+      - Hard-coded background color (#0000ff) and text color (#ffffff)
     depends_on:
-      js:
-        - assets/component-localization-form.js
-        - assets/shopify.js
+      js: []
       snippets:
-        - snippets/component-social-icons.liquid
-        - snippets/component-localization-form.liquid
+        - component-social-icons.liquid
       sections: []
-      global_objects:
-        - section.blocks
-        - section.settings
-        - settings.social_facebook_link
-        - settings.social_instagram_link
-        - settings.social_youtube_link
-        - settings.social_tiktok_link
-        - settings.social_twitter_link
-        - settings.social_pinterest_link
-        - settings.social_snapchat_link
-        - settings.social_tumblr_link
-        - settings.social_vimeo_link
-        - settings.brand_image
-        - settings.brand_headline
-        - settings.brand_description
-        - settings.brand_image_width
-        - settings.animations_reveal_on_scroll
-        - settings.enable_country_selector
-        - settings.enable_language_selector
-        - settings.payment_enable
-        - shop.enabled_payment_types
-        - shop.name
-      custom_elements: []
-    depended_on_by:
-      - sections/footer-group.json
-      - layout/theme.liquid
-    key_identifiers:
-      css_classes:
-        - footer
-        - footer__content-top
-        - footer__content-bottom
-        - footer__blocks-wrapper
-        - footer-block
-        - footer-block__heading
-        - footer-block__details-content
-        - footer-block__brand-info
-        - footer__column
-        - footer__localization
-        - footer__list-social
-        - section-footer-padding
-      data_attributes:
-        - data-cascade
-      js_events_emitted: []
-      js_events_listened: []
-      custom_elements: []
-    state_ownership:
-      - Social icons visibility state (has_social_icons)
-      - Brand information empty state (brand_empty)
-      - Only empty brand block state (only_empty_brand)
+      assets:
+        - section-footer.css
+      settings:
+        - social media links (facebook, instagram, youtube, tiktok, twitter, pinterest, snapchat, tumblr, vimeo)
+        - brand_image, brand_headline, brand_description, brand_image_width
+        - animations_reveal_on_scroll
     common_mistakes:
-      - Modifying inline background color (#ff0000) without realizing it overrides color_scheme setting
-      - Not checking for empty social links before rendering social icon blocks
-      - Forgetting that newsletter form requires shop.customer_accounts_enabled
-      - Missing that localization forms depend on country/language selector settings
-      - Not accounting for brand_empty conditional logic when adding brand content
-    fix_guidance: Check section.blocks array and settings.social_*_link values for visibility issues; verify color_scheme vs
-      hardcoded background color conflict; ensure localization form snippets are available when enable_country_selector
-      or enable_language_selector is true
+      - Forgetting to check if social settings exist before rendering social icons
+      - Not accounting for only_empty_brand condition which hides footer when only empty brand block exists
+      - Modifying the hard-coded inline styles without updating the color scheme logic
+      - Breaking the conditional logic for has_social_icons which checks multiple social settings
+    fix_guidance: Check section.blocks array structure and types, verify settings.social_* link configurations, review
+      brand_empty and only_empty_brand conditional logic for visibility issues
   - file: sections/header-group.json
     responsibility: Configures the header group combining announcement bar and header sections with their settings and display order
     owns:

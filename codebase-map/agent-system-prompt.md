@@ -3,10 +3,12 @@
 ## Rules Before Editing Any File
 
 1. **Check feature index first** — find primary vs secondary files for the task
-2. **Never add inline scripts** to .liquid files if a .js file owns that logic
-3. **Trace to the root** — if broken in a custom element, find its JS class
-4. **For new UI** — check component inventory and mockup-matching-guide.md before creating new files
-5. **Check `do_not_edit`** — some files are generated or theme-critical
+2. **Check dependency graph** — before editing any JS file, read `codebase-map/dependency-graph.yml` to see what depends on it and what it depends on. Look at `depended_on_by` to understand impact, and `impact_score` to gauge risk.
+3. **Never add inline scripts** to .liquid files if a .js file owns that logic
+4. **Trace to the root** — if broken in a custom element, find its JS class in the dependency graph's `element_registry`
+5. **For new UI** — check component inventory and mockup-matching-guide.md before creating new files
+6. **Check `do_not_edit`** — some files are generated or theme-critical
+7. **Event coupling** — check `event_bus` in the dependency graph before renaming or removing custom events
 
 ---
 
@@ -33,34 +35,54 @@
 - Escape user input: `{{ string | escape }}` in attributes
 - Don't reference `content_for_header` outside layout files
 
-### CSS Variables (This Theme)
-- This theme uses CSS custom properties (defined in css-variables.liquid or similar)
-- Always reference theme tokens: `color: var(--color-primary)`, `font-family: var(--font-body-family)`
-- For brand-wide color/font changes, update the variables file — not individual sections
-
-### CSS Naming Convention: BEM
-- This theme follows BEM naming: `.block__element--modifier`
-- Block = section or component name: `.footer`, `.product-card`
-- Element = child: `.footer__links`, `.product-card__image`
-- Modifier = variant: `.footer--dark`, `.product-card--featured`
-- Never use ID selectors for styling
-
-### JavaScript: Alpine.js
-- This theme uses Alpine.js for interactivity
-- Use `x-data`, `x-show`, `x-bind`, `@click` directives
-- Store component state in `x-data="{ open: false }"`
-- For shared state use Alpine.store()
-
-### File Organization
-- Section CSS goes in: `assets/section-{name}.css`
-- Component CSS goes in: `assets/component-{name}.css`
-- Section JS goes in: `assets/section-{name}.js`
-- Load CSS at top of section: `{{ 'section-name.css' | asset_url | stylesheet_tag }}`
-
 ---
 
 ## Feature → File Index
 
+### CART DRAWER
+- **Start here**: snippets/component-cart-drawer.liquid
+- **Primary**: snippets/component-cart-drawer.liquid, assets/component-cart-drawer.js, assets/cart.css
+- **Do not edit**: assets/critical.css
+
+### PRODUCT FORM
+- **Start here**: sections/product.liquid
+- **Primary**: sections/product.liquid, assets/section-product.js, assets/section-product.css
+- **Do not edit**: assets/shopify.js, assets/critical.css
+
+### COLLECTION GRID
+- **Start here**: sections/collection.liquid
+- **Primary**: sections/collection.liquid, assets/section-collection.css, assets/section-collection.js
+- **Do not edit**: templates/collection.json
+
+### HEADER NAVIGATION
+- **Start here**: sections/header.liquid
+- **Primary**: sections/header.liquid, assets/section-footer.css
+- **Do not edit**: assets/critical.css
+
+### PREDICTIVE SEARCH
+- **Start here**: snippets/component-predictive-search.liquid
+- **Primary**: snippets/component-predictive-search.liquid, assets/component-predictive-search.js, assets/component-predictive-search.css
+- **Do not edit**: assets/theme.js
+
+### QUICK ADD
+- **Start here**: assets/component-quick-add.js
+- **Primary**: assets/component-quick-add.js, assets/component-quick-add.css
+- **Do not edit**: assets/component-modal-opener.js
+
+### FILTERS
+- **Start here**: assets/section-collection.js
+- **Primary**: snippets/component-filters-sidebar.liquid, snippets/component-filters-horizontal.liquid, assets/section-collection.css
+- **Do not edit**: assets/shopify.js
+
+### PRODUCT MEDIA
+- **Start here**: snippets/component-product-media-gallery.liquid
+- **Primary**: snippets/component-product-media-gallery.liquid, snippets/component-product-media.liquid, assets/section-product.css
+- **Do not edit**: assets/critical.css
+
+### VARIANT PICKER
+- **Start here**: assets/section-product.js
+- **Primary**: sections/product.liquid, assets/section-product.js
+- **Do not edit**: assets/shopify.js
 
 
 ---
@@ -210,7 +232,7 @@
 - **sections/featured-collections.liquid**: Displays a grid of featured collection cards with customizable images, titles, and layout styles
 - **sections/featured-products.liquid**: Renders a swiper carousel of manually selected featured products with navigation arrows and optional view-all link
 - **sections/footer-group.json**: Defines the footer section group configuration including layout blocks for link lists, brand information, and text content with localization settings.
-- **sections/footer.liquid**: Renders the site footer with configurable blocks for text, navigation menus, social icons, and brand information
+- **sections/footer.liquid**: Renders the footer section with configurable blocks for text, menus, social icons, and brand information, plus bottom content area for localization and payment icons.
 - **sections/header-group.json**: Configures the header group combining announcement bar and header sections with their settings and display order
 - **sections/header.liquid**: Renders and styles the site-wide header including logo, navigation menu, search, cart, and account icons with configurable sticky behavior and layout options.
 - **sections/hello-world.liquid**: Renders a welcome/onboarding section for developers new to the Skeleton theme with educational content and links.
@@ -391,3 +413,29 @@
 - [sections/Faq-metaobjects.liquid] Modifying Alpine.js state variable names without updating all @click and x-show bindings consistently
 - [sections/Faq-metaobjects.liquid] Expecting answer text to have HTML formatting when it's a multi_line_text_field that requires newline_to_br filter
 - [sections/Faq-metaobjects.liquid] Breaking responsive padding by modifying section.id which is used in dynamic style tag
+
+---
+
+## JS Dependency Graph
+
+**Full graph available at: `codebase-map/dependency-graph.yml`**
+
+Before editing any JS file, Read the dependency graph to understand:
+- `depends_on`: what this file needs to work (don't break the contract)
+- `depended_on_by`: what breaks if you change this file
+- `impact_score`: 0–1 risk level (higher = more files affected)
+- `element_registry`: which JS file owns each custom element tag
+- `event_bus`: who dispatches and who listens to each custom event
+
+### High-Impact Files (edit with caution)
+
+- **`assets/component-pickup-availability.js`** — registers: <pickup-availability>, <pickup-availability-drawer> | classes: PickupAvailability, PickupAvailabilityDrawer | listens: click, keyup
+- **`assets/component-predictive-search.js`** — registers: <predictive-search> | classes: PredictiveSearch | listens: input, focus, click
+- **`assets/component-quick-add.js`** — registers: <quick-add-modal> | classes: QuickAdd | listens: submit, click, keyup
+- **`assets/section-brand-story-v2.js`** — registers: <brand-story-v2> | classes: BrandStoryV2 | listens: click, mouseenter, focus
+- **`assets/component-cart-discount.js`** — registers: <cart-discount-form> | classes: CartDiscountForm | listens: submit, click
+- **`assets/component-filters-price-range.js`** — registers: <price-range> | classes: PriceRange | listens: input, change
+- **`assets/component-product-media-modal.js`** — registers: <product-media-modal> | classes: ProductMediaModal | listens: click, pointerup
+- **`assets/section-collection.js`** — registers: <collection-info> | classes: CollectionInfo | listens: change, click
+- **`assets/section-product.js`** — registers: <product-info> | classes: ProductInfo | listens: change, click
+- **`assets/section-shop-by-category.js`** — registers: <shop-by-category> | classes: ShopByCategory | listens: mouseover, focus
