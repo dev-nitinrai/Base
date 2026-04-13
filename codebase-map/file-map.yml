@@ -5298,61 +5298,36 @@ files:
       - Truncated file content suggests incomplete updateFilters or fetchSection implementation
     fix_guidance: Check that data-section attribute matches section ID, verify filter form IDs (#filters-form,
   - file: assets/section-faq.css
-    responsibility: Styles the FAQ accordion section with expandable question/answer blocks and setup instructions for
-      metaobject integration
+    responsibility: Provides all layout, typography, spacing, and accordion icon styles for the FAQ section components.
     owns:
-      - FAQ section layout and typography including heading styles
-      - Accordion block structure with borders and spacing
-      - Header button layout with question text and toggle icon
-      - Collapsible content area styling for answers
-      - Icon circle button with rotation transition
-      - Theme editor empty state notice for metaobject setup instructions
-      - Mobile responsive breakpoints for smaller screens
+      - .faq-section block-level container
+      - .faq__heading title styles
+      - .faq__container flex column layout
+      - .faq__block border separator
+      - .faq__accordion wrapper
+      - .faq__header button layout and cursor
+      - .faq__title question text styles
+      - .faq__icon circular toggle icon with transform transition
+      - .faq__content answer panel padding and overflow
+      - .faq__content-wrapper inner wrapper
+      - .faq__answer answer text with opacity
+      - mobile responsive overrides at max-width 749px
     depends_on:
       js: []
       snippets: []
       sections:
         - sections/Faq.liquid
         - sections/Faq-metaobjects.liquid
-      global_objects:
-        - --color-background
-        - --color-foreground
-      custom_elements: []
-    depended_on_by:
-      - sections/Faq.liquid
-      - sections/Faq-metaobjects.liquid
-    key_identifiers:
-      css_classes:
-        - faq-section
-        - faq__heading
-        - faq__container
-        - faq__block
-        - faq__accordion
-        - faq__header
-        - faq__title
-        - faq__icon
-        - faq__content
-        - faq__content-wrapper
-        - faq__answer
-        - faq__setup-notice
-        - faq__setup-notice-inner
-        - faq__setup-notice-title
-        - faq__setup-steps
-        - faq__setup-notice-hint
-      data_attributes: []
-      js_events_emitted: []
-      js_events_listened: []
-      custom_elements: []
-    state_ownership:
-      - none - visual styling only, accordion state managed by JavaScript
     common_mistakes:
-      - Assuming this file handles accordion expand/collapse logic when it only provides visual styling
-      - Missing that icon rotation animation is CSS-only and requires JavaScript to toggle classes
-      - Not recognizing the setup notice styles are specifically for theme editor empty states
-      - Overlooking mobile responsive adjustments at 749px breakpoint
-    fix_guidance: Check if CSS custom properties --color-background and --color-foreground are defined in
-      snippets/css-variables.liquid when colors appear incorrect; verify JavaScript is toggling appropriate classes for
-      accordion state transitions
+      - Editing accordion open/close animation here when it is controlled by JS toggle classes in the section liquid file
+      - Expecting icon rotation to work without a corresponding JS class being added to .faq__icon on toggle
+      - Assuming .faq__content visibility is CSS-only when show/hide logic lives in section JS
+      - Confusing sections/Faq.liquid and sections/Faq-metaobjects.liquid as sharing identical markup when class names
+        may differ
+      - Overriding CSS custom properties locally without checking --color-background and --color-foreground definitions
+        in theme.liquid
+    fix_guidance: Check sections/Faq.liquid and sections/Faq-metaobjects.liquid for matching class names and any JS toggling
+      open/active state classes before adjusting visual styles here.
   - file: assets/section-featured-collections-v2.css
     responsibility: Styles the featured collections v2 section with tabbed navigation, swiper carousel integration, and
       placeholder product cards
@@ -9390,3 +9365,26 @@ files:
     fix_guidance: When customizer text is wrong, check if schema keys in section files match translation keys here; if
       translations are missing, add them via Shopify admin language editor or ensure schema keys exist in corresponding
       section files
+  - file: sections/top-banner.liquid
+    responsibility: Renders a simple full-width top banner bar displaying a configurable promotional text message with
+      hardcoded black background and white text styling.
+    owns:
+      - .top-banner__message paragraph element
+      - Inline scoped stylesheet for .top-banner__message
+      - "Schema setting: message (text)"
+    depends_on:
+      js: []
+      snippets: []
+      sections: []
+    common_mistakes:
+      - Attempting to add rich text or HTML in the message setting — the escape filter strips all HTML tags
+      - Expecting theme-level CSS variables or design tokens to control colors — background and text colors are
+        hardcoded and not connected to theme settings
+      - Trying to reference this as an announcement bar replacement — it has no link, close button, or multi-message
+        support unlike sections/announcement-bar.liquid
+      - Assuming styles are global — the {% stylesheet %} tag scopes styles but agents may duplicate selectors in global
+        CSS causing conflicts
+      - Adding presets and expecting it to auto-appear in layout — it must be manually added to a template or
+        header-group/theme layout
+    fix_guidance: Check section.settings.message value in the Shopify customizer first; for styling changes go directly to
+      the hardcoded values inside the {% stylesheet %} block since no external CSS file or CSS variables are involved.
