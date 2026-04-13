@@ -1,0 +1,13 @@
+{
+  "sections": {
+    "new-section_mnxm0qdd": {
+      "type": "new-section",
+      "settings": {
+        "message": "Free shipping on orders over $50"
+      }
+    }
+  },
+  "order": [
+    "new-section_mnxm0qdd"
+  ]
+}

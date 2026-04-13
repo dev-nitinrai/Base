@@ -3655,6 +3655,57 @@ sections:
       - slideshow.liquid
       - product-recommendations.liquid
       - multicolumn.liquid
+  - file: sections/top-banner.liquid
+    name: top-banner
+    label: Top banner
+    visual_role: Banner image with text overlay
+    settings:
+      - id: message
+        type: text
+        label: Message
+    blocks: []
+    max_blocks: null
+    templates_allowed:
+      - "*"
+    presets:
+      - Top banner
+    uses_image: false
+    uses_video: false
+    uses_slider: false
+    uses_grid: false
+    uses_tabs: false
+    uses_accordion: false
+    uses_form: false
+    layout_type: full-width-hero
+    mockup_keywords:
+      - announcement bar
+      - top banner
+      - promo bar
+      - shipping message
+      - site-wide notice
+      - header banner
+      - promotional strip
+      - notification bar
+      - free shipping bar
+      - top notice
+    when_to_use: Use this section when the mockup shows a simple full-width banner at the top of the page displaying a
+      single line of promotional or informational text with a black background and white text.
+    when_to_create_new: Create a new section if the mockup requires multiple messages, a dismissible close button, countdown
+      timers, links, icons, rotating announcements, or a background color other than black.
+    requires_new_section_if:
+      - Banner needs a configurable background or text color
+      - Banner includes a clickable link or CTA button
+      - Banner displays rotating or multiple messages
+      - Banner has a dismiss/close button
+      - Banner includes a countdown timer
+      - Banner requires an icon or emoji alongside text
+      - Banner needs to be conditionally shown based on cart contents or customer tags
+      - Banner requires rich text or HTML formatting beyond plain text
+    similar_sections:
+      - announcement-bar.liquid
+      - promo-banner.liquid
+      - header-banner.liquid
+      - notice-bar.liquid
 snippets:
   - file: snippets/component-article-card.liquid
     name: component-article-card
@@ -4423,7 +4474,7 @@ assets:
       size_lines: 324
     - file: assets/section-faq.css
       name: section-faq.css
-      size_lines: 160
+      size_lines: 115
     - file: assets/section-featured-collections-v2.css
       name: section-featured-collections-v2.css
       size_lines: 182
