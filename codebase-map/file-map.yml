@@ -1386,81 +1386,33 @@ files:
     fix_guidance: Check sections/footer.liquid for actual rendering logic; this file only stores configuration data that
       footer.liquid consumes via section.blocks and section.settings.
   - file: sections/footer.liquid
-    responsibility: Renders the site footer with configurable blocks for text, navigation menus, social icons, and brand information
+    responsibility: Renders the site-wide footer with configurable blocks (text, link lists, social icons, brand
+      information), localization controls, and bottom bar with payment icons.
     owns:
-      - Footer section layout and content structure
-      - Footer blocks rendering (text, link_list, social_icons, brand_information)
-      - Newsletter signup form integration
-      - Payment icons display
-      - Localization forms for country/language selection
-      - Footer policies and copyright text display
-      - Social media icon visibility logic
+      - Footer layout and block rendering (text, link_list, social_icons, brand_information)
+      - Social icons visibility logic via has_social_icons flag
+      - Brand emptiness detection and only_empty_brand guard
+      - Inline background/color override styles for the footer section
+      - Footer bottom bar with scroll-trigger animation wrapper
+      - Payment icons row
+      - Localization dropdowns region
     depends_on:
-      js:
-        - assets/component-localization-form.js
-        - assets/shopify.js
+      js: []
       snippets:
-        - snippets/component-social-icons.liquid
-        - snippets/component-localization-form.liquid
-      sections: []
-      global_objects:
-        - section.blocks
-        - section.settings
-        - settings.social_facebook_link
-        - settings.social_instagram_link
-        - settings.social_youtube_link
-        - settings.social_tiktok_link
-        - settings.social_twitter_link
-        - settings.social_pinterest_link
-        - settings.social_snapchat_link
-        - settings.social_tumblr_link
-        - settings.social_vimeo_link
-        - settings.brand_image
-        - settings.brand_headline
-        - settings.brand_description
-        - settings.brand_image_width
-        - settings.animations_reveal_on_scroll
-        - settings.enable_country_selector
-        - settings.enable_language_selector
-        - settings.payment_enable
-        - shop.enabled_payment_types
-        - shop.name
-      custom_elements: []
-    depended_on_by:
-      - sections/footer-group.json
-      - layout/theme.liquid
-    key_identifiers:
-      css_classes:
-        - footer
-        - footer__content-top
-        - footer__content-bottom
-        - footer__blocks-wrapper
-        - footer-block
-        - footer-block__heading
-        - footer-block__details-content
-        - footer-block__brand-info
-        - footer__column
-        - footer__localization
-        - footer__list-social
-        - section-footer-padding
-      data_attributes:
-        - data-cascade
-      js_events_emitted: []
-      js_events_listened: []
-      custom_elements: []
-    state_ownership:
-      - Social icons visibility state (has_social_icons)
-      - Brand information empty state (brand_empty)
-      - Only empty brand block state (only_empty_brand)
+        - component-social-icons
+      sections:
+        - sections/footer-group.json
     common_mistakes:
-      - Modifying inline background color (#ff0000) without realizing it overrides color_scheme setting
-      - Not checking for empty social links before rendering social icon blocks
-      - Forgetting that newsletter form requires shop.customer_accounts_enabled
-      - Missing that localization forms depend on country/language selector settings
-      - Not accounting for brand_empty conditional logic when adding brand content
-    fix_guidance: Check section.blocks array and settings.social_*_link values for visibility issues; verify color_scheme vs
-      hardcoded background color conflict; ensure localization form snippets are available when enable_country_selector
-      or enable_language_selector is true
+      - Editing social link conditions here instead of in global theme settings where social URLs are actually defined
+      - Assuming brand_image, brand_headline, or brand_description are section settings when they are global settings
+        (settings.brand_*)
+      - Adding new block types in Liquid without registering them in the corresponding footer-group.json schema, causing
+        blocks to silently not appear in the editor
+      - Overriding footer colors via section color_scheme setting while the hardcoded inline style (background-color
+        black, color white) always wins regardless of scheme
+      - Expecting only_empty_brand to hide the footer entirely rather than just the content-top div
+    fix_guidance: Check global settings (settings.brand_*, settings.social_*) for brand and social data first, then verify
+      block type definitions exist in sections/footer-group.json schema before debugging Liquid rendering.
   - file: sections/header-group.json
     responsibility: Configures the header group combining announcement bar and header sections with their settings and display order
     owns:
@@ -5298,61 +5250,37 @@ files:
       - Truncated file content suggests incomplete updateFilters or fetchSection implementation
     fix_guidance: Check that data-section attribute matches section ID, verify filter form IDs (#filters-form,
   - file: assets/section-faq.css
-    responsibility: Styles the FAQ accordion section with expandable question/answer blocks and setup instructions for
-      metaobject integration
+    responsibility: Provides all visual styling for the FAQ section including accordion layout, typography, spacing, icons,
+      and mobile responsive breakpoints.
     owns:
-      - FAQ section layout and typography including heading styles
-      - Accordion block structure with borders and spacing
-      - Header button layout with question text and toggle icon
-      - Collapsible content area styling for answers
-      - Icon circle button with rotation transition
-      - Theme editor empty state notice for metaobject setup instructions
-      - Mobile responsive breakpoints for smaller screens
+      - .faq-section layout and background
+      - .faq__heading typography and spacing
+      - .faq__container flex column layout
+      - .faq__block border separator styling
+      - .faq__accordion wrapper styles
+      - .faq__header button layout and cursor behavior
+      - .faq__title font size and padding
+      - .faq__icon circular border and transform transition
+      - .faq__content overflow and padding
+      - .faq__answer font size, line height, and muted color
+      - mobile responsive overrides at max-width 749px
     depends_on:
       js: []
       snippets: []
       sections:
         - sections/Faq.liquid
         - sections/Faq-metaobjects.liquid
-      global_objects:
-        - --color-background
-        - --color-foreground
-      custom_elements: []
-    depended_on_by:
-      - sections/Faq.liquid
-      - sections/Faq-metaobjects.liquid
-    key_identifiers:
-      css_classes:
-        - faq-section
-        - faq__heading
-        - faq__container
-        - faq__block
-        - faq__accordion
-        - faq__header
-        - faq__title
-        - faq__icon
-        - faq__content
-        - faq__content-wrapper
-        - faq__answer
-        - faq__setup-notice
-        - faq__setup-notice-inner
-        - faq__setup-notice-title
-        - faq__setup-steps
-        - faq__setup-notice-hint
-      data_attributes: []
-      js_events_emitted: []
-      js_events_listened: []
-      custom_elements: []
-    state_ownership:
-      - none - visual styling only, accordion state managed by JavaScript
     common_mistakes:
-      - Assuming this file handles accordion expand/collapse logic when it only provides visual styling
-      - Missing that icon rotation animation is CSS-only and requires JavaScript to toggle classes
-      - Not recognizing the setup notice styles are specifically for theme editor empty states
-      - Overlooking mobile responsive adjustments at 749px breakpoint
-    fix_guidance: Check if CSS custom properties --color-background and --color-foreground are defined in
-      snippets/css-variables.liquid when colors appear incorrect; verify JavaScript is toggling appropriate classes for
-      accordion state transitions
+      - Editing accordion open/close visibility here instead of in the Liquid or JS that toggles state classes
+      - Assuming icon rotation animation is JS-driven when it is CSS transition on transform triggered by a class toggle
+      - Applying padding or margin fixes here without accounting for the mobile breakpoint override at 749px that resets
+        the same properties
+      - Confusing sections/Faq.liquid and sections/Faq-metaobjects.liquid as sharing identical markup when metaobjects
+        variant may differ
+      - Using hardcoded color values instead of the CSS custom properties (--color-foreground, --color-background)
+        already in use
+    fix_guidance: Check sections/Faq.liquid and sections/Faq-metaobjects.liquid for the class names and state toggles first,
+      then verify CSS variable values in the theme's base or root stylesheet before modifying layout or color here.
   - file: assets/section-featured-collections-v2.css
     responsibility: Styles the featured collections v2 section with tabbed navigation, swiper carousel integration, and
       placeholder product cards
