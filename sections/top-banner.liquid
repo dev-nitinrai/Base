@@ -1,0 +1,30 @@
+<p class="top-banner__message">{{ section.settings.message | escape }}</p>
+
+{% stylesheet %}
+  .top-banner__message {
+    margin: 0;
+    padding: 12px 16px;
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Top Banner",
+  "settings": [
+    {
+      "type": "text",
+      "id": "message",
+      "label": "Message",
+      "default": "Free shipping on orders over $50"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Top Banner"
+    }
+  ]
+}
+{% endschema %}

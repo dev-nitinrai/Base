@@ -9,6 +9,10 @@
  */
 {
   "sections": {
+    "top_banner": {
+      "type": "top-banner",
+      "settings": {}
+    },
     "hero_1": {
       "type": "hero",
       "settings": {
@@ -182,6 +186,7 @@
     }
   },
   "order": [
+    "top_banner",
     "hero_1",
     "featured_collections_hhETJ9",
     "selling_points_v2_6NgzaK",
