@@ -3655,6 +3655,111 @@ sections:
       - slideshow.liquid
       - product-recommendations.liquid
       - multicolumn.liquid
+  - file: sections/shade-finder.liquid
+    name: shade-finder
+    label: Shade Finder
+    visual_role: Shade Finder section
+    settings:
+      - type: header
+      - id: heading
+        type: text
+        label: Section heading
+      - id: default_view
+        type: select
+        label: Default view mode
+      - id: show_arrows
+        type: checkbox
+        label: Show navigation arrows
+      - type: header
+      - id: cta_text
+        type: text
+        label: CTA label
+      - id: cta_button_text
+        type: text
+        label: CTA button text
+      - id: cta_link
+        type: url
+        label: CTA button link
+      - type: header
+      - id: bg_color
+        type: color
+        label: Background color
+      - id: heading_color
+        type: color
+        label: Heading color
+      - id: card_text_color
+        type: color
+        label: Card description color
+      - id: active_pill_bg
+        type: color
+        label: Active filter pill background
+      - id: active_pill_text
+        type: color
+        label: Active filter pill text
+      - id: button_color
+        type: color
+        label: CTA button background
+      - id: button_text_color
+        type: color
+        label: CTA button text color
+      - type: header
+      - id: padding_top
+        type: range
+        label: Top padding
+      - id: padding_bottom
+        type: range
+        label: Bottom padding
+    blocks:
+      - type: shade
+        name: Shade card
+        settings:
+          - shade_name
+          - shade_description
+          - usage
+          - skin_tone
+          - model_image
+          - swatch_image
+    max_blocks: null
+    templates_allowed:
+      - "*"
+    presets:
+      - Shade Finder
+    uses_image: true
+    uses_video: false
+    uses_slider: false
+    uses_grid: true
+    uses_tabs: false
+    uses_accordion: false
+    uses_form: false
+    layout_type: block
+    mockup_keywords:
+      - shade finder
+      - foundation matcher
+      - skin tone filter
+      - makeup swatches
+      - model view toggle
+      - beauty filter
+      - color selector
+      - complexion finder
+      - pill filters
+      - swatch grid
+    when_to_use: Use this section when a design mockup includes an interactive beauty/makeup shade selection tool with
+      toggleable swatch or model views and filterable pill categories.
+    when_to_create_new: Create a new section if the mockup requires a quiz-based shade finder, a non-toggle single-view
+      layout, or lacks filter pill categories entirely.
+    requires_new_section_if:
+      - Design requires a multi-step quiz flow instead of a filter/toggle interface
+      - Mockup shows a shade recommendation engine with skin tone photo upload
+      - Layout requires more than two view modes beyond swatches and models
+      - Filters are dropdowns or sliders rather than pill buttons
+      - Section needs to integrate a third-party shade finder embed or iframe
+      - Mockup shows shades grouped in a tabbed interface rather than pill-filtered grid
+    similar_sections:
+      - sections/product-swatches.liquid
+      - sections/color-filter-grid.liquid
+      - sections/beauty-finder.liquid
+      - sections/product-filter-and-sort.liquid
+      - sections/collection-filters.liquid
 snippets:
   - file: snippets/component-article-card.liquid
     name: component-article-card
@@ -4423,7 +4528,7 @@ assets:
       size_lines: 324
     - file: assets/section-faq.css
       name: section-faq.css
-      size_lines: 160
+      size_lines: 115
     - file: assets/section-featured-collections-v2.css
       name: section-featured-collections-v2.css
       size_lines: 182
@@ -4487,3 +4592,6 @@ assets:
     - file: assets/swiper7.4.1.min.css
       name: swiper7.4.1.min.css
       size_lines: 13
+    - file: assets/section-shade-finder.css
+      name: section-shade-finder.css
+      size_lines: 389

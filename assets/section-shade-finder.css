@@ -1,0 +1,388 @@
+.shade-finder {
+  width: 100%;
+  overflow: hidden;
+}
+
+.shade-finder__inner {
+  position: relative;
+}
+
+.shade-finder__top-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40px;
+  min-height: 48px;
+}
+
+.shade-finder__heading {
+  font-family: var(--font-heading-family);
+  font-style: var(--font-heading-style);
+  font-weight: var(--font-heading-weight);
+  font-size: clamp(2.8rem, 4vw, 4.8rem);
+  line-height: 1.1;
+  text-align: center;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.shade-finder__toggle {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.shade-finder__toggle-label {
+  font-family: var(--font-body-family);
+  font-size: 1.3rem;
+  color: rgba(var(--color-foreground), 0.45);
+  transition: color 200ms ease;
+  user-select: none;
+}
+
+.shade-finder__toggle-label--active {
+  color: rgba(var(--color-foreground), 1);
+}
+
+.shade-finder__toggle-track {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 44px;
+  height: 24px;
+  background-color: #c8c8c8;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: background-color 200ms ease;
+  flex-shrink: 0;
+}
+
+.shade-finder__toggle-track:focus-visible {
+  outline: 2px solid rgba(var(--color-foreground), 1);
+  outline-offset: 2px;
+}
+
+.shade-finder__toggle-thumb {
+  position: absolute;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  transition: transform 200ms ease;
+  will-change: transform;
+}
+
+.shade-finder__toggle-thumb--right {
+  transform: translateX(20px);
+}
+
+.shade-finder__filters {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.shade-finder__filter-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.shade-finder__filter-group-label {
+  font-family: var(--font-body-family);
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  color: rgba(var(--color-foreground), 1);
+}
+
+.shade-finder__filter-pills {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.shade-finder__filter-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 18px;
+  border-radius: 20px;
+  border: 1px solid rgba(var(--color-foreground), 0.8);
+  background-color: transparent;
+  color: rgba(var(--color-foreground), 1);
+  font-family: var(--font-body-family);
+  font-size: 1.1rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.shade-finder__filter-pill:hover {
+  background-color: rgba(var(--color-foreground), 0.06);
+}
+
+.shade-finder__filter-pill:focus-visible {
+  outline: 2px solid rgba(var(--color-foreground), 1);
+  outline-offset: 2px;
+}
+
+.shade-finder__filter-pill--active {
+  background-color: #000000;
+  color: #ffffff;
+  border-color: #000000;
+}
+
+.shade-finder__filter-pill--active:hover {
+  background-color: #1a1a1a;
+  border-color: #1a1a1a;
+}
+
+.shade-finder__carousel-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  --shade-gap: 20px;
+}
+
+.shade-finder__track-container {
+  flex: 1;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.shade-finder__track {
+  display: flex;
+  gap: var(--shade-gap);
+  transition: transform 400ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform;
+  align-items: flex-start;
+}
+
+.shade-finder__card {
+  flex: 0 0 calc((100% - var(--shade-gap) * 3) / 4);
+  min-width: 0;
+  transition: opacity 200ms ease, visibility 200ms ease;
+}
+
+.shade-finder__card--hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.shade-finder__card-image-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background-color: #f0eeec;
+}
+
+.shade-finder__card-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+
+.shade-finder__card-image--visible {
+  opacity: 1;
+}
+
+.shade-finder__card-image-wrap:hover .shade-finder__card-image--visible {
+  transform: scale(1.03);
+  transition: opacity 300ms ease, transform 500ms ease;
+}
+
+.shade-finder__card-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f0eeec;
+}
+
+.shade-finder__placeholder-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.shade-finder__card-body {
+  padding-top: 16px;
+  text-align: center;
+}
+
+.shade-finder__card-name {
+  font-family: var(--font-body-family);
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 8px;
+  color: rgba(var(--color-foreground), 1);
+}
+
+.shade-finder__card-description {
+  font-family: var(--font-body-family);
+  font-size: 1.3rem;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.shade-finder__arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: rgba(var(--color-foreground), 1);
+  transition: opacity 200ms ease, background-color 200ms ease;
+  border-radius: 50%;
+}
+
+.shade-finder__arrow:hover {
+  background-color: rgba(var(--color-foreground), 0.06);
+}
+
+.shade-finder__arrow:focus-visible {
+  outline: 2px solid rgba(var(--color-foreground), 1);
+  outline-offset: 2px;
+}
+
+.shade-finder__arrow:disabled {
+  opacity: 0.2;
+  cursor: default;
+  pointer-events: none;
+}
+
+.shade-finder__empty {
+  text-align: center;
+  padding: 48px 0;
+  font-family: var(--font-body-family);
+  font-size: 1.4rem;
+  color: rgba(var(--color-foreground), 0.55);
+}
+
+.shade-finder__cta {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 40px;
+}
+
+.shade-finder__cta-label {
+  font-family: var(--font-body-family);
+  font-size: 1.4rem;
+  color: rgba(var(--color-foreground), 0.7);
+}
+
+.shade-finder__cta-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 24px;
+  background-color: #000000;
+  color: #ffffff;
+  font-family: var(--font-body-family);
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  text-decoration: none;
+  border-radius: 2px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 200ms ease;
+  white-space: nowrap;
+}
+
+.shade-finder__cta-button:hover {
+  background-color: #1a1a1a;
+}
+
+.shade-finder__cta-button:focus-visible {
+  outline: 2px solid rgba(var(--color-foreground), 1);
+  outline-offset: 2px;
+}
+
+@media screen and (max-width: 1023px) {
+  .shade-finder__card {
+    flex: 0 0 calc((100% - var(--shade-gap)) / 2);
+  }
+
+  .shade-finder__toggle {
+    position: static;
+    transform: none;
+  }
+
+  .shade-finder__top-bar {
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    min-height: auto;
+  }
+
+  .shade-finder__filters {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .shade-finder__card {
+    flex: 0 0 100%;
+  }
+
+  .shade-finder__filter-group {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .shade-finder__cta {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shade-finder__track,
+  .shade-finder__toggle-thumb,
+  .shade-finder__card-image,
+  .shade-finder__filter-pill,
+  .shade-finder__cta-button {
+    transition: none;
+  }
+}

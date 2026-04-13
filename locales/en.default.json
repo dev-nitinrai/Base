@@ -281,6 +281,29 @@
       "close_tooltip": "Close",
       "previous": "Previous slide",
       "next": "Next slide"
+    },
+    "shade_finder": {
+      "swatches": "Swatches",
+      "models": "Models",
+      "view_toggle_label": "Toggle between swatches and models view",
+      "filters_label": "Filter shades",
+      "usage_label": "USAGE",
+      "skin_tone_label": "SKIN TONE",
+      "filter_all": "ALL",
+      "filter_bronzer": "BRONZER",
+      "filter_blush": "BLUSH",
+      "filter_highlighter": "HIGHLIGHTER",
+      "filter_color_correct": "COLOR CORRECT",
+      "filter_light": "LIGHT",
+      "filter_medium": "MEDIUM",
+      "filter_dark": "DARK",
+      "prev_label": "Previous shades",
+      "next_label": "Next shades",
+      "carousel_label": "Shade cards",
+      "slide_label": "Shade",
+      "model_image_alt": "model image",
+      "swatch_image_alt": "swatch image",
+      "no_results": "No shades match the selected filters."
     }
   },
   "products": {

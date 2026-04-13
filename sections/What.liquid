@@ -1,0 +1,256 @@
+
+{% schema %}
+{
+  "name": "What Shade Am I?",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section Heading",
+      "default": "What Shade Am I?"
+    },
+    {
+      "type": "select",
+      "id": "default_view",
+      "label": "Default View Mode",
+      "options": [
+        {
+          "value": "swatches",
+          "label": "Swatches"
+        },
+        {
+          "value": "models",
+          "label": "Models"
+        }
+      ],
+      "default": "models"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrows",
+      "label": "Show Navigation Arrows",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "CTA Label Text",
+      "default": "Still Not Sure?"
+    },
+    {
+      "type": "text",
+      "id": "cta_button_text",
+      "label": "CTA Button Text",
+      "default": "FIND MY SHADE"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "CTA Button Link"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Section Background Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "card_text_color",
+      "label": "Card Description Color",
+      "default": "#4A4A4A"
+    },
+    {
+      "type": "color",
+      "id": "active_pill_bg",
+      "label": "Active Filter Pill Background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "active_pill_text",
+      "label": "Active Filter Pill Text Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "CTA Button Background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "CTA Button Text Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top Padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom Padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "blocks": [
+    {
+      "type": "shade",
+      "name": "Shade Card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "shade_name",
+          "label": "Shade Name",
+          "default": "AU NATUREL"
+        },
+        {
+          "type": "textarea",
+          "id": "shade_description",
+          "label": "Shade Description",
+          "default": "is a clear balm with subtle opal pearl for all skin tones"
+        },
+        {
+          "type": "select",
+          "id": "usage",
+          "label": "Usage Category",
+          "options": [
+            {
+              "value": "all",
+              "label": "All"
+            },
+            {
+              "value": "bronzer",
+              "label": "Bronzer"
+            },
+            {
+              "value": "blush",
+              "label": "Blush"
+            },
+            {
+              "value": "highlighter",
+              "label": "Highlighter"
+            },
+            {
+              "value": "color_correct",
+              "label": "Color Correct"
+            }
+          ],
+          "default": "all"
+        },
+        {
+          "type": "select",
+          "id": "skin_tone",
+          "label": "Skin Tone",
+          "options": [
+            {
+              "value": "all",
+              "label": "All"
+            },
+            {
+              "value": "light",
+              "label": "Light"
+            },
+            {
+              "value": "medium",
+              "label": "Medium"
+            },
+            {
+              "value": "dark",
+              "label": "Dark"
+            }
+          ],
+          "default": "all"
+        },
+        {
+          "type": "image_picker",
+          "id": "swatch_image",
+          "label": "Swatch Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "model_image",
+          "label": "Model Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "What Shade Am I?",
+      "settings": {
+        "heading": "What Shade Am I?",
+        "default_view": "models",
+        "show_arrows": true,
+        "cta_label": "Still Not Sure?",
+        "cta_button_text": "FIND MY SHADE",
+        "bg_color": "#FFFFFF",
+        "heading_color": "#000000",
+        "card_text_color": "#4A4A4A",
+        "active_pill_bg": "#000000",
+        "active_pill_text": "#FFFFFF",
+        "button_color": "#000000",
+        "button_text_color": "#FFFFFF",
+        "padding_top": 64,
+        "padding_bottom": 64
+      },
+      "blocks": [
+        {
+          "type": "shade",
+          "settings": {
+            "shade_name": "AU NATUREL",
+            "shade_description": "is a clear balm with subtle opal pearl for all skin tones",
+            "usage": "all",
+            "skin_tone": "all"
+          }
+        },
+        {
+          "type": "shade",
+          "settings": {
+            "shade_name": "HAPPY HOUR",
+            "shade_description": "a cool sheer pink with silver shimmer for fair to medium tan skin tones",
+            "usage": "blush",
+            "skin_tone": "light"
+          }
+        },
+        {
+          "type": "shade",
+          "settings": {
+            "shade_name": "MAGIC HOUR",
+            "shade_description": "is a cool, sheer bronze with silver shimmer for light to medium-dark skin",
+            "usage": "bronzer",
+            "skin_tone": "medium"
+          }
+        },
+        {
+          "type": "shade",
+          "settings": {
+            "shade_name": "GOLDEN HOUR",
+            "shade_description": "is a warm, sheer gold with multidimensional shimmer for all skin tones",
+            "usage": "highlighter",
+            "skin_tone": "all"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

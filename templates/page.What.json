@@ -1,0 +1,70 @@
+{
+  "sections": {
+    "What_mnxnwnnf": {
+      "type": "What",
+      "settings": {
+        "heading": "What Shade Am I?",
+        "default_view": "models",
+        "show_arrows": true,
+        "cta_label": "Still Not Sure?",
+        "cta_button_text": "FIND MY SHADE",
+        "bg_color": "#FFFFFF",
+        "heading_color": "#000000",
+        "card_text_color": "#4A4A4A",
+        "active_pill_bg": "#000000",
+        "active_pill_text": "#FFFFFF",
+        "button_color": "#000000",
+        "button_text_color": "#FFFFFF",
+        "padding_top": 64,
+        "padding_bottom": 64
+      },
+      "blocks": {
+        "shade_1": {
+          "type": "shade",
+          "settings": {
+            "shade_name": "AU NATUREL",
+            "shade_description": "is a clear balm with subtle opal pearl for all skin tones",
+            "usage": "all",
+            "skin_tone": "all"
+          }
+        },
+        "shade_2": {
+          "type": "shade",
+          "settings": {
+            "shade_name": "HAPPY HOUR",
+            "shade_description": "a cool sheer pink with silver shimmer for fair to medium tan skin tones",
+            "usage": "blush",
+            "skin_tone": "light"
+          }
+        },
+        "shade_3": {
+          "type": "shade",
+          "settings": {
+            "shade_name": "MAGIC HOUR",
+            "shade_description": "is a cool, sheer bronze with silver shimmer for light to medium-dark skin",
+            "usage": "bronzer",
+            "skin_tone": "medium"
+          }
+        },
+        "shade_4": {
+          "type": "shade",
+          "settings": {
+            "shade_name": "GOLDEN HOUR",
+            "shade_description": "is a warm, sheer gold with multidimensional shimmer for all skin tones",
+            "usage": "highlighter",
+            "skin_tone": "all"
+          }
+        }
+      },
+      "block_order": [
+        "shade_1",
+        "shade_2",
+        "shade_3",
+        "shade_4"
+      ]
+    }
+  },
+  "order": [
+    "What_mnxnwnnf"
+  ]
+}
