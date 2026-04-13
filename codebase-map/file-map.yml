@@ -5298,61 +5298,40 @@ files:
       - Truncated file content suggests incomplete updateFilters or fetchSection implementation
     fix_guidance: Check that data-section attribute matches section ID, verify filter form IDs (#filters-form,
   - file: assets/section-faq.css
-    responsibility: Styles the FAQ accordion section with expandable question/answer blocks and setup instructions for
-      metaobject integration
+    responsibility: Provides all visual styling for the FAQ section accordion layout, typography, spacing, and responsive behavior.
     owns:
-      - FAQ section layout and typography including heading styles
-      - Accordion block structure with borders and spacing
-      - Header button layout with question text and toggle icon
-      - Collapsible content area styling for answers
-      - Icon circle button with rotation transition
-      - Theme editor empty state notice for metaobject setup instructions
-      - Mobile responsive breakpoints for smaller screens
+      - .faq-section layout and background
+      - .faq__heading typography and spacing
+      - .faq__container flex column layout
+      - .faq__block bottom border dividers
+      - .faq__accordion wrapper styles
+      - .faq__header button reset and flex layout
+      - .faq__title font size and padding
+      - .faq__icon circular toggle indicator with rotation transition
+      - .faq__content overflow and padding for accordion body
+      - .faq__content-wrapper inner padding
+      - .faq__answer font size, line height, and muted color
+      - .faq__answer p margin rhythm
+      - Mobile breakpoint overrides at max-width 749px
     depends_on:
       js: []
       snippets: []
       sections:
         - sections/Faq.liquid
         - sections/Faq-metaobjects.liquid
-      global_objects:
-        - --color-background
-        - --color-foreground
-      custom_elements: []
-    depended_on_by:
-      - sections/Faq.liquid
-      - sections/Faq-metaobjects.liquid
-    key_identifiers:
-      css_classes:
-        - faq-section
-        - faq__heading
-        - faq__container
-        - faq__block
-        - faq__accordion
-        - faq__header
-        - faq__title
-        - faq__icon
-        - faq__content
-        - faq__content-wrapper
-        - faq__answer
-        - faq__setup-notice
-        - faq__setup-notice-inner
-        - faq__setup-notice-title
-        - faq__setup-steps
-        - faq__setup-notice-hint
-      data_attributes: []
-      js_events_emitted: []
-      js_events_listened: []
-      custom_elements: []
-    state_ownership:
-      - none - visual styling only, accordion state managed by JavaScript
     common_mistakes:
-      - Assuming this file handles accordion expand/collapse logic when it only provides visual styling
-      - Missing that icon rotation animation is CSS-only and requires JavaScript to toggle classes
-      - Not recognizing the setup notice styles are specifically for theme editor empty states
-      - Overlooking mobile responsive adjustments at 749px breakpoint
-    fix_guidance: Check if CSS custom properties --color-background and --color-foreground are defined in
-      snippets/css-variables.liquid when colors appear incorrect; verify JavaScript is toggling appropriate classes for
-      accordion state transitions
+      - Editing accordion open/close animation here when it is controlled by JS toggling classes in sections/Faq.liquid
+        or sections/Faq-metaobjects.liquid
+      - Assuming .faq__icon rotation is JS-driven when it is purely CSS transition on transform
+      - Overlooking that rgba opacity syntax uses CSS custom property format rgb(var(--color-foreground), 0.2) which
+        requires the variable to supply raw RGB values not full rgb() string
+      - Applying padding or height changes to .faq__content without accounting for the JS-controlled height or display
+        toggling in the paired liquid section
+      - Forgetting that both Faq.liquid and Faq-metaobjects.liquid share these styles so changes affect both FAQ
+        implementations
+    fix_guidance: Check sections/Faq.liquid and sections/Faq-metaobjects.liquid for JS class toggling and HTML structure
+      first when layout or animation issues arise, then verify CSS custom property values in layout/theme.liquid
+      globals.
   - file: assets/section-featured-collections-v2.css
     responsibility: Styles the featured collections v2 section with tabbed navigation, swiper carousel integration, and
       placeholder product cards
@@ -9310,45 +9289,55 @@ files:
     fix_guidance: Check translation keys exist in locales/en.default.schema.json, verify settings_data.json contains actual
       values, ensure color scheme roles map correctly to CSS variables in snippets/css-variables.liquid
   - file: locales/en.default.json
-    responsibility: Stores English language translations for all user-facing text and labels throughout the Shopify theme.
+    responsibility: Provides all English UI string translations and labels used across the theme, serving as the single
+      source of truth for user-facing text.
     owns:
-      - All English translation strings for UI elements (buttons, labels, error messages)
-      - Customer account and authentication text (login, register, reset password)
-      - Cart and checkout related messaging
-      - Product and collection page labels
-      - Form validation and error messages
-      - Blog and article interface text
-      - Navigation and menu labels
-      - Footer and general UI text
+      - 404 page text strings
+      - Blog and article comment form labels
+      - Cart labels, button text, discount messaging
+      - Customer account, orders, order detail labels
+      - Address form field labels and confirmations
+      - Registration, login, password reset, account activation strings
+      - Product, collection, search, and general navigation labels
+      - Accessibility strings and ARIA labels
+      - Error messages and validation text
+      - Checkout and payment-related UI strings
     depends_on:
       js: []
       snippets: []
-      sections: []
-      global_objects:
-        - Shopify theme translation system (t filter in Liquid)
-      custom_elements: []
-    depended_on_by:
-      - All .liquid template and section files that use translation filters
-      - Shopify admin language editor
-      - Any JavaScript that references translation keys
-      - All customer-facing UI components (cart, product cards, forms, etc.)
-    key_identifiers:
-      css_classes: []
-      data_attributes: []
-      js_events_emitted: []
-      js_events_listened: []
-      custom_elements: []
-    state_ownership:
-      - none
+      sections:
+        - sections/404.liquid
+        - sections/article.liquid
+        - sections/blog.liquid
+        - sections/blogs.liquid
+        - sections/cart.liquid
+        - sections/account.liquid
+        - sections/activate-account.liquid
+        - sections/addresses.liquid
+        - sections/login.liquid
+        - sections/register.liquid
+        - sections/reset-password.liquid
+        - sections/order.liquid
+        - sections/search.liquid
+        - sections/product.liquid
+        - sections/collection.liquid
+        - sections/password.liquid
+        - sections/predictive-results.liquid
+        - sections/related-products.liquid
     common_mistakes:
-      - Modifying translation keys without updating corresponding Liquid template references
-      - Adding translations without matching schema counterpart in en.default.schema.json
-      - Forgetting that this file may be auto-regenerated by Shopify admin language editor
-      - Hardcoding text in templates instead of using translation keys from this file
-      - Not maintaining consistency in terminology across different sections
-    fix_guidance: When text displays incorrectly or is missing, search for the translation key (e.g., cart.checkout,
-      customer.login_page.title) in Liquid files using {{ 't' filter, verify the key exists in this JSON structure, and
-      ensure nested object paths match exactly.
+      - Adding hardcoded strings directly in .liquid files instead of referencing locale keys via {{ 'key' | t }}
+      - Editing this file manually when it may be overwritten by Shopify admin language editor syncs
+      - Referencing a locale key that does not exist in this file, causing silent empty string output rather than an
+        error
+      - Assuming translated text from this file will auto-update sibling locale files (e.g. en.json); each must be
+        updated separately
+      - Using incorrect key nesting paths in t filter calls (e.g. 'customer.login' instead of
+        'customer.login_page.title')
+      - Forgetting to include interpolation variables (e.g. {{ number }}, {{ date }}) when the locale string expects
+        them, resulting in broken output
+    fix_guidance: Search for the exact dot-notation key path referenced in the .liquid file's t filter call and verify it
+      exists at the correct nesting level in this file; if output is blank, the key path is likely mismatched or
+      missing.
   - file: locales/en.default.schema.json
     responsibility: Provides default English translations for all Shopify theme editor schema settings, labels, and section
       configurations
@@ -9390,3 +9379,35 @@ files:
     fix_guidance: When customizer text is wrong, check if schema keys in section files match translation keys here; if
       translations are missing, add them via Shopify admin language editor or ensure schema keys exist in corresponding
       section files
+  - file: sections/new-section.liquid
+    responsibility: Renders a Shade Finder tool that filters and displays makeup shade metaobjects by usage type and skin
+      tone, with configurable layout, colors, and grid columns via section settings.
+    owns:
+      - Shade finder section wrapper and scoped CSS custom properties
+      - Usage filter pill buttons (all, bronzer, blush, highlighter, color_correct)
+      - Skin tone filter pill buttons (all, light, and truncated additional tones)
+      - Section header (heading, subheading)
+      - Metaobject data binding via shop.metaobjects.shade.values
+      - Responsive padding scaling (mobile 0.75x, desktop 1x)
+      - CSS variables for theming (pills, cards, CTA, toggles, columns)
+      - data-default-view and data-section-id attributes for JS initialization
+    depends_on:
+      js:
+        - Likely a companion shade-finder.js asset handling filter logic, view toggling, and pill aria-pressed state
+          (not visible in file list but implied by data attributes)
+      snippets: []
+      sections: []
+    common_mistakes:
+      - Assuming filter values are dynamic from metaobjects when they are hardcoded pill buttons that must be manually
+        kept in sync with actual metaobject field values
+      - Adding new filter categories in settings without adding corresponding hardcoded pill buttons in the Liquid markup
+      - Editing CSS variables in the style block without knowing which JS or CSS files consume those variable names
+      - Forgetting that columns are set via CSS custom properties (--shade-columns-desktop, --shade-columns-mobile) and
+        the actual grid CSS must reference these variables elsewhere
+      - Missing translation keys (e.g. sections.shade_finder.usage_*) in locale files when adding new filter pills
+      - Modifying section.settings keys without updating the sections schema block (schema likely truncated)
+      - Assuming metaobject namespace is correct without verifying shop.metaobjects.shade matches the actual metaobject
+        definition handle in the store
+    fix_guidance: Check the schema block at the bottom of the file first for available settings, then verify metaobject
+      handle and field names in Shopify Admin, then locate the companion JS asset responsible for filter/view behavior
+      using the data-section-id and data-filter-type attributes as entry points.

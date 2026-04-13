@@ -1,0 +1,132 @@
+{
+  "sections": {
+    "new-section_mnxl6x2j": {
+      "type": "new-section",
+      "settings": {
+        "heading": "What Shade Am I?",
+        "subheading": "Find your perfect match with our shade finder. Filter by product type and skin tone to discover your ideal shade.",
+        "default_view": "swatches",
+        "show_usage_filter": true,
+        "usage_filter_label": "Usage",
+        "show_skin_tone_filter": true,
+        "skin_tone_filter_label": "Skin Tone",
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "show_cta": true,
+        "cta_heading": "Still Not Sure?",
+        "cta_subheading": "Take our quick quiz and we'll recommend the perfect shade for you.",
+        "cta_button_text": "Take the Quiz",
+        "bg_color": "#FFFFFF",
+        "heading_color": "#1A1A1A",
+        "text_color": "#4A4A4A",
+        "pill_active_bg": "#1A1A1A",
+        "pill_active_text": "#FFFFFF",
+        "pill_inactive_bg": "#F5F5F5",
+        "pill_inactive_text": "#1A1A1A",
+        "card_bg_color": "#FAFAFA",
+        "toggle_active_color": "#1A1A1A",
+        "cta_bg_color": "#F5F0EB",
+        "cta_button_color": "#1A1A1A",
+        "cta_button_text_color": "#FFFFFF",
+        "card_radius": 12,
+        "padding_top": 64,
+        "padding_bottom": 64
+      },
+      "blocks": {
+        "shade_1": {
+          "type": "shade",
+          "settings": {
+            "name": "Sun Kissed",
+            "description": "A warm golden bronze for a natural sun-kissed glow.",
+            "usage": "bronzer",
+            "skin_tone": "light",
+            "position": 1
+          }
+        },
+        "shade_2": {
+          "type": "shade",
+          "settings": {
+            "name": "Terra Cotta",
+            "description": "A rich terracotta bronzer that adds depth and warmth.",
+            "usage": "bronzer",
+            "skin_tone": "medium",
+            "position": 2
+          }
+        },
+        "shade_3": {
+          "type": "shade",
+          "settings": {
+            "name": "Deep Bronze",
+            "description": "An intense bronze with warm undertones for deeper skin.",
+            "usage": "bronzer",
+            "skin_tone": "dark",
+            "position": 3
+          }
+        },
+        "shade_4": {
+          "type": "shade",
+          "settings": {
+            "name": "Petal Pink",
+            "description": "A soft rosy blush that brightens fair complexions.",
+            "usage": "blush",
+            "skin_tone": "light",
+            "position": 4
+          }
+        },
+        "shade_5": {
+          "type": "shade",
+          "settings": {
+            "name": "Berry Flush",
+            "description": "A vibrant berry blush that pops on medium skin tones.",
+            "usage": "blush",
+            "skin_tone": "medium",
+            "position": 5
+          }
+        },
+        "shade_6": {
+          "type": "shade",
+          "settings": {
+            "name": "Champagne Glow",
+            "description": "A luminous champagne highlighter for an ethereal shimmer.",
+            "usage": "highlighter",
+            "skin_tone": "light",
+            "position": 6
+          }
+        },
+        "shade_7": {
+          "type": "shade",
+          "settings": {
+            "name": "Rose Gold",
+            "description": "A rose gold highlighter that flatters medium skin tones beautifully.",
+            "usage": "highlighter",
+            "skin_tone": "medium",
+            "position": 7
+          }
+        },
+        "shade_8": {
+          "type": "shade",
+          "settings": {
+            "name": "Lavender Correct",
+            "description": "A lavender color corrector that neutralizes sallowness on deeper skin.",
+            "usage": "color_correct",
+            "skin_tone": "dark",
+            "position": 8
+          }
+        }
+      },
+      "block_order": [
+        "shade_1",
+        "shade_2",
+        "shade_3",
+        "shade_4",
+        "shade_5",
+        "shade_6",
+        "shade_7",
+        "shade_8"
+      ]
+    }
+  },
+  "order": [
+    "new-section_mnxl6x2j"
+  ]
+}

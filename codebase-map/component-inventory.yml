@@ -3655,6 +3655,141 @@ sections:
       - slideshow.liquid
       - product-recommendations.liquid
       - multicolumn.liquid
+  - file: sections/new-section.liquid
+    name: new-section
+    label: What Shade Am I?
+    visual_role: What Shade Am I? section
+    settings:
+      - id: heading
+        type: text
+        label: Heading
+      - id: subheading
+        type: textarea
+        label: Subheading
+      - id: default_view
+        type: select
+        label: Default View
+      - id: show_usage_filter
+        type: checkbox
+        label: Show Usage Filter
+      - id: usage_filter_label
+        type: text
+        label: Usage Filter Label
+      - id: show_skin_tone_filter
+        type: checkbox
+        label: Show Skin Tone Filter
+      - id: skin_tone_filter_label
+        type: text
+        label: Skin Tone Filter Label
+      - id: columns_desktop
+        type: range
+        label: Columns (Desktop)
+      - id: columns_mobile
+        type: select
+        label: Columns (Mobile)
+      - type: header
+      - id: show_cta
+        type: checkbox
+        label: Show CTA Block
+      - id: cta_heading
+        type: text
+        label: CTA Heading
+      - id: cta_subheading
+        type: textarea
+        label: CTA Subheading
+      - id: cta_button_text
+        type: text
+        label: CTA Button Text
+      - id: cta_button_url
+        type: url
+        label: CTA Button URL
+      - type: header
+      - id: bg_color
+        type: color
+        label: Section Background Color
+      - id: heading_color
+        type: color
+        label: Heading Color
+      - id: text_color
+        type: color
+        label: Text Color
+      - id: pill_active_bg
+        type: color
+        label: Active Filter Pill Background
+      - id: pill_active_text
+        type: color
+        label: Active Filter Pill Text
+      - id: pill_inactive_bg
+        type: color
+        label: Inactive Filter Pill Background
+      - id: pill_inactive_text
+        type: color
+        label: Inactive Filter Pill Text
+      - id: card_bg_color
+        type: color
+        label: Card Background Color
+      - id: toggle_active_color
+        type: color
+        label: Toggle Active Color
+      - id: cta_bg_color
+        type: color
+        label: CTA Background Color
+      - id: cta_button_color
+        type: color
+        label: CTA Button Color
+      - id: cta_button_text_color
+        type: color
+        label: CTA Button Text Color
+      - id: card_radius
+        type: range
+        label: Card Border Radius
+      - id: padding_top
+        type: range
+        label: Top Padding
+      - id: padding_bottom
+        type: range
+        label: Bottom Padding
+    blocks: []
+    max_blocks: null
+    templates_allowed:
+      - "*"
+    presets:
+      - What Shade Am I?
+    uses_image: true
+    uses_video: false
+    uses_slider: false
+    uses_grid: true
+    uses_tabs: false
+    uses_accordion: false
+    uses_form: false
+    layout_type: grid
+    mockup_keywords:
+      - shade finder
+      - beauty filter
+      - foundation matcher
+      - color selector
+      - bronzer blush picker
+      - pill filter
+      - makeup shade grid
+      - product filter cards
+      - skin tone selector
+      - cosmetics quiz
+    when_to_use: Use this section when a mockup shows a filterable beauty/cosmetics shade discovery tool with pill-button
+      filters (e.g., bronzer, blush, highlighter) and a card grid layout for browsing shades.
+    when_to_create_new: Create a new section if the mockup requires a multi-step quiz format, image-based skin tone
+      matching, or shade filtering driven by customer-uploaded photos rather than static pill filters.
+    requires_new_section_if:
+      - Design includes a step-by-step questionnaire or wizard UI instead of pill filters
+      - Shade matching relies on image upload or camera input for skin tone detection
+      - Results are displayed as a single recommended product rather than a filterable grid
+      - Filter categories differ significantly from usage-based cosmetic types (e.g., season, undertone sliders)
+      - Layout uses a side-panel or drawer for filters rather than inline pill controls
+      - Shade data comes from a product metafield or collection rather than a metaobject called 'shade'
+    similar_sections:
+      - sections/collection-filter.liquid
+      - sections/product-grid.liquid
+      - sections/faceted-filtering.liquid
+      - sections/custom-quiz.liquid
 snippets:
   - file: snippets/component-article-card.liquid
     name: component-article-card
@@ -4423,7 +4558,7 @@ assets:
       size_lines: 324
     - file: assets/section-faq.css
       name: section-faq.css
-      size_lines: 160
+      size_lines: 115
     - file: assets/section-featured-collections-v2.css
       name: section-featured-collections-v2.css
       size_lines: 182

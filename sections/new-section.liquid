@@ -1,0 +1,980 @@
+{%- style -%}
+  .shade-finder-{{ section.id }} {
+    background-color: {{ section.settings.bg_color }};
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+    --shade-heading-color: {{ section.settings.heading_color }};
+    --shade-text-color: {{ section.settings.text_color }};
+    --shade-pill-active-bg: {{ section.settings.pill_active_bg }};
+    --shade-pill-active-text: {{ section.settings.pill_active_text }};
+    --shade-pill-inactive-bg: {{ section.settings.pill_inactive_bg }};
+    --shade-pill-inactive-text: {{ section.settings.pill_inactive_text }};
+    --shade-card-bg: {{ section.settings.card_bg_color }};
+    --shade-card-radius: {{ section.settings.card_radius }}px;
+    --shade-toggle-active: {{ section.settings.toggle_active_color }};
+    --shade-cta-bg: {{ section.settings.cta_bg_color }};
+    --shade-cta-btn-bg: {{ section.settings.cta_button_color }};
+    --shade-cta-btn-text: {{ section.settings.cta_button_text_color }};
+    --shade-columns-desktop: {{ section.settings.columns_desktop }};
+    --shade-columns-mobile: {{ section.settings.columns_mobile }};
+  }
+
+  @media screen and (min-width: 750px) {
+    .shade-finder-{{ section.id }} {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+{%- liquid
+  assign shade_entries = shop.metaobjects.shade.values
+  assign default_view = section.settings.default_view
+-%}
+
+<section
+  class="shade-finder shade-finder-{{ section.id }}"
+  id="shade-finder-{{ section.id }}"
+  data-default-view="{{ default_view }}"
+  data-section-id="{{ section.id }}"
+>
+  <div class="page-width">
+
+    <div class="shade-finder__header">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="shade-finder__heading">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.subheading != blank -%}
+        <p class="shade-finder__subheading">{{ section.settings.subheading | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="shade-finder__controls">
+
+      {%- if section.settings.show_usage_filter -%}
+        <div class="shade-finder__filter-group" role="group" aria-label="{{ section.settings.usage_filter_label | escape }}">
+          <span class="shade-finder__filter-label">{{ section.settings.usage_filter_label | escape }}</span>
+          <div class="shade-finder__pills" role="list">
+            <button
+              class="shade-finder__pill shade-finder__pill--active"
+              data-filter-type="usage"
+              data-filter-value="all"
+              aria-pressed="true"
+              type="button"
+            >{{ 'sections.shade_finder.filter_all' | t }}</button>
+            <button
+              class="shade-finder__pill"
+              data-filter-type="usage"
+              data-filter-value="bronzer"
+              aria-pressed="false"
+              type="button"
+            >{{ 'sections.shade_finder.usage_bronzer' | t }}</button>
+            <button
+              class="shade-finder__pill"
+              data-filter-type="usage"
+              data-filter-value="blush"
+              aria-pressed="false"
+              type="button"
+            >{{ 'sections.shade_finder.usage_blush' | t }}</button>
+            <button
+              class="shade-finder__pill"
+              data-filter-type="usage"
+              data-filter-value="highlighter"
+              aria-pressed="false"
+              type="button"
+            >{{ 'sections.shade_finder.usage_highlighter' | t }}</button>
+            <button
+              class="shade-finder__pill"
+              data-filter-type="usage"
+              data-filter-value="color_correct"
+              aria-pressed="false"
+              type="button"
+            >{{ 'sections.shade_finder.usage_color_correct' | t }}</button>
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.show_skin_tone_filter -%}
+        <div class="shade-finder__filter-group" role="group" aria-label="{{ section.settings.skin_tone_filter_label | escape }}">
+          <span class="shade-finder__filter-label">{{ section.settings.skin_tone_filter_label | escape }}</span>
+          <div class="shade-finder__pills" role="list">
+            <button
+              class="shade-finder__pill shade-finder__pill--active"
+              data-filter-type="skin-tone"
+              data-filter-value="all"
+              aria-pressed="true"
+              type="button"
+            >{{ 'sections.shade_finder.filter_all' | t }}</button>
+            <button
+              class="shade-finder__pill"
+              data-filter-type="skin-tone"
+              data-filter-value="light"
+              aria-pressed="false"
+              type="button"
+            >{{ 'sections.shade_finder.skin_tone_light' | t }}</button>
+            <button
+              class="shade-finder__pill"
+              data-filter-type="skin-tone"
+              data-filter-value="medium"
+              aria-pressed="false"
+              type="button"
+            >{{ 'sections.shade_finder.skin_tone_medium' | t }}</button>
+            <button
+              class="shade-finder__pill"
+              data-filter-type="skin-tone"
+              data-filter-value="dark"
+              aria-pressed="false"
+              type="button"
+            >{{ 'sections.shade_finder.skin_tone_dark' | t }}</button>
+          </div>
+        </div>
+      {%- endif -%}
+
+      <div class="shade-finder__view-toggle" role="group" aria-label="{{ 'sections.shade_finder.view_toggle_label' | t }}">
+        <span
+          class="shade-finder__toggle-label{% if default_view == 'swatches' %} shade-finder__toggle-label--active{% endif %}"
+          data-toggle-label="swatches"
+        >{{ 'sections.shade_finder.view_swatches' | t }}</span>
+        <button
+          class="shade-finder__toggle-switch"
+          role="switch"
+          aria-checked="{% if default_view == 'models' %}true{% else %}false{% endif %}"
+          aria-label="{{ 'sections.shade_finder.view_toggle_label' | t }}"
+          type="button"
+          data-view-toggle
+        >
+          <span class="shade-finder__toggle-knob"></span>
+        </button>
+        <span
+          class="shade-finder__toggle-label{% if default_view == 'models' %} shade-finder__toggle-label--active{% endif %}"
+          data-toggle-label="models"
+        >{{ 'sections.shade_finder.view_models' | t }}</span>
+      </div>
+
+    </div>
+
+    <div
+      class="shade-finder__grid"
+      id="shade-grid-{{ section.id }}"
+      role="region"
+      aria-live="polite"
+      aria-label="{{ 'sections.shade_finder.grid_label' | t }}"
+    >
+      {%- if shade_entries != blank -%}
+        {%- for shade in shade_entries -%}
+          {%- liquid
+            assign shade_name = shade.name.value | default: ''
+            assign shade_desc = shade.description.value | default: ''
+            assign shade_usage = shade.usage.value | default: ''
+            assign shade_skin_tone = shade.skin_tone.value | default: ''
+            assign shade_position = shade.position.value | default: 99
+            assign shade_model_img = shade.model_image.value
+            assign shade_swatch_img = shade.swatch_image.value
+          -%}
+
+          {%- capture model_src -%}
+            {%- if shade_model_img != blank -%}{{ shade_model_img | image_url: width: 600 }}{%- endif -%}
+          {%- endcapture -%}
+          {%- capture swatch_src -%}
+            {%- if shade_swatch_img != blank -%}{{ shade_swatch_img | image_url: width: 600 }}{%- endif -%}
+          {%- endcapture -%}
+
+          <article
+            class="shade-finder__card"
+            data-usage="{{ shade_usage | escape }}"
+            data-skin-tone="{{ shade_skin_tone | escape }}"
+            data-model-src="{{ model_src | strip | escape }}"
+            data-swatch-src="{{ swatch_src | strip | escape }}"
+            data-position="{{ shade_position }}"
+            aria-label="{{ shade_name | escape }}"
+          >
+            <div class="shade-finder__card-image-wrap">
+              {%- if shade_swatch_img != blank -%}
+                <img
+                  class="shade-finder__card-img shade-finder__card-img--swatch"
+                  src="{{ shade_swatch_img | image_url: width: 600 }}"
+                  srcset="{{ shade_swatch_img | image_url: width: 300 }} 300w, {{ shade_swatch_img | image_url: width: 600 }} 600w"
+                  sizes="(min-width: 750px) calc(100vw / {{ section.settings.columns_desktop }}), calc(100vw / {{ section.settings.columns_mobile }})"
+                  alt="{{ shade_name | escape }} {{ 'sections.shade_finder.swatch_alt' | t }}"
+                  width="600"
+                  height="600"
+                  loading="lazy"
+                >
+              {%- else -%}
+                <div class="shade-finder__card-img-placeholder shade-finder__card-img--swatch" aria-hidden="true">
+                  {{ 'product-1' | placeholder_svg_tag: 'shade-finder__placeholder-svg' }}
+                </div>
+              {%- endif -%}
+
+              {%- if shade_model_img != blank -%}
+                <img
+                  class="shade-finder__card-img shade-finder__card-img--model"
+                  src="{{ shade_model_img | image_url: width: 600 }}"
+                  srcset="{{ shade_model_img | image_url: width: 300 }} 300w, {{ shade_model_img | image_url: width: 600 }} 600w"
+                  sizes="(min-width: 750px) calc(100vw / {{ section.settings.columns_desktop }}), calc(100vw / {{ section.settings.columns_mobile }})"
+                  alt="{{ shade_name | escape }} {{ 'sections.shade_finder.model_alt' | t }}"
+                  width="600"
+                  height="600"
+                  loading="lazy"
+                >
+              {%- else -%}
+                <div class="shade-finder__card-img-placeholder shade-finder__card-img--model" aria-hidden="true">
+                  {{ 'product-2' | placeholder_svg_tag: 'shade-finder__placeholder-svg' }}
+                </div>
+              {%- endif -%}
+
+              {%- if shade_usage != blank -%}
+                <span class="shade-finder__card-badge">{{ shade_usage | replace: '_', ' ' | capitalize }}</span>
+              {%- endif -%}
+            </div>
+
+            <div class="shade-finder__card-body">
+              {%- if shade_name != blank -%}
+                <h3 class="shade-finder__card-name">{{ shade_name | escape }}</h3>
+              {%- endif -%}
+              {%- if shade_desc != blank -%}
+                <p class="shade-finder__card-desc">{{ shade_desc | escape }}</p>
+              {%- endif -%}
+              {%- if shade_skin_tone != blank -%}
+                <span class="shade-finder__card-tone">{{ shade_skin_tone | capitalize }}</span>
+              {%- endif -%}
+            </div>
+          </article>
+        {%- endfor -%}
+      {%- else -%}
+        <p class="shade-finder__empty">{{ 'sections.shade_finder.no_shades' | t }}</p>
+      {%- endif -%}
+    </div>
+
+    <p class="shade-finder__no-results" hidden aria-live="assertive">
+      {{ 'sections.shade_finder.no_results' | t }}
+    </p>
+
+    {%- if section.settings.show_cta -%}
+      <div class="shade-finder__cta">
+        {%- if section.settings.cta_heading != blank -%}
+          <h3 class="shade-finder__cta-heading">{{ section.settings.cta_heading | escape }}</h3>
+        {%- endif -%}
+        {%- if section.settings.cta_subheading != blank -%}
+          <p class="shade-finder__cta-subheading">{{ section.settings.cta_subheading | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.cta_button_text != blank -%}
+          <a
+            href="{{ section.settings.cta_button_url | default: '#' }}"
+            class="shade-finder__cta-btn"
+          >{{ section.settings.cta_button_text | escape }}</a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+{% stylesheet %}
+.shade-finder {
+  box-sizing: border-box;
+}
+
+.shade-finder .page-width {
+  max-width: var(--page-width, 1200px);
+  margin-inline: auto;
+  padding-inline: var(--page-margin, 20px);
+}
+
+.shade-finder__header {
+  text-align: center;
+  margin-block-end: 2.5rem;
+}
+
+.shade-finder__heading {
+  font-family: var(--font-heading-family);
+  font-style: var(--font-heading-style);
+  font-weight: var(--font-heading-weight);
+  color: var(--shade-heading-color);
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  margin-block: 0 0.75rem;
+  line-height: 1.15;
+}
+
+.shade-finder__subheading {
+  color: var(--shade-text-color);
+  font-size: clamp(0.9375rem, 1.5vw, 1.0625rem);
+  max-width: 52ch;
+  margin-inline: auto;
+  margin-block: 0;
+  line-height: 1.6;
+}
+
+.shade-finder__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.25rem 2rem;
+  margin-block-end: 2rem;
+}
+
+.shade-finder__filter-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.shade-finder__filter-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--shade-text-color);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.shade-finder__pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+.shade-finder__pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.375rem 0.875rem;
+  border-radius: 999px;
+  border: 1.5px solid transparent;
+  font-size: 0.875rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+  background-color: var(--shade-pill-inactive-bg);
+  color: var(--shade-pill-inactive-text);
+  border-color: var(--shade-pill-inactive-bg);
+  min-height: 44px;
+  white-space: nowrap;
+}
+
+.shade-finder__pill--active,
+.shade-finder__pill[aria-pressed="true"] {
+  background-color: var(--shade-pill-active-bg);
+  color: var(--shade-pill-active-text);
+  border-color: var(--shade-pill-active-bg);
+}
+
+.shade-finder__pill:focus-visible {
+  outline: 2px solid var(--shade-pill-active-bg);
+  outline-offset: 2px;
+}
+
+.shade-finder__view-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  margin-inline-start: auto;
+}
+
+.shade-finder__toggle-label {
+  font-size: 0.875rem;
+  color: var(--shade-text-color);
+  opacity: 0.55;
+  transition: opacity 0.18s ease;
+  user-select: none;
+}
+
+.shade-finder__toggle-label--active {
+  opacity: 1;
+  font-weight: 600;
+  color: var(--shade-heading-color);
+}
+
+.shade-finder__toggle-switch {
+  position: relative;
+  width: 2.75rem;
+  height: 1.5rem;
+  border-radius: 999px;
+  background-color: var(--shade-toggle-active);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: background-color 0.18s ease;
+  min-height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.shade-finder__toggle-switch:focus-visible {
+  outline: 2px solid var(--shade-toggle-active);
+  outline-offset: 3px;
+}
+
+.shade-finder__toggle-knob {
+  position: absolute;
+  left: 0.1875rem;
+  width: 1.125rem;
+  height: 1.125rem;
+  border-radius: 50%;
+  background-color: #fff;
+  transition: transform 0.2s ease;
+  pointer-events: none;
+}
+
+.shade-finder__toggle-switch[aria-checked="true"] .shade-finder__toggle-knob {
+  transform: translateX(1.25rem);
+}
+
+.shade-finder__grid {
+  display: grid;
+  grid-template-columns: repeat(var(--shade-columns-mobile, 2), 1fr);
+  gap: 1.25rem;
+  margin-block-end: 2.5rem;
+}
+
+@media screen and (min-width: 750px) {
+  .shade-finder__grid {
+    grid-template-columns: repeat(var(--shade-columns-desktop, 4), 1fr);
+    gap: 1.5rem;
+  }
+}
+
+.shade-finder__card {
+  background-color: var(--shade-card-bg);
+  border-radius: var(--shade-card-radius);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.shade-finder__card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.shade-finder__card[hidden] {
+  display: none;
+}
+
+.shade-finder__card-image-wrap {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background-color: #f0ece8;
+}
+
+.shade-finder__card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.3s ease;
+}
+
+.shade-finder__card-img--model {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+
+.shade-finder__card-img-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f0ece8;
+}
+
+.shade-finder__card-img-placeholder.shade-finder__card-img--model {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+
+.shade-finder__placeholder-svg {
+  width: 60%;
+  height: 60%;
+  opacity: 0.3;
+}
+
+.shade-finder--models-view .shade-finder__card-img--swatch,
+.shade-finder--models-view .shade-finder__card-img-placeholder.shade-finder__card-img--swatch {
+  opacity: 0;
+}
+
+.shade-finder--models-view .shade-finder__card-img--model,
+.shade-finder--models-view .shade-finder__card-img-placeholder.shade-finder__card-img--model {
+  opacity: 1;
+}
+
+.shade-finder__card-badge {
+  position: absolute;
+  top: 0.625rem;
+  inset-inline-start: 0.625rem;
+  background-color: rgba(255, 255, 255, 0.88);
+  color: #1a1a1a;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  backdrop-filter: blur(4px);
+}
+
+.shade-finder__card-body {
+  padding: 0.875rem 1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.shade-finder__card-name {
+  font-family: var(--font-heading-family);
+  font-style: var(--font-heading-style);
+  font-weight: var(--font-heading-weight);
+  color: var(--shade-heading-color);
+  font-size: 1rem;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.shade-finder__card-desc {
+  color: var(--shade-text-color);
+  font-size: 0.8125rem;
+  margin: 0;
+  line-height: 1.5;
+  overflow-wrap: break-word;
+}
+
+.shade-finder__card-tone {
+  display: inline-block;
+  margin-block-start: 0.375rem;
+  font-size: 0.75rem;
+  color: var(--shade-text-color);
+  opacity: 0.65;
+  font-style: italic;
+}
+
+.shade-finder__no-results {
+  text-align: center;
+  color: var(--shade-text-color);
+  padding-block: 2rem;
+  font-size: 1rem;
+}
+
+.shade-finder__empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--shade-text-color);
+  padding-block: 2rem;
+}
+
+.shade-finder__cta {
+  background-color: var(--shade-cta-bg);
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.shade-finder__cta-heading {
+  font-family: var(--font-heading-family);
+  font-style: var(--font-heading-style);
+  font-weight: var(--font-heading-weight);
+  color: var(--shade-heading-color);
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  margin: 0;
+}
+
+.shade-finder__cta-subheading {
+  color: var(--shade-text-color);
+  font-size: 0.9375rem;
+  margin: 0;
+  max-width: 44ch;
+  line-height: 1.6;
+}
+
+.shade-finder__cta-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-block-start: 0.5rem;
+  padding: 0.75rem 2rem;
+  background-color: var(--shade-cta-btn-bg);
+  color: var(--shade-cta-btn-text);
+  border-radius: 999px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: opacity 0.18s ease;
+  min-height: 44px;
+}
+
+.shade-finder__cta-btn:hover {
+  opacity: 0.82;
+}
+
+.shade-finder__cta-btn:focus-visible {
+  outline: 2px solid var(--shade-cta-btn-bg);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shade-finder__card,
+  .shade-finder__card-img,
+  .shade-finder__toggle-knob,
+  .shade-finder__pill,
+  .shade-finder__cta-btn {
+    transition: none;
+  }
+}
+{% endstylesheet %}
+
+{% javascript %}
+(function () {
+  function initShadeFinder(section) {
+    const grid = section.querySelector('.shade-finder__grid');
+    const noResults = section.querySelector('.shade-finder__no-results');
+    const toggleBtn = section.querySelector('[data-view-toggle]');
+    const toggleLabelSwatch = section.querySelector('[data-toggle-label="swatches"]');
+    const toggleLabelModel = section.querySelector('[data-toggle-label="models"]');
+
+    let activeUsage = 'all';
+    let activeSkinTone = 'all';
+    let currentView = section.dataset.defaultView || 'swatches';
+
+    function applyView() {
+      const isModels = currentView === 'models';
+      section.classList.toggle('shade-finder--models-view', isModels);
+      if (toggleBtn) {
+        toggleBtn.setAttribute('aria-checked', isModels ? 'true' : 'false');
+      }
+      if (toggleLabelSwatch) {
+        toggleLabelSwatch.classList.toggle('shade-finder__toggle-label--active', !isModels);
+      }
+      if (toggleLabelModel) {
+        toggleLabelModel.classList.toggle('shade-finder__toggle-label--active', isModels);
+      }
+    }
+
+    function applyFilters() {
+      const cards = grid.querySelectorAll('.shade-finder__card');
+      let visibleCount = 0;
+
+      for (const card of cards) {
+        const usageMatch = activeUsage === 'all' || card.dataset.usage === activeUsage;
+        const toneMatch = activeSkinTone === 'all' || card.dataset.skinTone === activeSkinTone;
+        const visible = usageMatch && toneMatch;
+        card.hidden = !visible;
+        if (visible) visibleCount++;
+      }
+
+      if (noResults) {
+        noResults.hidden = visibleCount > 0;
+      }
+    }
+
+    function updatePillState(group, activeValue) {
+      const pills = group.querySelectorAll('.shade-finder__pill');
+      for (const pill of pills) {
+        const isActive = pill.dataset.filterValue === activeValue;
+        pill.classList.toggle('shade-finder__pill--active', isActive);
+        pill.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+      }
+    }
+
+    section.addEventListener('click', function (e) {
+      const pill = e.target.closest('.shade-finder__pill');
+      if (pill) {
+        const filterType = pill.dataset.filterType;
+        const filterValue = pill.dataset.filterValue;
+        const group = pill.closest('.shade-finder__filter-group');
+
+        if (filterType === 'usage') {
+          activeUsage = filterValue;
+        } else if (filterType === 'skin-tone') {
+          activeSkinTone = filterValue;
+        }
+
+        if (group) updatePillState(group, filterValue);
+        applyFilters();
+        return;
+      }
+
+      if (e.target.closest('[data-view-toggle]')) {
+        currentView = currentView === 'swatches' ? 'models' : 'swatches';
+        applyView();
+      }
+    });
+
+    applyView();
+    applyFilters();
+  }
+
+  document.querySelectorAll('.shade-finder[data-section-id]').forEach(initShadeFinder);
+})();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "What Shade Am I?",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What Shade Am I?"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Find your perfect match with our shade finder. Filter by product type and skin tone to discover your ideal shade."
+    },
+    {
+      "type": "select",
+      "id": "default_view",
+      "label": "Default View",
+      "options": [
+        {
+          "value": "swatches",
+          "label": "Swatches"
+        },
+        {
+          "value": "models",
+          "label": "Models"
+        }
+      ],
+      "default": "swatches"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_usage_filter",
+      "label": "Show Usage Filter",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "usage_filter_label",
+      "label": "Usage Filter Label",
+      "default": "Usage"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_skin_tone_filter",
+      "label": "Show Skin Tone Filter",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "skin_tone_filter_label",
+      "label": "Skin Tone Filter Label",
+      "default": "Skin Tone"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Columns (Desktop)",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Columns (Mobile)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "header",
+      "content": "Still Not Sure? CTA"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cta",
+      "label": "Show CTA Block",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "cta_heading",
+      "label": "CTA Heading",
+      "default": "Still Not Sure?"
+    },
+    {
+      "type": "textarea",
+      "id": "cta_subheading",
+      "label": "CTA Subheading",
+      "default": "Take our quick quiz and we'll recommend the perfect shade for you."
+    },
+    {
+      "type": "text",
+      "id": "cta_button_text",
+      "label": "CTA Button Text",
+      "default": "Take the Quiz"
+    },
+    {
+      "type": "url",
+      "id": "cta_button_url",
+      "label": "CTA Button URL"
+    },
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Section Background Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#4A4A4A"
+    },
+    {
+      "type": "color",
+      "id": "pill_active_bg",
+      "label": "Active Filter Pill Background",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "color",
+      "id": "pill_active_text",
+      "label": "Active Filter Pill Text",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "pill_inactive_bg",
+      "label": "Inactive Filter Pill Background",
+      "default": "#F5F5F5"
+    },
+    {
+      "type": "color",
+      "id": "pill_inactive_text",
+      "label": "Inactive Filter Pill Text",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "label": "Card Background Color",
+      "default": "#FAFAFA"
+    },
+    {
+      "type": "color",
+      "id": "toggle_active_color",
+      "label": "Toggle Active Color",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "color",
+      "id": "cta_bg_color",
+      "label": "CTA Background Color",
+      "default": "#F5F0EB"
+    },
+    {
+      "type": "color",
+      "id": "cta_button_color",
+      "label": "CTA Button Color",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "color",
+      "id": "cta_button_text_color",
+      "label": "CTA Button Text Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "label": "Card Border Radius",
+      "min": 0,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top Padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom Padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "presets": [
+    {
+      "name": "What Shade Am I?",
+      "settings": {
+        "heading": "What Shade Am I?",
+        "subheading": "Find your perfect match with our shade finder. Filter by product type and skin tone to discover your ideal shade.",
+        "default_view": "swatches",
+        "show_usage_filter": true,
+        "usage_filter_label": "Usage",
+        "show_skin_tone_filter": true,
+        "skin_tone_filter_label": "Skin Tone",
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "show_cta": true,
+        "cta_heading": "Still Not Sure?",
+        "cta_subheading": "Take our quick quiz and we'll recommend the perfect shade for you.",
+        "cta_button_text": "Take the Quiz",
+        "bg_color": "#FFFFFF",
+        "heading_color": "#1A1A1A",
+        "text_color": "#4A4A4A",
+        "pill_active_bg": "#1A1A1A",
+        "pill_active_text": "#FFFFFF",
+        "pill_inactive_bg": "#F5F5F5",
+        "pill_inactive_text": "#1A1A1A",
+        "card_bg_color": "#FAFAFA",
+        "toggle_active_color": "#1A1A1A",
+        "cta_bg_color": "#F5F0EB",
+        "cta_button_color": "#1A1A1A",
+        "cta_button_text_color": "#FFFFFF",
+        "card_radius": 12,
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
+    }
+  ]
+}
+{% endschema %}
