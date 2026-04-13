@@ -3655,6 +3655,57 @@ sections:
       - slideshow.liquid
       - product-recommendations.liquid
       - multicolumn.liquid
+  - file: sections/top-banner.liquid
+    name: top-banner
+    label: Top Banner
+    visual_role: Banner image with text overlay
+    settings:
+      - id: message
+        type: text
+        label: Message
+    blocks: []
+    max_blocks: null
+    templates_allowed:
+      - "*"
+    presets:
+      - Top Banner
+    uses_image: false
+    uses_video: false
+    uses_slider: false
+    uses_grid: false
+    uses_tabs: false
+    uses_accordion: false
+    uses_form: false
+    layout_type: full-width-hero
+    mockup_keywords:
+      - announcement bar
+      - top banner
+      - promo bar
+      - site-wide message
+      - shipping notice
+      - header bar
+      - notification strip
+      - top strip
+      - promotional message
+      - info bar
+    when_to_use: Use this section when a mockup shows a full-width bar at the very top of the page displaying a single line
+      of text such as a promotional message, shipping offer, or site-wide announcement.
+    when_to_create_new: Create a new section if the mockup requires multiple messages, a dismissible close button, links
+      within the banner, icons, countdown timers, or rotating/scrolling text.
+    requires_new_section_if:
+      - Banner includes a clickable link or CTA button
+      - Banner has a dismiss or close button
+      - Banner displays rotating or marquee text
+      - Banner includes a countdown timer
+      - Banner supports multiple messages or slides
+      - Banner requires custom background color or gradient controls
+      - Banner includes an icon or emoji alongside the text
+      - Banner has different messages for mobile vs desktop
+    similar_sections:
+      - announcement-bar.liquid
+      - promo-banner.liquid
+      - header-banner.liquid
+      - notification-bar.liquid
 snippets:
   - file: snippets/component-article-card.liquid
     name: component-article-card
@@ -4423,7 +4474,7 @@ assets:
       size_lines: 324
     - file: assets/section-faq.css
       name: section-faq.css
-      size_lines: 160
+      size_lines: 115
     - file: assets/section-featured-collections-v2.css
       name: section-featured-collections-v2.css
       size_lines: 182

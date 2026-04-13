@@ -5298,61 +5298,38 @@ files:
       - Truncated file content suggests incomplete updateFilters or fetchSection implementation
     fix_guidance: Check that data-section attribute matches section ID, verify filter form IDs (#filters-form,
   - file: assets/section-faq.css
-    responsibility: Styles the FAQ accordion section with expandable question/answer blocks and setup instructions for
-      metaobject integration
+    responsibility: Provides all layout and visual styles for the FAQ accordion section including heading, blocks, headers,
+      icons, content areas, and mobile responsive overrides.
     owns:
-      - FAQ section layout and typography including heading styles
-      - Accordion block structure with borders and spacing
-      - Header button layout with question text and toggle icon
-      - Collapsible content area styling for answers
-      - Icon circle button with rotation transition
-      - Theme editor empty state notice for metaobject setup instructions
-      - Mobile responsive breakpoints for smaller screens
+      - .faq-section
+      - .faq__heading
+      - .faq__container
+      - .faq__block
+      - .faq__accordion
+      - .faq__header
+      - .faq__title
+      - .faq__icon
+      - .faq__content
+      - .faq__content-wrapper
+      - .faq__answer
+      - mobile breakpoint styles (max-width 749px)
     depends_on:
       js: []
       snippets: []
       sections:
         - sections/Faq.liquid
         - sections/Faq-metaobjects.liquid
-      global_objects:
-        - --color-background
-        - --color-foreground
-      custom_elements: []
-    depended_on_by:
-      - sections/Faq.liquid
-      - sections/Faq-metaobjects.liquid
-    key_identifiers:
-      css_classes:
-        - faq-section
-        - faq__heading
-        - faq__container
-        - faq__block
-        - faq__accordion
-        - faq__header
-        - faq__title
-        - faq__icon
-        - faq__content
-        - faq__content-wrapper
-        - faq__answer
-        - faq__setup-notice
-        - faq__setup-notice-inner
-        - faq__setup-notice-title
-        - faq__setup-steps
-        - faq__setup-notice-hint
-      data_attributes: []
-      js_events_emitted: []
-      js_events_listened: []
-      custom_elements: []
-    state_ownership:
-      - none - visual styling only, accordion state managed by JavaScript
     common_mistakes:
-      - Assuming this file handles accordion expand/collapse logic when it only provides visual styling
-      - Missing that icon rotation animation is CSS-only and requires JavaScript to toggle classes
-      - Not recognizing the setup notice styles are specifically for theme editor empty states
-      - Overlooking mobile responsive adjustments at 749px breakpoint
-    fix_guidance: Check if CSS custom properties --color-background and --color-foreground are defined in
-      snippets/css-variables.liquid when colors appear incorrect; verify JavaScript is toggling appropriate classes for
-      accordion state transitions
+      - Editing accordion open/close or icon rotation state here expecting visual changes without knowing that
+        transform/display toggling is controlled by JS in the section liquid file
+      - Assuming this file covers both Faq.liquid and Faq-metaobjects.liquid without verifying the metaobjects section
+        references these same class names
+      - Adding new color values as hard-coded hex instead of using the existing CSS custom property pattern
+        rgb(var(--color-foreground)) and rgb(var(--color-background))
+      - Attempting to control accordion expanded state purely in CSS without checking whether the section liquid uses a
+        class toggle or the details/summary HTML pattern
+    fix_guidance: Check sections/Faq.liquid and sections/Faq-metaobjects.liquid first for class name alignment and JS-driven
+      state changes before modifying styles here.
   - file: assets/section-featured-collections-v2.css
     responsibility: Styles the featured collections v2 section with tabbed navigation, swiper carousel integration, and
       placeholder product cards
@@ -9390,3 +9367,26 @@ files:
     fix_guidance: When customizer text is wrong, check if schema keys in section files match translation keys here; if
       translations are missing, add them via Shopify admin language editor or ensure schema keys exist in corresponding
       section files
+  - file: sections/top-banner.liquid
+    responsibility: Renders a simple full-width banner strip with a configurable text message and hardcoded black background styling.
+    owns:
+      - .top-banner__message paragraph element
+      - Inline section stylesheet for banner layout and colors
+      - Schema setting for banner message text
+    depends_on:
+      js: []
+      snippets: []
+      sections: []
+    common_mistakes:
+      - Attempting to add rich text or HTML in the message setting without removing the escape filter, which will render
+        tags as literal text
+      - Trying to style the banner by editing a global stylesheet instead of the inline {% stylesheet %} block which is
+        scoped to this section
+      - Assuming this section is automatically included in the layout; it must be added to a JSON template or
+        header-group.json to appear
+      - Confusing this section with sections/announcement-bar.liquid which may serve a similar purpose, leading to
+        duplicate or conflicting banners
+      - Hardcoding color changes directly in the stylesheet block without adding schema settings, making merchant
+        customization impossible
+    fix_guidance: Check sections/header-group.json or layout/theme.liquid for where this section is rendered, and inspect
+      the schema settings block first before modifying any visual output.

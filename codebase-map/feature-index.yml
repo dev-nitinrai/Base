@@ -1,116 +1,215 @@
-cart_drawer:
-  primary_files:
-    - snippets/component-cart-drawer.liquid
-    - assets/component-cart-drawer.js
-    - assets/cart.css
-  secondary_files:
-    - snippets/component-cart-discount.liquid
-    - assets/component-cart-discount.js
-    - sections/cart.liquid
-  do_not_edit:
-    - assets/critical.css
-  entry_point: snippets/component-cart-drawer.liquid
-product_form:
-  primary_files:
-    - sections/product.liquid
-    - assets/section-product.js
-    - assets/section-product.css
-  secondary_files:
-    - assets/component-selling-plans.js
-    - snippets/component-product-price.liquid
-    - assets/component-product-price.css
-  do_not_edit:
-    - assets/shopify.js
-    - assets/critical.css
-  entry_point: sections/product.liquid
-collection_grid:
-  primary_files:
-    - sections/collection.liquid
-    - assets/section-collection.css
-    - assets/section-collection.js
-  secondary_files:
-    - snippets/component-product-card.liquid
-    - assets/component-product-card.css
-    - assets/component-product-card.js
-    - snippets/component-pagination.liquid
-    - assets/component-pagination.css
-    - assets/component-infinite-scroll.js
-  do_not_edit:
-    - templates/collection.json
-  entry_point: sections/collection.liquid
-header_navigation:
-  primary_files:
-    - sections/header.liquid
-    - assets/section-footer.css
-  secondary_files:
-    - snippets/component-nav-drawer.liquid
-    - snippets/component-nav-dropdown.liquid
-    - snippets/component-nav-megamenu.liquid
-    - sections/header-group.json
-    - snippets/component-localization-form.liquid
-    - assets/component-localization-form.js
-  do_not_edit:
-    - assets/critical.css
-  entry_point: sections/header.liquid
-predictive_search:
-  primary_files:
-    - snippets/component-predictive-search.liquid
-    - assets/component-predictive-search.js
-    - assets/component-predictive-search.css
-  secondary_files:
-    - sections/predictive-results.liquid
-    - sections/search.liquid
-    - assets/section-search.css
-  do_not_edit:
-    - assets/theme.js
-  entry_point: snippets/component-predictive-search.liquid
-quick_add:
-  primary_files:
-    - assets/component-quick-add.js
-    - assets/component-quick-add.css
-  secondary_files:
-    - snippets/component-product-card.liquid
-    - assets/component-cart-notification.js
-    - snippets/component-cart-notification.liquid
-  do_not_edit:
-    - assets/component-modal-opener.js
-  entry_point: assets/component-quick-add.js
-filters:
-  primary_files:
-    - snippets/component-filters-sidebar.liquid
-    - snippets/component-filters-horizontal.liquid
-    - assets/section-collection.css
-  secondary_files:
-    - snippets/component-filters-drawer.liquid
-    - snippets/component-filters-price-range.liquid
-    - assets/component-filters-price-range.js
-    - assets/section-collection.js
-  do_not_edit:
-    - assets/shopify.js
-  entry_point: assets/section-collection.js
-product_media:
-  primary_files:
-    - snippets/component-product-media-gallery.liquid
-    - snippets/component-product-media.liquid
-    - assets/section-product.css
-  secondary_files:
-    - snippets/component-product-media-modal.liquid
-    - assets/component-product-media-modal.js
-    - assets/component-product-media-modal.css
-    - assets/component-product-media-magnify.js
-    - assets/section-product.js
-  do_not_edit:
-    - assets/critical.css
-  entry_point: snippets/component-product-media-gallery.liquid
-variant_picker:
-  primary_files:
-    - sections/product.liquid
-    - assets/section-product.js
-  secondary_files:
-    - snippets/component-product-card.liquid
-    - assets/component-product-card.js
-    - assets/component-selling-plans.js
-    - snippets/component-product-price.liquid
-  do_not_edit:
-    - assets/shopify.js
-  entry_point: assets/section-product.js
+features:
+  storefront_password_protection:
+    primary_files:
+      - layout/password.liquid
+      - sections/password.liquid
+      - templates/password.json
+    secondary_files:
+      - snippets/meta-tags.liquid
+      - snippets/css-variables.liquid
+      - assets/critical.css
+    do_not_edit:
+      - templates/password.json
+    entry_point: layout/password.liquid
+  main_layout_and_global_structure:
+    primary_files:
+      - layout/theme.liquid
+    secondary_files:
+      - snippets/css-variables.liquid
+      - snippets/meta-tags.liquid
+      - snippets/component-gtm-head.liquid
+      - snippets/component-gtm-body.liquid
+      - snippets/component-splash-screen-head.liquid
+      - snippets/component-splash-screen.liquid
+      - snippets/component-data-layer.liquid
+      - snippets/component-predictive-search.liquid
+      - snippets/component-cart-drawer.liquid
+      - snippets/component-cart-notification.liquid
+      - snippets/component-nav-drawer.liquid
+      - assets/critical.css
+      - assets/theme.js
+    do_not_edit: []
+    entry_point: layout/theme.liquid
+  header:
+    primary_files:
+      - sections/header.liquid
+      - sections/header-group.json
+    secondary_files:
+      - snippets/component-nav-dropdown.liquid
+      - snippets/component-nav-megamenu.liquid
+      - snippets/component-nav-drawer.liquid
+      - snippets/component-predictive-search.liquid
+      - snippets/component-localization-form.liquid
+      - snippets/component-social-icons.liquid
+      - assets/component-predictive-search.css
+      - assets/component-predictive-search.js
+      - assets/component-localization-form.js
+    do_not_edit:
+      - sections/header-group.json
+    entry_point: sections/header.liquid
+  announcement_bar:
+    primary_files:
+      - sections/announcement-bar.liquid
+    secondary_files:
+      - sections/header-group.json
+    do_not_edit:
+      - sections/header-group.json
+    entry_point: sections/announcement-bar.liquid
+  top_banner:
+    primary_files:
+      - sections/top-banner.liquid
+    secondary_files: []
+    do_not_edit: []
+    entry_point: sections/top-banner.liquid
+  footer:
+    primary_files:
+      - sections/footer.liquid
+      - sections/footer-group.json
+    secondary_files:
+      - snippets/component-social-icons.liquid
+      - snippets/component-localization-form.liquid
+      - assets/section-footer.css
+      - assets/component-localization-form.js
+    do_not_edit:
+      - sections/footer-group.json
+    entry_point: sections/footer.liquid
+  404_page:
+    primary_files:
+      - sections/404.liquid
+      - templates/404.json
+    secondary_files: []
+    do_not_edit:
+      - templates/404.json
+    entry_point: templates/404.json
+  faq_metaobjects:
+    primary_files:
+      - sections/Faq-metaobjects.liquid
+    secondary_files:
+      - assets/section-faq.css
+    do_not_edit: []
+    entry_point: sections/Faq-metaobjects.liquid
+  faq:
+    primary_files:
+      - sections/Faq.liquid
+    secondary_files:
+      - assets/section-faq.css
+    do_not_edit: []
+    entry_point: sections/Faq.liquid
+  customer_account:
+    primary_files:
+      - sections/account.liquid
+      - templates/customers/account.json
+    secondary_files:
+      - assets/customer.css
+      - assets/customer.js
+    do_not_edit:
+      - templates/customers/account.json
+    entry_point: templates/customers/account.json
+  customer_activate_account:
+    primary_files:
+      - sections/activate-account.liquid
+      - templates/customers/activate_account.json
+    secondary_files:
+      - assets/customer.css
+    do_not_edit:
+      - templates/customers/activate_account.json
+    entry_point: templates/customers/activate_account.json
+  customer_addresses:
+    primary_files:
+      - sections/addresses.liquid
+      - templates/customers/addresses.json
+    secondary_files:
+      - assets/customer.css
+      - assets/customer.js
+      - assets/shopify.js
+    do_not_edit:
+      - templates/customers/addresses.json
+    entry_point: templates/customers/addresses.json
+  customer_login:
+    primary_files:
+      - sections/login.liquid
+      - templates/customers/login.json
+    secondary_files:
+      - assets/customer.css
+    do_not_edit:
+      - templates/customers/login.json
+    entry_point: templates/customers/login.json
+  customer_register:
+    primary_files:
+      - sections/register.liquid
+      - templates/customers/register.json
+    secondary_files:
+      - assets/customer.css
+    do_not_edit:
+      - templates/customers/register.json
+    entry_point: templates/customers/register.json
+  customer_order:
+    primary_files:
+      - sections/order.liquid
+      - templates/customers/order.json
+    secondary_files:
+      - assets/customer.css
+    do_not_edit:
+      - templates/customers/order.json
+    entry_point: templates/customers/order.json
+  customer_reset_password:
+    primary_files:
+      - sections/reset-password.liquid
+      - templates/customers/reset_password.json
+    secondary_files:
+      - assets/customer.css
+    do_not_edit:
+      - templates/customers/reset_password.json
+    entry_point: templates/customers/reset_password.json
+  animated_features_v2:
+    primary_files:
+      - sections/animated-features-v2.liquid
+    secondary_files:
+      - assets/section-animated-features-v2.css
+      - assets/section-animated-features-v2.js
+    do_not_edit: []
+    entry_point: sections/animated-features-v2.liquid
+  animated_features:
+    primary_files:
+      - sections/animated-features.liquid
+    secondary_files:
+      - assets/section-animated-features.css
+      - assets/section-animated-features.js
+    do_not_edit: []
+    entry_point: sections/animated-features.liquid
+  article_page:
+    primary_files:
+      - sections/article.liquid
+      - templates/article.json
+    secondary_files:
+      - assets/section-article.css
+      - snippets/component-article-card.liquid
+      - assets/component-article-card.css
+      - snippets/component-product-share-button.liquid
+      - assets/component-product-share-button.css
+      - assets/component-product-share-button.js
+    do_not_edit:
+      - templates/article.json
+    entry_point: templates/article.json
+  blog_listing:
+    primary_files:
+      - sections/blog.liquid
+      - templates/blog.json
+    secondary_files:
+      - assets/section-blog.css
+      - snippets/component-article-card.liquid
+      - assets/component-article-card.css
+      - snippets/component-pagination.liquid
+      - assets/component-pagination.css
+    do_not_edit:
+      - templates/blog.json
+    entry_point: templates/blog.json
+  blogs_section:
+    primary_files:
+      - sections/blogs.liquid
+    secondary_files:
+      - assets/section-blogs.css
+      - snippets/component-article-card.liquid
+      - assets/component-article-card.css
+    do_not_edit: []
+    entry_point: sections/
