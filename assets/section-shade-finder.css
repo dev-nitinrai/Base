@@ -14,10 +14,13 @@ shade-finder,
   padding-block: var(--sf-padding-top, 80px) var(--sf-padding-bottom, 80px);
 }
 
-/* ── Header ── */
+/* ── Header area: relative container so toggle can be absolutely positioned ── */
 .shade-finder__header {
+  position: relative;
   text-align: center;
   margin-block-end: 40px;
+  /* Padding ensures heading text doesn't overlap the toggle */
+  padding-block: 8px;
 }
 
 .shade-finder__heading {
@@ -28,23 +31,21 @@ shade-finder,
   color: var(--sf-heading-color, #1a1a1a);
   letter-spacing: -0.01em;
   margin: 0;
+  text-align: center;
+  display: block;
 }
 
-/* ── Controls row: toggle left, filters right ── */
-.shade-finder__controls {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 20px 32px;
-  margin-block-end: 36px;
-}
-
-/* ── Toggle (Swatches / Models) ── */
+/* ── Toggle (Swatches / Models) — absolutely positioned top-left of header ── */
 .shade-finder__toggle {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
   display: flex;
   align-items: center;
   gap: 10px;
   flex-shrink: 0;
+  z-index: 1;
 }
 
 .shade-finder__toggle-label {
@@ -57,28 +58,25 @@ shade-finder,
   white-space: nowrap;
 }
 
+/* Light gray pill-style toggle track — matches reference (never goes dark) */
 .shade-finder__toggle-track {
   position: relative;
   display: inline-flex;
   align-items: center;
   width: 48px;
   height: 26px;
-  background-color: #d0d0d0;
+  background-color: #c8c8c8;
   border-radius: 13px;
   cursor: pointer;
-  transition: background-color 0.25s ease;
   border: none;
   padding: 0;
   flex-shrink: 0;
+  /* No color transition — stays light gray regardless of state */
 }
 
 .shade-finder__toggle-track:focus-visible {
   outline: 2px solid #000;
   outline-offset: 2px;
-}
-
-.shade-finder__toggle-track[aria-checked="true"] {
-  background-color: #1a1a1a;
 }
 
 .shade-finder__toggle-thumb {
@@ -90,11 +88,22 @@ shade-finder,
   border-radius: 50%;
   transition: transform 0.25s ease;
   pointer-events: none;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
 }
 
+/* When Models is active (aria-checked="true"), thumb slides right */
 .shade-finder__toggle-track[aria-checked="true"] .shade-finder__toggle-thumb {
   transform: translateX(22px);
+}
+
+/* ── Controls row: filter pills only (toggle moved to header) ── */
+.shade-finder__controls {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 20px 80px;
+  margin-block-end: 36px;
+  flex-wrap: wrap;
 }
 
 /* ── Filter groups container: two groups side by side ── */
@@ -102,7 +111,7 @@ shade-finder,
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  gap: 40px;
+  gap: 80px;
   flex-shrink: 0;
 }
 
@@ -161,8 +170,7 @@ shade-finder,
   outline-offset: 2px;
 }
 
-.shade-finder__pill[aria-pressed="true"],
-.shade-finder__pill--active[aria-pressed="true"] {
+.shade-finder__pill[aria-pressed="true"] {
   background-color: var(--sf-pill-active-bg, #000);
   color: var(--sf-pill-active-text, #fff);
   border-color: var(--sf-pill-active-bg, #000);
@@ -184,8 +192,8 @@ shade-finder,
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   background: transparent;
   border: none;
   cursor: pointer;
@@ -393,14 +401,8 @@ shade-finder,
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .shade-finder__controls {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-  }
-
   .shade-finder__filters {
-    gap: 24px;
+    gap: 32px;
     flex-wrap: wrap;
   }
 
@@ -412,7 +414,15 @@ shade-finder,
 /* ── Mobile: 1-up grid ── */
 @media screen and (max-width: 767px) {
   .shade-finder__header {
-    margin-block-end: 28px;
+    padding-block-start: 48px;
+    margin-block-end: 24px;
+  }
+
+  .shade-finder__toggle {
+    position: static;
+    transform: none;
+    margin-block-end: 12px;
+    display: inline-flex;
   }
 
   .shade-finder__heading {
@@ -430,6 +440,10 @@ shade-finder,
   .shade-finder__filters {
     flex-direction: column;
     gap: 16px;
+  }
+
+  .shade-finder__pill-row {
+    flex-wrap: wrap;
   }
 
   .shade-finder__cta-row {
@@ -456,7 +470,6 @@ shade-finder,
 @media (prefers-reduced-motion: reduce) {
   .shade-finder__card-img,
   .shade-finder__card,
-  .shade-finder__toggle-track,
   .shade-finder__toggle-thumb {
     transition: none;
   }

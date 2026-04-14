@@ -66,17 +66,19 @@
     {%- comment -%} Screen-reader live region for filter announcements {%- endcomment -%}
     <span class="shade-finder__sr-announce visually-hidden" aria-live="polite" aria-atomic="true"></span>
 
-    {%- comment -%} ── Heading ── {%- endcomment -%}
-    {%- if heading != blank -%}
-      <div class="shade-finder__header">
-        <h2 class="shade-finder__heading">{{ heading | escape }}</h2>
-      </div>
-    {%- endif -%}
+    {%- comment -%}
+      ── Header: toggle absolutely positioned top-left, heading centered ──
+      The toggle sits inside the header container so it aligns vertically
+      with the heading without pushing it off-center.
+    {%- endcomment -%}
+    {%- comment -%}
+      Header row: toggle on left, heading centered, spacer on right.
+      Uses position:relative on wrapper + position:absolute on toggle
+      so the heading can be truly centered on the full width.
+    {%- endcomment -%}
+    <div class="shade-finder__header">
 
-    {%- comment -%} ── Controls: toggle + filter pills ── {%- endcomment -%}
-    <div class="shade-finder__controls">
-
-      {%- comment -%} Swatches / Models toggle — top-left {%- endcomment -%}
+      {%- comment -%} Swatches / Models toggle — absolutely positioned top-left {%- endcomment -%}
       <div class="shade-finder__toggle" role="group" aria-label="Image view">
         <span
           class="shade-finder__toggle-label"
@@ -100,14 +102,23 @@
         >{{ label_models | escape }}</span>
       </div>
 
-      {%- comment -%} Filter groups — right side, two groups side by side {%- endcomment -%}
+      {%- if heading != blank -%}
+        <h2 class="shade-finder__heading">{{ heading | escape }}</h2>
+      {%- endif -%}
+
+    </div>
+
+    {%- comment -%} ── Filter pills row (centered below heading) ── {%- endcomment -%}
+    <div class="shade-finder__controls">
+
+      {%- comment -%} Filter groups — two groups side by side, centered ── {%- endcomment -%}
       <div class="shade-finder__filters" role="group" aria-label="Filter shades">
 
         {%- comment -%} USAGE filter {%- endcomment -%}
         <div class="shade-finder__filter-group" role="group" aria-labelledby="sf-usage-label-{{ section.id }}">
           <span id="sf-usage-label-{{ section.id }}" class="shade-finder__filter-label">USAGE</span>
           <div class="shade-finder__pill-row">
-            <button class="shade-finder__pill shade-finder__pill--active" data-group="usage" data-value="all" aria-pressed="true">ALL</button>
+            <button class="shade-finder__pill" data-group="usage" data-value="all" aria-pressed="true">ALL</button>
             <button class="shade-finder__pill" data-group="usage" data-value="bronzer" aria-pressed="false">BRONZER</button>
             <button class="shade-finder__pill" data-group="usage" data-value="blush" aria-pressed="false">BLUSH</button>
             <button class="shade-finder__pill" data-group="usage" data-value="highlighter" aria-pressed="false">HIGHLIGHTER</button>
@@ -119,7 +130,7 @@
         <div class="shade-finder__filter-group" role="group" aria-labelledby="sf-tone-label-{{ section.id }}">
           <span id="sf-tone-label-{{ section.id }}" class="shade-finder__filter-label">SKIN TONE</span>
           <div class="shade-finder__pill-row">
-            <button class="shade-finder__pill shade-finder__pill--active" data-group="tone" data-value="all" aria-pressed="true">ALL</button>
+            <button class="shade-finder__pill" data-group="tone" data-value="all" aria-pressed="true">ALL</button>
             <button class="shade-finder__pill" data-group="tone" data-value="light" aria-pressed="false">LIGHT</button>
             <button class="shade-finder__pill" data-group="tone" data-value="medium" aria-pressed="false">MEDIUM</button>
             <button class="shade-finder__pill" data-group="tone" data-value="dark" aria-pressed="false">DARK</button>
