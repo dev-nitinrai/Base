@@ -1,0 +1,300 @@
+{
+  "sections": {
+    "what-shade-am-i_mnyxj4wu": {
+      "type": "what-shade-am-i",
+      "settings": {
+        "heading": "What Shade Am I?",
+        "subheading": "Find your perfect match. Select your skin tone category, then explore shades to discover products made for you.",
+        "tab_label_undertone": "By Undertone",
+        "tab_label_depth": "By Depth",
+        "selected_shade_label": "Your Shade:",
+        "no_shade_placeholder": "Select a shade to see matching products",
+        "matching_products_heading": "Matching Products",
+        "cta_button_text": "Shop This Shade",
+        "reset_button_text": "Reset",
+        "bg_color": "#FDF8F5",
+        "heading_color": "#1A1A1A",
+        "text_color": "#4A4A4A",
+        "tab_active_bg": "#1A1A1A",
+        "tab_active_text": "#FFFFFF",
+        "tab_inactive_bg": "#EFEFEF",
+        "tab_inactive_text": "#4A4A4A",
+        "chip_active_bg": "#1A1A1A",
+        "chip_active_text": "#FFFFFF",
+        "chip_inactive_bg": "#FFFFFF",
+        "chip_inactive_text": "#1A1A1A",
+        "card_bg_color": "#FFFFFF",
+        "card_selected_border": "#1A1A1A",
+        "button_color": "#1A1A1A",
+        "button_text_color": "#FFFFFF",
+        "card_radius": 12,
+        "swatch_size": 72,
+        "cards_visible": 4,
+        "padding_top": 80,
+        "padding_bottom": 80,
+        "show_shade_description": true,
+        "show_matching_products": true,
+        "enable_autoplay": false
+      },
+      "blocks": {
+        "filter_category_1": {
+          "type": "filter_category",
+          "settings": {
+            "label": "All",
+            "value": "all",
+            "tab": "undertone"
+          }
+        },
+        "filter_category_2": {
+          "type": "filter_category",
+          "settings": {
+            "label": "Cool",
+            "value": "cool",
+            "tab": "undertone"
+          }
+        },
+        "filter_category_3": {
+          "type": "filter_category",
+          "settings": {
+            "label": "Warm",
+            "value": "warm",
+            "tab": "undertone"
+          }
+        },
+        "filter_category_4": {
+          "type": "filter_category",
+          "settings": {
+            "label": "Neutral",
+            "value": "neutral",
+            "tab": "undertone"
+          }
+        },
+        "filter_category_5": {
+          "type": "filter_category",
+          "settings": {
+            "label": "Olive",
+            "value": "olive",
+            "tab": "undertone"
+          }
+        },
+        "filter_category_6": {
+          "type": "filter_category",
+          "settings": {
+            "label": "All",
+            "value": "all",
+            "tab": "depth"
+          }
+        },
+        "filter_category_7": {
+          "type": "filter_category",
+          "settings": {
+            "label": "Fair",
+            "value": "fair",
+            "tab": "depth"
+          }
+        },
+        "filter_category_8": {
+          "type": "filter_category",
+          "settings": {
+            "label": "Light",
+            "value": "light",
+            "tab": "depth"
+          }
+        },
+        "filter_category_9": {
+          "type": "filter_category",
+          "settings": {
+            "label": "Medium",
+            "value": "medium",
+            "tab": "depth"
+          }
+        },
+        "filter_category_10": {
+          "type": "filter_category",
+          "settings": {
+            "label": "Tan",
+            "value": "tan",
+            "tab": "depth"
+          }
+        },
+        "filter_category_11": {
+          "type": "filter_category",
+          "settings": {
+            "label": "Deep",
+            "value": "deep",
+            "tab": "depth"
+          }
+        },
+        "filter_category_12": {
+          "type": "filter_category",
+          "settings": {
+            "label": "Rich",
+            "value": "rich",
+            "tab": "depth"
+          }
+        },
+        "shade_card_13": {
+          "type": "shade_card",
+          "settings": {
+            "shade_name": "Porcelain",
+            "shade_code": "N10",
+            "color_hex": "#F9EDE4",
+            "description": "A light, cool-toned shade with subtle pink undertones. Perfect for very fair complexions.",
+            "undertone": "cool",
+            "depth": "fair"
+          }
+        },
+        "shade_card_14": {
+          "type": "shade_card",
+          "settings": {
+            "shade_name": "Ivory",
+            "shade_code": "W15",
+            "color_hex": "#F5E0C8",
+            "description": "A warm ivory with golden undertones that complements fair to light skin beautifully.",
+            "undertone": "warm",
+            "depth": "fair"
+          }
+        },
+        "shade_card_15": {
+          "type": "shade_card",
+          "settings": {
+            "shade_name": "Shell",
+            "shade_code": "N20",
+            "color_hex": "#EDD5BC",
+            "description": "A neutral light shade that blends seamlessly across a range of fair to light tones.",
+            "undertone": "neutral",
+            "depth": "light"
+          }
+        },
+        "shade_card_16": {
+          "type": "shade_card",
+          "settings": {
+            "shade_name": "Bisque",
+            "shade_code": "W25",
+            "color_hex": "#E8C9A8",
+            "description": "A warm, peachy light shade with golden warmth for a natural sun-kissed look.",
+            "undertone": "warm",
+            "depth": "light"
+          }
+        },
+        "shade_card_17": {
+          "type": "shade_card",
+          "settings": {
+            "shade_name": "Sand",
+            "shade_code": "O30",
+            "color_hex": "#D4B08A",
+            "description": "An olive-leaning medium shade with green-gold undertones for a natural finish.",
+            "undertone": "olive",
+            "depth": "medium"
+          }
+        },
+        "shade_card_18": {
+          "type": "shade_card",
+          "settings": {
+            "shade_name": "Buff",
+            "shade_code": "N30",
+            "color_hex": "#C9A882",
+            "description": "A neutral medium shade that works across warm and cool medium complexions.",
+            "undertone": "neutral",
+            "depth": "medium"
+          }
+        },
+        "shade_card_19": {
+          "type": "shade_card",
+          "settings": {
+            "shade_name": "Caramel",
+            "shade_code": "W40",
+            "color_hex": "#B8895E",
+            "description": "A rich warm tan with amber undertones for medium to tan skin tones.",
+            "undertone": "warm",
+            "depth": "tan"
+          }
+        },
+        "shade_card_20": {
+          "type": "shade_card",
+          "settings": {
+            "shade_name": "Tawny",
+            "shade_code": "C40",
+            "color_hex": "#A07858",
+            "description": "A cool-toned tan shade with subtle rose undertones for deeper tan complexions.",
+            "undertone": "cool",
+            "depth": "tan"
+          }
+        },
+        "shade_card_21": {
+          "type": "shade_card",
+          "settings": {
+            "shade_name": "Espresso",
+            "shade_code": "W50",
+            "color_hex": "#7A5035",
+            "description": "A deep, warm-toned shade with rich bronze undertones for deep complexions.",
+            "undertone": "warm",
+            "depth": "deep"
+          }
+        },
+        "shade_card_22": {
+          "type": "shade_card",
+          "settings": {
+            "shade_name": "Mahogany",
+            "shade_code": "C50",
+            "color_hex": "#6B3F2E",
+            "description": "A cool deep shade with red-berry undertones for rich, deep complexions.",
+            "undertone": "cool",
+            "depth": "deep"
+          }
+        },
+        "shade_card_23": {
+          "type": "shade_card",
+          "settings": {
+            "shade_name": "Ebony",
+            "shade_code": "N60",
+            "color_hex": "#4A2A1E",
+            "description": "A neutral-rich shade for the deepest complexions with balanced undertones.",
+            "undertone": "neutral",
+            "depth": "rich"
+          }
+        },
+        "shade_card_24": {
+          "type": "shade_card",
+          "settings": {
+            "shade_name": "Obsidian",
+            "shade_code": "W60",
+            "color_hex": "#3A1F14",
+            "description": "The deepest warm shade with golden-bronze undertones for the richest skin tones.",
+            "undertone": "warm",
+            "depth": "rich"
+          }
+        }
+      },
+      "block_order": [
+        "filter_category_1",
+        "filter_category_2",
+        "filter_category_3",
+        "filter_category_4",
+        "filter_category_5",
+        "filter_category_6",
+        "filter_category_7",
+        "filter_category_8",
+        "filter_category_9",
+        "filter_category_10",
+        "filter_category_11",
+        "filter_category_12",
+        "shade_card_13",
+        "shade_card_14",
+        "shade_card_15",
+        "shade_card_16",
+        "shade_card_17",
+        "shade_card_18",
+        "shade_card_19",
+        "shade_card_20",
+        "shade_card_21",
+        "shade_card_22",
+        "shade_card_23",
+        "shade_card_24"
+      ]
+    }
+  },
+  "order": [
+    "what-shade-am-i_mnyxj4wu"
+  ]
+}

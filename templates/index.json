@@ -137,6 +137,148 @@
         "enable_mobile_slider": true
       }
     },
+    "what_shade_am_i_1": {
+      "type": "what-shade-am-i",
+      "blocks": {
+        "usage_all": {
+          "type": "usage_filter",
+          "settings": { "label": "ALL", "value": "all" }
+        },
+        "usage_bronzer": {
+          "type": "usage_filter",
+          "settings": { "label": "BRONZER", "value": "bronzer" }
+        },
+        "usage_blush": {
+          "type": "usage_filter",
+          "settings": { "label": "BLUSH", "value": "blush" }
+        },
+        "usage_highlighter": {
+          "type": "usage_filter",
+          "settings": { "label": "HIGHLIGHTER", "value": "highlighter" }
+        },
+        "usage_color_correct": {
+          "type": "usage_filter",
+          "settings": { "label": "COLOR CORRECT", "value": "color-correct" }
+        },
+        "tone_all": {
+          "type": "skin_tone_filter",
+          "settings": { "label": "ALL", "value": "all" }
+        },
+        "tone_light": {
+          "type": "skin_tone_filter",
+          "settings": { "label": "LIGHT", "value": "light" }
+        },
+        "tone_medium": {
+          "type": "skin_tone_filter",
+          "settings": { "label": "MEDIUM", "value": "medium" }
+        },
+        "tone_dark": {
+          "type": "skin_tone_filter",
+          "settings": { "label": "DARK", "value": "dark" }
+        },
+        "shade_au_naturel": {
+          "type": "shade_card",
+          "settings": {
+            "shade_name": "AU NATUREL",
+            "color_hex": "#D4A898",
+            "description": "is a clear balm with subtle opal pearl for all skin tones",
+            "usage": "blush",
+            "skin_tone": "all"
+          }
+        },
+        "shade_happy_hour": {
+          "type": "shade_card",
+          "settings": {
+            "shade_name": "HAPPY HOUR",
+            "color_hex": "#C8A0A0",
+            "description": "a cool sheer pink with silver shimmer for fair to medium tan skin tones",
+            "usage": "blush",
+            "skin_tone": "light"
+          }
+        },
+        "shade_magic_hour": {
+          "type": "shade_card",
+          "settings": {
+            "shade_name": "MAGIC HOUR",
+            "color_hex": "#B8906A",
+            "description": "is a cool, sheer bronze with silver shimmer for light to medium-dark skin",
+            "usage": "bronzer",
+            "skin_tone": "medium"
+          }
+        },
+        "shade_golden_hour": {
+          "type": "shade_card",
+          "settings": {
+            "shade_name": "GOLDEN HOUR",
+            "color_hex": "#C8A870",
+            "description": "is a warm, sheer gold with multidimensional shimmer for all skin tones",
+            "usage": "highlighter",
+            "skin_tone": "all"
+          }
+        },
+        "shade_rose_hour": {
+          "type": "shade_card",
+          "settings": {
+            "shade_name": "ROSE HOUR",
+            "color_hex": "#D4A0A8",
+            "description": "a soft rose with warm undertones for medium to dark skin tones",
+            "usage": "blush",
+            "skin_tone": "dark"
+          }
+        },
+        "shade_bronze_hour": {
+          "type": "shade_card",
+          "settings": {
+            "shade_name": "BRONZE HOUR",
+            "color_hex": "#A87850",
+            "description": "a deep bronze with golden shimmer for medium to dark complexions",
+            "usage": "bronzer",
+            "skin_tone": "dark"
+          }
+        }
+      },
+      "block_order": [
+        "usage_all",
+        "usage_bronzer",
+        "usage_blush",
+        "usage_highlighter",
+        "usage_color_correct",
+        "tone_all",
+        "tone_light",
+        "tone_medium",
+        "tone_dark",
+        "shade_au_naturel",
+        "shade_happy_hour",
+        "shade_magic_hour",
+        "shade_golden_hour",
+        "shade_rose_hour",
+        "shade_bronze_hour"
+      ],
+      "settings": {
+        "heading": "What Shade Am I?",
+        "toggle_label_swatches": "Swatches",
+        "toggle_label_models": "Models",
+        "usage_label": "USAGE",
+        "skin_tone_label": "SKIN TONE",
+        "cta_prefix": "Still Not Sure?",
+        "cta_text": "FIND MY SHADE",
+        "bg_color": "#EFEFEF",
+        "heading_color": "#1A1A1A",
+        "text_color": "#4A4A4A",
+        "chip_active_bg": "#1A1A1A",
+        "chip_active_text": "#FFFFFF",
+        "chip_inactive_bg": "#FFFFFF",
+        "chip_inactive_text": "#1A1A1A",
+        "card_bg_color": "#FFFFFF",
+        "card_selected_border": "#1A1A1A",
+        "button_color": "#1A1A1A",
+        "button_text_color": "#FFFFFF",
+        "card_radius": 0,
+        "padding_top": 60,
+        "padding_bottom": 60,
+        "show_shade_description": true
+      }
+    },
     "product_highlights_gUaG6E": {
       "type": "product-highlights",
       "blocks": {
@@ -184,6 +326,7 @@
   "order": [
     "hero_1",
     "featured_collections_hhETJ9",
+    "what_shade_am_i_1",
     "selling_points_v2_6NgzaK",
     "product_highlights_gUaG6E"
   ]

@@ -8914,14 +8914,13 @@ files:
     fix_guidance: Check gift_card object availability and enabled/expired states first, verify settings.logo fallback works,
       ensure inline styles remain for standalone rendering outside theme context
   - file: templates/index.json
-    responsibility: Defines the homepage layout and section configuration with their settings and block order
+    responsibility: Defines the home page layout by declaring, ordering, and configuring all sections and their blocks with
+      default content and settings.
     owns:
-      - Homepage section assembly and ordering
-      - Section-specific settings for hero, featured-collections, selling-points-v2, product-highlights,
-        featured-products, brand-story-v2, promo-banner, logos, and animated-features-v2
-      - Block configurations within each section (collection cards, selling points, features, product selections, story
-        content, promo content, logo images, feature cards)
-      - Visual styling parameters (color schemes, alignments, spacing, overlay settings)
+      - Home page section composition and render order
+      - Default content values for hero, featured collections, selling points, and other home page sections
+      - Block definitions and block ordering within each section
+      - Per-section and per-block settings (color schemes, alignments, text, links)
     depends_on:
       js: []
       snippets: []
@@ -8929,40 +8928,31 @@ files:
         - sections/hero.liquid
         - sections/featured-collections.liquid
         - sections/selling-points-v2.liquid
-        - sections/product-highlights.liquid
-        - sections/featured-products.liquid
+        - sections/announcement-bar.liquid
+        - sections/brand-story.liquid
         - sections/brand-story-v2.liquid
-        - sections/promo-banner.liquid
-        - sections/logos.liquid
+        - sections/animated-features.liquid
         - sections/animated-features-v2.liquid
-      global_objects:
-        - Shopify theme editor
-        - Shopify collections
-        - Shopify products
-      custom_elements: []
-    depended_on_by:
-      - Shopify theme rendering engine when displaying homepage
-      - Shopify theme editor for homepage customization
-      - layout/theme.liquid as the parent template wrapper
+        - sections/featured-products.liquid
+        - sections/logos.liquid
+        - sections/promo-banner.liquid
+        - sections/shop-by-category-v2.liquid
+        - sections/dynamic-grid.liquid
+        - sections/related-products.liquid
+        - sections/custom-section.liquid
     common_mistakes:
-      - Manually editing this file instead of using Shopify theme editor (changes may be overwritten)
-      - Breaking JSON syntax when adding or removing sections or blocks
-      - Referencing non-existent section types that don't have corresponding liquid files
-      - Forgetting to maintain block_order array when adding/removing blocks
-      - Using incorrect handle format for Shopify resource references (collections, products)
-    fix_guidance: Check that all section types referenced exist in sections/ directory, verify JSON syntax is valid, ensure
-      block_order arrays match actual block keys, and prefer making changes through Shopify admin to avoid overwrite
-      conflicts
-    state_ownership:
-      - Homepage visual layout state
-      - Section visibility and ordering on homepage
-      - Block-level content and configuration per section
-    key_identifiers:
-      css_classes: []
-      data_attributes: []
-      js_events_emitted: []
-      js_events_listened: []
-      custom_elements: []
+      - Editing this file manually expecting changes to persist, since Shopify admin and the theme editor auto-overwrite
+        it
+      - Referencing a section type that does not have a matching liquid file in the sections/ directory, causing a
+        silent render failure
+      - Adding a block to block_order whose key does not exist in the blocks object, or vice versa, causing schema
+        validation errors
+      - Assuming empty string collection or link values will inherit defaults rather than rendering nothing
+      - Treating this file as the source of truth for section logic or styles, which live entirely in the corresponding
+        section liquid files
+    fix_guidance: If a section is missing or broken on the home page, first verify the type value matches an existing
+      sections/*.liquid filename exactly, then confirm block_order keys align with blocks object keys, and check the
+      corresponding section liquid file for required settings keys.
   - file: templates/list-collections.json
     responsibility: Defines the page template structure for the collections list page displaying all store collections
     owns:
@@ -9310,45 +9300,50 @@ files:
     fix_guidance: Check translation keys exist in locales/en.default.schema.json, verify settings_data.json contains actual
       values, ensure color scheme roles map correctly to CSS variables in snippets/css-variables.liquid
   - file: locales/en.default.json
-    responsibility: Stores English language translations for all user-facing text and labels throughout the Shopify theme.
+    responsibility: Provides all English UI string translations and labels used across the theme via Liquid's `t` filter.
     owns:
-      - All English translation strings for UI elements (buttons, labels, error messages)
-      - Customer account and authentication text (login, register, reset password)
-      - Cart and checkout related messaging
-      - Product and collection page labels
-      - Form validation and error messages
-      - Blog and article interface text
-      - Navigation and menu labels
-      - Footer and general UI text
+      - All user-facing static text strings for the default English locale
+      - Translation keys for 404, blog, cart, customer account, orders, addresses, register, login, password reset, and
+        activate account flows
+      - Pluralization and interpolation templates (e.g., "Order {{ number }}", "{{ date }} by {{ author }}")
     depends_on:
       js: []
       snippets: []
-      sections: []
-      global_objects:
-        - Shopify theme translation system (t filter in Liquid)
-      custom_elements: []
-    depended_on_by:
-      - All .liquid template and section files that use translation filters
-      - Shopify admin language editor
-      - Any JavaScript that references translation keys
-      - All customer-facing UI components (cart, product cards, forms, etc.)
-    key_identifiers:
-      css_classes: []
-      data_attributes: []
-      js_events_emitted: []
-      js_events_listened: []
-      custom_elements: []
-    state_ownership:
-      - none
+      sections:
+        - sections/404.liquid
+        - sections/article.liquid
+        - sections/blog.liquid
+        - sections/blogs.liquid
+        - sections/cart.liquid
+        - sections/account.liquid
+        - sections/activate-account.liquid
+        - sections/addresses.liquid
+        - sections/order.liquid
+        - sections/login.liquid
+        - sections/register.liquid
+        - sections/reset-password.liquid
+        - sections/search.liquid
+        - sections/product.liquid
+        - sections/collection.liquid
+        - sections/collections.liquid
+        - sections/related-products.liquid
+        - sections/featured-products.liquid
+        - sections/password.liquid
+        - sections/header.liquid
+        - sections/footer.liquid
+        - sections/announcement-bar.liquid
+        - sections/predictive-results.liquid
     common_mistakes:
-      - Modifying translation keys without updating corresponding Liquid template references
-      - Adding translations without matching schema counterpart in en.default.schema.json
-      - Forgetting that this file may be auto-regenerated by Shopify admin language editor
-      - Hardcoding text in templates instead of using translation keys from this file
-      - Not maintaining consistency in terminology across different sections
-    fix_guidance: When text displays incorrectly or is missing, search for the translation key (e.g., cart.checkout,
-      customer.login_page.title) in Liquid files using {{ 't' filter, verify the key exists in this JSON structure, and
-      ensure nested object paths match exactly.
+      - Adding new translation keys here without a corresponding `t:` schema entry in the section that uses them,
+        causing silent fallback to the raw key string
+      - Editing this file manually when Shopify admin language editor will overwrite changes on next sync
+      - Using incorrect interpolation variable names (e.g., `{{ name }}` vs `{{ number }}`) that do not match what
+        Liquid passes to the `t` filter
+      - Assuming a key exists in this file and skipping nil checks in Liquid, causing broken or empty rendered strings
+      - Duplicating keys across nested namespaces (e.g., both `blog.email` and `blogs.article.email`) leading to
+        inconsistent translations
+    fix_guidance: Search for the exact `t:` key path used in the failing Liquid template and verify it matches the nested
+      key structure in this file exactly, including interpolation variable names.
   - file: locales/en.default.schema.json
     responsibility: Provides default English translations for all Shopify theme editor schema settings, labels, and section
       configurations
@@ -9390,3 +9385,36 @@ files:
     fix_guidance: When customizer text is wrong, check if schema keys in section files match translation keys here; if
       translations are missing, add them via Shopify admin language editor or ensure schema keys exist in corresponding
       section files
+  - file: sections/what-shade-am-i.liquid
+    responsibility: Renders an interactive shade-finder widget with usage and skin-tone filter chips, a carousel of shade
+      cards, and a swatch/model-image toggle, all driven by customizable theme settings and blocks.
+    owns:
+      - wsai__toggle (swatch vs model image view switcher)
+      - wsai__filters (usage_filter and skin_tone_filter chip rows)
+      - wsai__carousel / wsai__track (shade card carousel with prev/next nav)
+      - wsai__card articles (shade cards built from shade_card blocks)
+      - CSS custom properties for all visual theming (colors, radius, spacing, swatch size)
+      - aria attributes for toggle, chips, carousel, and cards (accessibility)
+      - "Block types: shade_card, usage_filter, skin_tone_filter"
+    depends_on:
+      js:
+        - what-shade-am-i custom element JS (expected as a registered CustomElement for <what-shade-am-i>)
+        - data-wsai-toggle, data-wsai-prev, data-wsai-next, data-wsai-carousel, data-wsai-track, data-wsai-card
+          selectors (JS hooks)
+      snippets: []
+      sections: []
+    common_mistakes:
+      - Assuming filter state is managed in Liquid — all chip active/inactive toggling and card filtering is handled
+        client-side in the custom element JS, not server-side
+      - Adding new block types without adding corresponding data-* attributes consumed by the JS filter logic
+      - Editing chip initial active state in Liquid (forloop.first) without matching the JS initialization logic,
+        causing state mismatch on load
+      - Truncated image_url filter (visible in source as 'widt') will break image srcset — ensure full 'width' param is
+        present
+      - Changing CSS variable names in settings without updating the corresponding JS or CSS that references those
+        variables
+      - Expecting skin_tone or usage filtering to work if block values are inconsistent with card data-usage or
+        data-skin-tone attribute values
+    fix_guidance: Check the custom element JS file for <what-shade-am-i> first — all interactivity (filtering, carousel,
+      toggle) lives there; verify data-* attribute names match exactly between this Liquid and the JS selectors, and
+      confirm the image_url srcset line is not truncated.
