@@ -3655,6 +3655,148 @@ sections:
       - slideshow.liquid
       - product-recommendations.liquid
       - multicolumn.liquid
+  - file: sections/what-shade-am-i.liquid
+    name: what-shade-am-i
+    label: What Shade Am I?
+    visual_role: What Shade Am I? section
+    settings:
+      - id: heading
+        type: text
+        label: Heading
+      - id: toggle_label_swatches
+        type: text
+        label: Toggle label — swatches
+      - id: toggle_label_models
+        type: text
+        label: Toggle label — models
+      - id: usage_label
+        type: text
+        label: Usage filter label
+      - id: skin_tone_label
+        type: text
+        label: Skin tone filter label
+      - id: cta_prefix
+        type: text
+        label: CTA prefix text
+      - id: cta_text
+        type: text
+        label: CTA button text
+      - id: cta_url
+        type: url
+        label: CTA button URL
+      - id: show_shade_description
+        type: checkbox
+        label: Show shade description
+      - id: bg_color
+        type: color
+        label: Background color
+      - id: heading_color
+        type: color
+        label: Heading color
+      - id: text_color
+        type: color
+        label: Body text color
+      - id: chip_active_bg
+        type: color
+        label: Active chip background
+      - id: chip_active_text
+        type: color
+        label: Active chip text
+      - id: chip_inactive_bg
+        type: color
+        label: Inactive chip background
+      - id: chip_inactive_text
+        type: color
+        label: Inactive chip text
+      - id: card_bg_color
+        type: color
+        label: Card background
+      - id: card_selected_border
+        type: color
+        label: Selected card border
+      - id: button_color
+        type: color
+        label: CTA button background
+      - id: button_text_color
+        type: color
+        label: CTA button text
+      - id: card_radius
+        type: range
+        label: Card border radius
+      - id: swatch_size
+        type: range
+        label: Swatch size (px)
+      - id: padding_top
+        type: range
+        label: Top padding
+      - id: padding_bottom
+        type: range
+        label: Bottom padding
+    blocks:
+      - type: usage_filter
+        name: Usage filter chip
+        settings:
+          - label
+          - value
+      - type: skin_tone_filter
+        name: Skin tone filter chip
+        settings:
+          - label
+          - value
+      - type: shade_card
+        name: Shade card
+        settings:
+          - shade_name
+          - color_hex
+          - model_image
+          - swatch_image
+          - description
+          - usage
+          - skin_tone
+          - matching_products
+          - cta_url
+    max_blocks: null
+    templates_allowed:
+      - "*"
+    presets:
+      - What Shade Am I?
+    uses_image: true
+    uses_video: false
+    uses_slider: false
+    uses_grid: true
+    uses_tabs: false
+    uses_accordion: false
+    uses_form: false
+    layout_type: grid
+    mockup_keywords:
+      - shade finder
+      - foundation matcher
+      - skin tone filter
+      - swatch selector
+      - beauty quiz
+      - shade cards
+      - usage filter
+      - model toggle
+      - color chips
+      - complexion guide
+    when_to_use: Use this section when a mockup shows an interactive shade-matching or foundation-finder tool with
+      filterable swatches or model images, toggle between swatch/model views, and chip-based filters for skin tone or
+      usage.
+    when_to_create_new: Create a new section if the mockup requires a multi-step quiz format, product recommendation engine,
+      or shade finder without swatch cards and chip filters as the core interaction pattern.
+    requires_new_section_if:
+      - Mockup includes a step-by-step wizard or progress bar instead of simultaneous filters
+      - Mockup requires AI or image-upload-based skin tone detection
+      - Mockup shows a side-by-side product comparison layout rather than filterable cards
+      - Mockup includes video backgrounds or animated model transitions instead of static toggle
+      - Mockup requires more than two filter categories beyond usage and skin tone
+      - Mockup integrates directly with a quiz app or third-party shade-matching service
+    similar_sections:
+      - shade-finder.liquid
+      - product-quiz.liquid
+      - foundation-finder.liquid
+      - skin-tone-selector.liquid
+      - swatch-grid.liquid
 snippets:
   - file: snippets/component-article-card.liquid
     name: component-article-card

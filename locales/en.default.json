@@ -342,5 +342,12 @@
       "title": "Page not found",
       "subtext": "404"
     }
+  },
+  "sections": {
+    "what_shade_am_i": {
+      "prev_slide": "Previous shade",
+      "next_slide": "Next shade",
+      "no_shades": "Add shade cards in the theme editor to get started."
+    }
   }
 }
