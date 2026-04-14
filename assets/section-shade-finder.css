@@ -1,0 +1,430 @@
+/* ============================================================
+   Shade Finder Section
+   BEM: .shade-finder as block root
+   ============================================================ */
+
+shade-finder,
+.shade-finder {
+  display: block;
+}
+
+.shade-finder {
+  background-color: var(--sf-bg, #f5f5f5);
+  padding-block: var(--sf-padding-top, 80px) var(--sf-padding-bottom, 80px);
+}
+
+/* ── Header ── */
+.shade-finder__header {
+  text-align: center;
+  margin-block-end: 40px;
+}
+
+.shade-finder__heading {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(3.2rem, 5vw, 5.6rem);
+  font-weight: 400;
+  line-height: 1.1;
+  color: var(--sf-heading-color, #1a1a1a);
+  letter-spacing: -0.01em;
+}
+
+/* ── Controls row (toggle + filters) ── */
+.shade-finder__controls {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px 32px;
+  margin-block-end: 36px;
+}
+
+/* ── Toggle ── */
+.shade-finder__toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.shade-finder__toggle-label {
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: var(--sf-text-color, #1a1a1a);
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  user-select: none;
+}
+
+.shade-finder__toggle-track {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 48px;
+  height: 26px;
+  background-color: #d0d0d0;
+  border-radius: 13px;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+  border: none;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.shade-finder__toggle-track:focus-visible {
+  outline: 2px solid #000;
+  outline-offset: 2px;
+}
+
+.shade-finder__toggle-track[aria-checked="true"] {
+  background-color: #1a1a1a;
+}
+
+.shade-finder__toggle-thumb {
+  position: absolute;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  background-color: #fff;
+  border-radius: 50%;
+  transition: transform 0.25s ease;
+  pointer-events: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.shade-finder__toggle-track[aria-checked="true"] .shade-finder__toggle-thumb {
+  transform: translateX(22px);
+}
+
+/* ── Filter groups ── */
+.shade-finder__filters {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px 48px;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.shade-finder__filter-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.shade-finder__filter-label {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--sf-text-color, #1a1a1a);
+  text-transform: uppercase;
+  white-space: nowrap;
+  margin-inline-end: 4px;
+}
+
+.shade-finder__pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 16px;
+  border-radius: 22px;
+  border: 1px solid #1a1a1a;
+  background-color: transparent;
+  color: var(--sf-text-color, #1a1a1a);
+  font-size: 1.2rem;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.shade-finder__pill:hover {
+  background-color: rgba(0, 0, 0, 0.06);
+}
+
+.shade-finder__pill:focus-visible {
+  outline: 2px solid #000;
+  outline-offset: 2px;
+}
+
+.shade-finder__pill[aria-pressed="true"] {
+  background-color: var(--sf-pill-active-bg, #000);
+  color: var(--sf-pill-active-text, #fff);
+  border-color: var(--sf-pill-active-bg, #000);
+}
+
+/* ── Grid wrapper with arrow nav ── */
+.shade-finder__grid-wrapper {
+  position: relative;
+}
+
+.shade-finder__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--sf-text-color, #1a1a1a);
+  font-size: 2rem;
+  padding: 0;
+  transition: opacity 0.2s ease;
+}
+
+.shade-finder__arrow:focus-visible {
+  outline: 2px solid #000;
+  outline-offset: 2px;
+}
+
+.shade-finder__arrow[aria-disabled="true"] {
+  opacity: 0.25;
+  cursor: default;
+  pointer-events: none;
+}
+
+.shade-finder__arrow--prev {
+  left: -44px;
+}
+
+.shade-finder__arrow--next {
+  right: -44px;
+}
+
+.shade-finder__arrow svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ── Card grid ── */
+.shade-finder__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--sf-card-gap, 24px);
+  overflow: hidden;
+}
+
+/* ── Individual card ── */
+.shade-finder__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  transition: opacity 0.3s ease;
+}
+
+.shade-finder__card[data-hidden="true"] {
+  display: none;
+}
+
+.shade-finder__card-image-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background-color: #e8e4e0;
+}
+
+.shade-finder__card-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.3s ease;
+}
+
+.shade-finder__card-img--swatch {
+  opacity: 0;
+}
+
+.shade-finder__card-img--model {
+  opacity: 1;
+}
+
+/* When view is swatches */
+.shade-finder[data-view="swatches"] .shade-finder__card-img--swatch {
+  opacity: 1;
+}
+
+.shade-finder[data-view="swatches"] .shade-finder__card-img--model {
+  opacity: 0;
+}
+
+.shade-finder__card-name {
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--sf-text-color, #1a1a1a);
+  line-height: 1.2;
+}
+
+.shade-finder__card-desc {
+  font-size: 1.3rem;
+  font-weight: 400;
+  text-align: center;
+  color: var(--sf-text-color, #1a1a1a);
+  line-height: 1.5;
+  max-width: 240px;
+}
+
+/* ── Empty state ── */
+.shade-finder__empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding-block: 48px;
+  font-size: 1.5rem;
+  color: var(--sf-text-color, #1a1a1a);
+  opacity: 0.6;
+}
+
+/* ── CTA row ── */
+.shade-finder__cta-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-block-start: 40px;
+}
+
+.shade-finder__cta-pre {
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: var(--sf-text-color, #1a1a1a);
+}
+
+.shade-finder__cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 24px;
+  background-color: var(--sf-btn-bg, #000);
+  color: var(--sf-btn-text, #fff);
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  white-space: nowrap;
+}
+
+.shade-finder__cta-btn:hover {
+  opacity: 0.85;
+}
+
+.shade-finder__cta-btn:focus-visible {
+  outline: 2px solid #000;
+  outline-offset: 2px;
+}
+
+.shade-finder__cta-btn svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+}
+
+/* ── Placeholder (no image) ── */
+.shade-finder__card-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ddd8d3;
+}
+
+.shade-finder__card-placeholder svg {
+  width: 48px;
+  height: 48px;
+  opacity: 0.35;
+  stroke: #555;
+  fill: none;
+  stroke-width: 1.5;
+}
+
+/* ── Responsive ── */
+@media screen and (max-width: 1023px) {
+  .shade-finder__arrow--prev {
+    left: -32px;
+  }
+  .shade-finder__arrow--next {
+    right: -32px;
+  }
+
+  .shade-finder__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .shade-finder__filters {
+    justify-content: flex-start;
+  }
+
+  .shade-finder__controls {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .shade-finder__arrow--prev {
+    left: -28px;
+  }
+  .shade-finder__arrow--next {
+    right: -28px;
+  }
+
+  .shade-finder__grid {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .shade-finder__filter-group {
+    flex-wrap: wrap;
+  }
+
+  .shade-finder__cta-row {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+}
+
+@media screen and (max-width: 479px) {
+  .shade-finder__arrow--prev {
+    left: -24px;
+  }
+  .shade-finder__arrow--next {
+    right: -24px;
+  }
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .shade-finder__card-img,
+  .shade-finder__card,
+  .shade-finder__toggle-track,
+  .shade-finder__toggle-thumb {
+    transition: none;
+  }
+}

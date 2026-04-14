@@ -341,6 +341,22 @@
     "404": {
       "title": "Page not found",
       "subtext": "404"
+    },
+    "shade_finder": {
+      "usage": "Usage",
+      "skin_tone": "Skin Tone",
+      "all": "All",
+      "bronzer": "Bronzer",
+      "blush": "Blush",
+      "highlighter": "Highlighter",
+      "color_correct": "Color Correct",
+      "light": "Light",
+      "medium": "Medium",
+      "dark": "Dark",
+      "prev": "Previous shades",
+      "next": "Next shades",
+      "grid_label": "Shade cards",
+      "no_results": "No shades match the selected filters."
     }
   }
 }

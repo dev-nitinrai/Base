@@ -1,0 +1,352 @@
+
+{% schema %}
+{
+  "name": "Shade Finder",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What Shade Am I?"
+    },
+    {
+      "type": "metaobject_list",
+      "id": "shades",
+      "label": "Shade Metaobjects"
+    },
+    {
+      "type": "select",
+      "id": "default_view",
+      "label": "Default View",
+      "options": [
+        {
+          "value": "models",
+          "label": "Models"
+        },
+        {
+          "value": "swatches",
+          "label": "Swatches"
+        }
+      ],
+      "default": "models"
+    },
+    {
+      "type": "text",
+      "id": "toggle_label_swatches",
+      "label": "Toggle Label — Swatches",
+      "default": "Swatches"
+    },
+    {
+      "type": "text",
+      "id": "toggle_label_models",
+      "label": "Toggle Label — Models",
+      "default": "Models"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrows",
+      "label": "Show Arrow Navigation",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA Button Text",
+      "default": "FIND MY SHADE"
+    },
+    {
+      "type": "text",
+      "id": "cta_pre_text",
+      "label": "CTA Pre-text",
+      "default": "Still Not Sure?"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "CTA Button Link"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#F5F5F5"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "color",
+      "id": "pill_active_bg",
+      "label": "Active Filter Pill Background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "pill_active_text",
+      "label": "Active Filter Pill Text",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "button_bg",
+      "label": "CTA Button Background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "CTA Button Text Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top Padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom Padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "card_gap",
+      "label": "Card Gap",
+      "min": 8,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    }
+  ],
+  "blocks": [
+    {
+      "type": "shade",
+      "name": "Shade Card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Shade Name",
+          "default": "SHADE NAME"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": ""
+        },
+        {
+          "type": "image_picker",
+          "id": "model_image",
+          "label": "Model Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "swatch_image",
+          "label": "Swatch Image"
+        },
+        {
+          "type": "select",
+          "id": "usage",
+          "label": "Usage",
+          "options": [
+            {
+              "value": "all",
+              "label": "All"
+            },
+            {
+              "value": "bronzer",
+              "label": "Bronzer"
+            },
+            {
+              "value": "blush",
+              "label": "Blush"
+            },
+            {
+              "value": "highlighter",
+              "label": "Highlighter"
+            },
+            {
+              "value": "color_correct",
+              "label": "Color Correct"
+            }
+          ],
+          "default": "all"
+        },
+        {
+          "type": "select",
+          "id": "skin_tone_1",
+          "label": "Skin Tone 1",
+          "options": [
+            {
+              "value": "all",
+              "label": "All"
+            },
+            {
+              "value": "light",
+              "label": "Light"
+            },
+            {
+              "value": "medium",
+              "label": "Medium"
+            },
+            {
+              "value": "dark",
+              "label": "Dark"
+            }
+          ],
+          "default": "all"
+        },
+        {
+          "type": "select",
+          "id": "skin_tone_2",
+          "label": "Skin Tone 2 (optional)",
+          "options": [
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "light",
+              "label": "Light"
+            },
+            {
+              "value": "medium",
+              "label": "Medium"
+            },
+            {
+              "value": "dark",
+              "label": "Dark"
+            }
+          ],
+          "default": "none"
+        },
+        {
+          "type": "select",
+          "id": "skin_tone_3",
+          "label": "Skin Tone 3 (optional)",
+          "options": [
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "light",
+              "label": "Light"
+            },
+            {
+              "value": "medium",
+              "label": "Medium"
+            },
+            {
+              "value": "dark",
+              "label": "Dark"
+            }
+          ],
+          "default": "none"
+        },
+        {
+          "type": "number",
+          "id": "position",
+          "label": "Sort Position",
+          "default": 1
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shade Finder",
+      "settings": {
+        "heading": "What Shade Am I?",
+        "default_view": "models",
+        "toggle_label_swatches": "Swatches",
+        "toggle_label_models": "Models",
+        "show_arrows": true,
+        "cta_text": "FIND MY SHADE",
+        "cta_pre_text": "Still Not Sure?",
+        "bg_color": "#F5F5F5",
+        "heading_color": "#1A1A1A",
+        "text_color": "#1A1A1A",
+        "pill_active_bg": "#000000",
+        "pill_active_text": "#FFFFFF",
+        "button_bg": "#000000",
+        "button_text_color": "#FFFFFF",
+        "padding_top": 80,
+        "padding_bottom": 80,
+        "card_gap": 24
+      },
+      "blocks": [
+        {
+          "type": "shade",
+          "settings": {
+            "name": "AU NATUREL",
+            "description": "is a clear balm with subtle opal pearl for all skin tones",
+            "usage": "highlighter",
+            "skin_tone_1": "all",
+            "skin_tone_2": "none",
+            "skin_tone_3": "none",
+            "position": 1
+          }
+        },
+        {
+          "type": "shade",
+          "settings": {
+            "name": "HAPPY HOUR",
+            "description": "a cool sheer pink with silver shimmer for fair to medium tan skin tones",
+            "usage": "blush",
+            "skin_tone_1": "light",
+            "skin_tone_2": "medium",
+            "skin_tone_3": "none",
+            "position": 2
+          }
+        },
+        {
+          "type": "shade",
+          "settings": {
+            "name": "MAGIC HOUR",
+            "description": "is a cool, sheer bronze with silver shimmer for light to medium-dark skin",
+            "usage": "bronzer",
+            "skin_tone_1": "light",
+            "skin_tone_2": "medium",
+            "skin_tone_3": "dark",
+            "position": 3
+          }
+        },
+        {
+          "type": "shade",
+          "settings": {
+            "name": "GOLDEN HOUR",
+            "description": "is a warm, sheer gold with multidimensional shimmer for all skin tones",
+            "usage": "highlighter",
+            "skin_tone_1": "all",
+            "skin_tone_2": "none",
+            "skin_tone_3": "none",
+            "position": 4
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

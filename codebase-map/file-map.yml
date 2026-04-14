@@ -5298,61 +5298,39 @@ files:
       - Truncated file content suggests incomplete updateFilters or fetchSection implementation
     fix_guidance: Check that data-section attribute matches section ID, verify filter form IDs (#filters-form,
   - file: assets/section-faq.css
-    responsibility: Styles the FAQ accordion section with expandable question/answer blocks and setup instructions for
-      metaobject integration
+    responsibility: Provides all visual styling for the FAQ accordion section including layout, typography, icon states, and
+      responsive breakpoints.
     owns:
-      - FAQ section layout and typography including heading styles
-      - Accordion block structure with borders and spacing
-      - Header button layout with question text and toggle icon
-      - Collapsible content area styling for answers
-      - Icon circle button with rotation transition
-      - Theme editor empty state notice for metaobject setup instructions
-      - Mobile responsive breakpoints for smaller screens
+      - .faq-section layout and background
+      - .faq__heading typography and spacing
+      - .faq__container flex column layout
+      - .faq__block border separator styling
+      - .faq__accordion wrapper styles
+      - .faq__header button layout and hover transition
+      - .faq__title font sizing and padding
+      - .faq__icon circular border and transform transition
+      - .faq__content overflow and padding
+      - .faq__content-wrapper inner padding
+      - .faq__answer font size, line-height, and muted color
+      - Mobile responsive overrides at max-width 749px
     depends_on:
       js: []
       snippets: []
       sections:
         - sections/Faq.liquid
         - sections/Faq-metaobjects.liquid
-      global_objects:
-        - --color-background
-        - --color-foreground
-      custom_elements: []
-    depended_on_by:
-      - sections/Faq.liquid
-      - sections/Faq-metaobjects.liquid
-    key_identifiers:
-      css_classes:
-        - faq-section
-        - faq__heading
-        - faq__container
-        - faq__block
-        - faq__accordion
-        - faq__header
-        - faq__title
-        - faq__icon
-        - faq__content
-        - faq__content-wrapper
-        - faq__answer
-        - faq__setup-notice
-        - faq__setup-notice-inner
-        - faq__setup-notice-title
-        - faq__setup-steps
-        - faq__setup-notice-hint
-      data_attributes: []
-      js_events_emitted: []
-      js_events_listened: []
-      custom_elements: []
-    state_ownership:
-      - none - visual styling only, accordion state managed by JavaScript
     common_mistakes:
-      - Assuming this file handles accordion expand/collapse logic when it only provides visual styling
-      - Missing that icon rotation animation is CSS-only and requires JavaScript to toggle classes
-      - Not recognizing the setup notice styles are specifically for theme editor empty states
-      - Overlooking mobile responsive adjustments at 749px breakpoint
-    fix_guidance: Check if CSS custom properties --color-background and --color-foreground are defined in
-      snippets/css-variables.liquid when colors appear incorrect; verify JavaScript is toggling appropriate classes for
-      accordion state transitions
+      - Assuming accordion open/close animation is handled here when it is controlled by JS toggling classes in the
+        Liquid/JS layer
+      - Editing icon rotation expecting visual change without a corresponding JS class toggle on .faq__icon
+      - Overlooking that both Faq.liquid and Faq-metaobjects.liquid share these styles so changes affect both FAQ
+        section variants
+      - Using hardcoded color values instead of the CSS custom properties (--color-foreground, --color-background)
+        breaking theme color scheme support
+      - Assuming the 749px breakpoint matches other sections when it may differ from the global theme breakpoint defined
+        elsewhere
+    fix_guidance: Check sections/Faq.liquid and sections/Faq-metaobjects.liquid for the HTML structure and any JS toggling
+      open/active classes before adjusting transitions or layout.
   - file: assets/section-featured-collections-v2.css
     responsibility: Styles the featured collections v2 section with tabbed navigation, swiper carousel integration, and
       placeholder product cards
@@ -8914,14 +8892,13 @@ files:
     fix_guidance: Check gift_card object availability and enabled/expired states first, verify settings.logo fallback works,
       ensure inline styles remain for standalone rendering outside theme context
   - file: templates/index.json
-    responsibility: Defines the homepage layout and section configuration with their settings and block order
+    responsibility: Defines the homepage layout by declaring which sections are present, their order, and their default
+      settings for the Shopify theme editor.
     owns:
-      - Homepage section assembly and ordering
-      - Section-specific settings for hero, featured-collections, selling-points-v2, product-highlights,
-        featured-products, brand-story-v2, promo-banner, logos, and animated-features-v2
-      - Block configurations within each section (collection cards, selling points, features, product selections, story
-        content, promo content, logo images, feature cards)
-      - Visual styling parameters (color schemes, alignments, spacing, overlay settings)
+      - Homepage section composition and ordering
+      - Default configuration values for each homepage section instance
+      - Section instance IDs (e.g. hero_1, selling_points_v2_6NgzaK)
+      - Block definitions and block ordering within sections
     depends_on:
       js: []
       snippets: []
@@ -8930,39 +8907,25 @@ files:
         - sections/featured-collections.liquid
         - sections/selling-points-v2.liquid
         - sections/product-highlights.liquid
-        - sections/featured-products.liquid
-        - sections/brand-story-v2.liquid
-        - sections/promo-banner.liquid
-        - sections/logos.liquid
+        - sections/animated-features.liquid
         - sections/animated-features-v2.liquid
-      global_objects:
-        - Shopify theme editor
-        - Shopify collections
-        - Shopify products
-      custom_elements: []
-    depended_on_by:
-      - Shopify theme rendering engine when displaying homepage
-      - Shopify theme editor for homepage customization
-      - layout/theme.liquid as the parent template wrapper
+        - sections/brand-story.liquid
+        - sections/brand-story-v2.liquid
+        - sections/logos.liquid
+        - sections/promo-banner.liquid
+        - sections/featured-products.liquid
+        - sections/shop-by-category-v2.liquid
+        - sections/dynamic-grid.liquid
+        - sections/custom-section.liquid
     common_mistakes:
-      - Manually editing this file instead of using Shopify theme editor (changes may be overwritten)
-      - Breaking JSON syntax when adding or removing sections or blocks
-      - Referencing non-existent section types that don't have corresponding liquid files
-      - Forgetting to maintain block_order array when adding/removing blocks
-      - Using incorrect handle format for Shopify resource references (collections, products)
-    fix_guidance: Check that all section types referenced exist in sections/ directory, verify JSON syntax is valid, ensure
-      block_order arrays match actual block keys, and prefer making changes through Shopify admin to avoid overwrite
-      conflicts
-    state_ownership:
-      - Homepage visual layout state
-      - Section visibility and ordering on homepage
-      - Block-level content and configuration per section
-    key_identifiers:
-      css_classes: []
-      data_attributes: []
-      js_events_emitted: []
-      js_events_listened: []
-      custom_elements: []
+      - Editing this file manually expecting changes to persist when the Shopify theme editor will overwrite it
+      - Adding a section type that does not have a corresponding .liquid file in sections/, causing a render error
+      - Assuming section setting keys here are the source of truth rather than the schema defined inside each section's
+        liquid file
+      - Duplicating a section instance ID which causes silent conflicts in the editor
+      - Removing the file entirely and expecting Shopify to fall back gracefully instead of breaking the homepage
+    fix_guidance: Cross-reference the type value of any broken section against the sections/ directory to confirm the liquid
+      file exists, then verify setting key names match the schema defined in that section's liquid {% schema %} block.
   - file: templates/list-collections.json
     responsibility: Defines the page template structure for the collections list page displaying all store collections
     owns:
@@ -9310,45 +9273,48 @@ files:
     fix_guidance: Check translation keys exist in locales/en.default.schema.json, verify settings_data.json contains actual
       values, ensure color scheme roles map correctly to CSS variables in snippets/css-variables.liquid
   - file: locales/en.default.json
-    responsibility: Stores English language translations for all user-facing text and labels throughout the Shopify theme.
+    responsibility: Provides all English UI strings and translatable text keys used across the entire theme via Liquid's `t` filter.
     owns:
-      - All English translation strings for UI elements (buttons, labels, error messages)
-      - Customer account and authentication text (login, register, reset password)
-      - Cart and checkout related messaging
-      - Product and collection page labels
-      - Form validation and error messages
-      - Blog and article interface text
-      - Navigation and menu labels
-      - Footer and general UI text
+      - All English-language UI labels, button text, error messages, and form field names
+      - Translation keys for 404, blog, cart, customer account, order, addresses, register, login, and all other sections
+      - Default fallback strings for every translatable reference in theme Liquid files
     depends_on:
       js: []
       snippets: []
-      sections: []
-      global_objects:
-        - Shopify theme translation system (t filter in Liquid)
-      custom_elements: []
-    depended_on_by:
-      - All .liquid template and section files that use translation filters
-      - Shopify admin language editor
-      - Any JavaScript that references translation keys
-      - All customer-facing UI components (cart, product cards, forms, etc.)
-    key_identifiers:
-      css_classes: []
-      data_attributes: []
-      js_events_emitted: []
-      js_events_listened: []
-      custom_elements: []
-    state_ownership:
-      - none
+      sections:
+        - sections/404.liquid
+        - sections/article.liquid
+        - sections/blog.liquid
+        - sections/blogs.liquid
+        - sections/cart.liquid
+        - sections/account.liquid
+        - sections/activate-account.liquid
+        - sections/addresses.liquid
+        - sections/order.liquid
+        - sections/register.liquid
+        - sections/login.liquid
+        - sections/reset-password.liquid
+        - sections/search.liquid
+        - sections/product.liquid
+        - sections/collection.liquid
+        - sections/password.liquid
+        - sections/header.liquid
+        - sections/footer.liquid
+        - sections/announcement-bar.liquid
+        - sections/predictive-results.liquid
+        - sections/related-products.liquid
     common_mistakes:
-      - Modifying translation keys without updating corresponding Liquid template references
-      - Adding translations without matching schema counterpart in en.default.schema.json
-      - Forgetting that this file may be auto-regenerated by Shopify admin language editor
-      - Hardcoding text in templates instead of using translation keys from this file
-      - Not maintaining consistency in terminology across different sections
-    fix_guidance: When text displays incorrectly or is missing, search for the translation key (e.g., cart.checkout,
-      customer.login_page.title) in Liquid files using {{ 't' filter, verify the key exists in this JSON structure, and
-      ensure nested object paths match exactly.
+      - Adding new Liquid `t` filter keys in section files without adding the corresponding key to this JSON file,
+        causing silent empty string output
+      - Editing this file manually when Shopify admin language editor may overwrite changes, as the file header warns it
+        is auto-generated
+      - Assuming nested key structure matches Liquid filter syntax incorrectly, e.g. using `'customer.orders.title'`
+        when the actual key path differs
+      - Duplicating keys across `blog` and `blogs` namespaces and referencing the wrong one in Liquid templates
+      - Deleting or renaming keys without auditing all Liquid files for usages, breaking translations silently with no
+        build error
+    fix_guidance: When a translation appears blank or missing, first search all section Liquid files for the `t` filter key
+      in question, then verify the exact nested key path exists in this file and matches the Liquid call precisely.
   - file: locales/en.default.schema.json
     responsibility: Provides default English translations for all Shopify theme editor schema settings, labels, and section
       configurations
@@ -9390,3 +9356,108 @@ files:
     fix_guidance: When customizer text is wrong, check if schema keys in section files match translation keys here; if
       translations are missing, add them via Shopify admin language editor or ensure schema keys exist in corresponding
       section files
+  - file: assets/section-shade-finder.css
+    responsibility: Defines all visual styles for the Shade Finder section using BEM methodology, including layout, toggle
+      switch, filter pills, card grid, and arrow navigation.
+    owns:
+      - .shade-finder block and all BEM elements/modifiers
+      - CSS custom property hooks (--sf-bg, --sf-padding-top, --sf-padding-bottom, --sf-heading-color, --sf-text-color,
+        --sf-pill-active-bg, --sf-pill-active-text, --sf-card-gap)
+      - Toggle track and thumb animation (aria-checked driven)
+      - Filter pill active/hover/focus states (aria-pressed driven)
+      - Arrow navigation disabled state (aria-disabled driven)
+      - Card grid 4-column layout and card hidden state (data-hidden driven)
+      - Card image swatch transition styles
+      - shade-finder custom element display normalization
+    depends_on:
+      js: []
+      snippets: []
+      sections: []
+    common_mistakes:
+      - Assuming styles are self-contained — the component requires JavaScript to toggle aria-checked, aria-pressed, and
+        data-hidden attributes for interactive states to visually activate
+      - Overriding CSS custom properties globally instead of scoping them to .shade-finder, causing unintended cascade
+        bleed
+      - Forgetting the truncated portion of the file may contain additional card image swatch styles (--swatch
+        modifier), leading to incomplete edits
+      - Treating the 4-column grid as responsive by default — no visible breakpoints are present in the shown content,
+        so mobile layout likely requires additions
+      - Placing arrow elements inside the grid instead of as siblings within .shade-finder__grid-wrapper, which breaks
+        the absolute positioning offsets (-44px)
+    fix_guidance: Check that JavaScript correctly sets aria-checked on toggle, aria-pressed on pills, and data-hidden on
+      cards; verify --sf-* custom properties are declared on the section root or :root if overriding defaults.
+  - file: assets/section-shade-finder.js
+    responsibility: Custom element controller managing swatch/model view toggling, usage and skin-tone filter pills,
+      paginated arrow navigation, touch swipe, and accessible announcements for the Shade Finder section.
+    owns:
+      - ShadeFinder custom HTML element class
+      - data-view attribute on the host element (models/swatches toggle)
+      - data-hidden attribute on shade cards (filter visibility)
+      - .shade-finder__toggle-track aria-checked state
+      - .shade-finder__pill aria-pressed state
+      - .shade-finder__arrow--prev / --next aria-disabled state
+      - .shade-finder__empty empty-state visibility
+      - aria-live region result count announcements
+      - Touch swipe horizontal drag navigation
+      - AbortController-based event listener lifecycle
+    depends_on:
+      js: []
+      snippets: []
+      sections:
+        - sections/product.liquid (likely renders shade-finder section or embeds the custom element)
+    common_mistakes:
+      - Assuming Alpine.js is available — this class intentionally avoids Alpine and initialises independently via
+        connectedCallback
+      - Editing filter logic without accounting for comma-separated multi-value data-usage and data-tone attributes on
+        cards
+      - "Forgetting that #page resets to 0 on every pill click, so pagination state is not preserved across filter
+        changes"
+      - Missing that the toneMatch check has a special fallback for cards with data-tone='all', which should always be
+        visible
+      - Treating data-hidden as a CSS class rather than a data attribute — visibility is driven by [data-hidden]
+        attribute selectors in CSS
+      - "Not calling both #applyPage and #updateArrows together after mutating #page — skipping either leaves UI out of
+        sync"
+      - "The file is truncated at #applyPage body — assuming the visible.forEach pagination loop is complete without
+        verifying"
+      - Registering the custom element with customElements.define assumes the tag name matches what the Liquid section
+        outputs
+    fix_guidance: Start with the host element's data attributes (data-view, data-hidden) and their corresponding CSS
+      selectors in the theme stylesheet, then verify the Liquid section outputs matching class names and data attributes
+      for cards, pills, arrows, and the toggle track.
+  - file: sections/shade-finder.liquid
+    responsibility: Renders an interactive shade-finder tool with swatch/model image toggle, filter pills by
+      usage/undertone/finish, and a product card grid driven by metaobject data and custom CSS variables.
+    owns:
+      - Shade finder section wrapper with data attributes for JS initialization
+      - CSS custom property declarations scoped to section ID for theming and spacing
+      - Responsive padding scaling (mobile 0.75x, desktop 1x)
+      - Swatches/Models toggle button with aria-checked and role=switch
+      - Filter pill groups for usage, undertone, and finish categories
+      - Screen-reader live region for filter announcements
+      - Heading and CTA block rendering
+      - Metaobject shades source detection flag (has_metaobjects)
+      - Asset loading for section-shade-finder.css and section-shade-finder.js (module)
+    depends_on:
+      js:
+        - assets/section-shade-finder.js
+      css:
+        - assets/section-shade-finder.css
+      snippets: []
+      sections: []
+      metaobjects:
+        - shades (referenced via section.settings.shades)
+    common_mistakes:
+      - Assuming filter pill values (bronzer, blush, highlighter) are dynamic when they are hardcoded in Liquid,
+        requiring template edits to add new categories
+      - Editing only JS or only CSS when the aria-checked toggle logic bridges both files
+      - Overlooking that padding values are multiplied by 0.75 for mobile only in the style block, not in section
+        settings
+      - Treating has_metaobjects as a true metaobject validation when it only checks if the shades setting is non-blank
+      - Missing that default_view drives both the data-view attribute and the aria-checked string replacement chain, so
+        invalid values silently break accessibility state
+      - Forgetting that CSS variables are scoped to the section ID selector, so global overrides will not apply without
+        matching specificity
+    fix_guidance: Start with the data-shade-finder attribute and section-shade-finder.js for behavioral issues; check the
+      scoped CSS custom properties in the inline style block for visual/theming issues; verify section.settings schema
+      in the schema tag (truncated) for missing or renamed settings.
