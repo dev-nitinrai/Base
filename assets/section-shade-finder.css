@@ -1,6 +1,7 @@
 /* ============================================================
    Shade Finder Section
    BEM: .shade-finder as block root
+   Custom element: <shade-finder>
    ============================================================ */
 
 shade-finder,
@@ -26,19 +27,19 @@ shade-finder,
   line-height: 1.1;
   color: var(--sf-heading-color, #1a1a1a);
   letter-spacing: -0.01em;
+  margin: 0;
 }
 
-/* ── Controls row (toggle + filters) ── */
+/* ── Controls row: toggle left, filters right ── */
 .shade-finder__controls {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  flex-wrap: wrap;
   gap: 20px 32px;
   margin-block-end: 36px;
 }
 
-/* ── Toggle ── */
+/* ── Toggle (Swatches / Models) ── */
 .shade-finder__toggle {
   display: flex;
   align-items: center;
@@ -53,6 +54,7 @@ shade-finder,
   letter-spacing: 0.02em;
   cursor: pointer;
   user-select: none;
+  white-space: nowrap;
 }
 
 .shade-finder__toggle-track {
@@ -95,21 +97,20 @@ shade-finder,
   transform: translateX(22px);
 }
 
-/* ── Filter groups ── */
+/* ── Filter groups container: two groups side by side ── */
 .shade-finder__filters {
   display: flex;
+  flex-direction: row;
   align-items: flex-start;
-  flex-wrap: wrap;
-  gap: 16px 48px;
-  flex: 1;
-  justify-content: flex-end;
+  gap: 40px;
+  flex-shrink: 0;
 }
 
+/* Each filter group: label + pill row stacked vertically */
 .shade-finder__filter-group {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .shade-finder__filter-label {
@@ -119,7 +120,16 @@ shade-finder,
   color: var(--sf-text-color, #1a1a1a);
   text-transform: uppercase;
   white-space: nowrap;
-  margin-inline-end: 4px;
+  line-height: 1;
+}
+
+/* Pill row: all pills in one horizontal line */
+.shade-finder__pill-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 8px;
+  align-items: center;
 }
 
 .shade-finder__pill {
@@ -139,6 +149,7 @@ shade-finder,
   transition: background-color 0.2s ease, color 0.2s ease;
   white-space: nowrap;
   line-height: 1;
+  flex-shrink: 0;
 }
 
 .shade-finder__pill:hover {
@@ -150,20 +161,24 @@ shade-finder,
   outline-offset: 2px;
 }
 
-.shade-finder__pill[aria-pressed="true"] {
+.shade-finder__pill[aria-pressed="true"],
+.shade-finder__pill--active[aria-pressed="true"] {
   background-color: var(--sf-pill-active-bg, #000);
   color: var(--sf-pill-active-text, #fff);
   border-color: var(--sf-pill-active-bg, #000);
 }
 
-/* ── Grid wrapper with arrow nav ── */
+/* ── Grid wrapper: arrows positioned outside the grid ── */
 .shade-finder__grid-wrapper {
   position: relative;
+  /* Horizontal padding makes room for the absolute-positioned arrows */
+  padding-inline: 56px;
+  margin-block-start: 8px;
 }
 
 .shade-finder__arrow {
   position: absolute;
-  top: 50%;
+  top: 40%;
   transform: translateY(-50%);
   z-index: 2;
   display: flex;
@@ -175,9 +190,10 @@ shade-finder,
   border: none;
   cursor: pointer;
   color: var(--sf-text-color, #1a1a1a);
-  font-size: 2rem;
   padding: 0;
   transition: opacity 0.2s ease;
+  min-width: 44px;
+  min-height: 44px;
 }
 
 .shade-finder__arrow:focus-visible {
@@ -192,16 +208,16 @@ shade-finder,
 }
 
 .shade-finder__arrow--prev {
-  left: -44px;
+  left: 0;
 }
 
 .shade-finder__arrow--next {
-  right: -44px;
+  right: 0;
 }
 
 .shade-finder__arrow svg {
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   stroke: currentColor;
   fill: none;
   stroke-width: 2;
@@ -209,12 +225,11 @@ shade-finder,
   stroke-linejoin: round;
 }
 
-/* ── Card grid ── */
+/* ── Card grid: 4-up desktop ── */
 .shade-finder__grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: var(--sf-card-gap, 24px);
-  overflow: hidden;
 }
 
 /* ── Individual card ── */
@@ -247,6 +262,7 @@ shade-finder,
   transition: opacity 0.3s ease;
 }
 
+/* Swatch image hidden by default; model image shown */
 .shade-finder__card-img--swatch {
   opacity: 0;
 }
@@ -255,7 +271,7 @@ shade-finder,
   opacity: 1;
 }
 
-/* When view is swatches */
+/* When view is swatches: swap visibility */
 .shade-finder[data-view="swatches"] .shade-finder__card-img--swatch {
   opacity: 1;
 }
@@ -272,6 +288,7 @@ shade-finder,
   text-align: center;
   color: var(--sf-text-color, #1a1a1a);
   line-height: 1.2;
+  margin: 0;
 }
 
 .shade-finder__card-desc {
@@ -281,6 +298,7 @@ shade-finder,
   color: var(--sf-text-color, #1a1a1a);
   line-height: 1.5;
   max-width: 240px;
+  margin: 0;
 }
 
 /* ── Empty state ── */
@@ -293,9 +311,10 @@ shade-finder,
   opacity: 0.6;
 }
 
-/* ── CTA row ── */
+/* ── CTA row: right-aligned ── */
 .shade-finder__cta-row {
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: flex-end;
   gap: 16px;
@@ -306,6 +325,7 @@ shade-finder,
   font-size: 1.5rem;
   font-weight: 400;
   color: var(--sf-text-color, #1a1a1a);
+  white-space: nowrap;
 }
 
 .shade-finder__cta-btn {
@@ -324,6 +344,7 @@ shade-finder,
   cursor: pointer;
   transition: opacity 0.2s ease;
   white-space: nowrap;
+  line-height: 1;
 }
 
 .shade-finder__cta-btn:hover {
@@ -346,7 +367,7 @@ shade-finder,
   flex-shrink: 0;
 }
 
-/* ── Placeholder (no image) ── */
+/* ── Placeholder (no image configured) ── */
 .shade-finder__card-placeholder {
   position: absolute;
   inset: 0;
@@ -356,66 +377,78 @@ shade-finder,
   background-color: #ddd8d3;
 }
 
-.shade-finder__card-placeholder svg {
-  width: 48px;
-  height: 48px;
-  opacity: 0.35;
-  stroke: #555;
-  fill: none;
-  stroke-width: 1.5;
+.shade-finder__placeholder-svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-/* ── Responsive ── */
+/* ── Tablet: 2-up grid ── */
 @media screen and (max-width: 1023px) {
-  .shade-finder__arrow--prev {
-    left: -32px;
-  }
-  .shade-finder__arrow--next {
-    right: -32px;
+  .shade-finder__grid-wrapper {
+    padding-inline: 48px;
   }
 
   .shade-finder__grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .shade-finder__filters {
-    justify-content: flex-start;
-  }
-
   .shade-finder__controls {
     flex-direction: column;
     align-items: flex-start;
+    gap: 16px;
+  }
+
+  .shade-finder__filters {
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .shade-finder__pill-row {
+    flex-wrap: wrap;
   }
 }
 
+/* ── Mobile: 1-up grid ── */
 @media screen and (max-width: 767px) {
-  .shade-finder__arrow--prev {
-    left: -28px;
+  .shade-finder__header {
+    margin-block-end: 28px;
   }
-  .shade-finder__arrow--next {
-    right: -28px;
+
+  .shade-finder__heading {
+    font-size: clamp(2.8rem, 8vw, 4rem);
+  }
+
+  .shade-finder__grid-wrapper {
+    padding-inline: 40px;
   }
 
   .shade-finder__grid {
     grid-template-columns: repeat(1, 1fr);
   }
 
-  .shade-finder__filter-group {
-    flex-wrap: wrap;
+  .shade-finder__filters {
+    flex-direction: column;
+    gap: 16px;
   }
 
   .shade-finder__cta-row {
     flex-direction: column;
     align-items: flex-end;
+    gap: 12px;
   }
 }
 
 @media screen and (max-width: 479px) {
-  .shade-finder__arrow--prev {
-    left: -24px;
+  .shade-finder__grid-wrapper {
+    padding-inline: 36px;
   }
-  .shade-finder__arrow--next {
-    right: -24px;
+
+  .shade-finder__arrow {
+    min-width: 36px;
+    min-height: 36px;
+    width: 36px;
+    height: 36px;
   }
 }
 

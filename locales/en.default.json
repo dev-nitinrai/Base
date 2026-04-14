@@ -281,6 +281,22 @@
       "close_tooltip": "Close",
       "previous": "Previous slide",
       "next": "Next slide"
+    },
+    "shade_finder": {
+      "usage": "USAGE",
+      "skin_tone": "SKIN TONE",
+      "all": "ALL",
+      "bronzer": "BRONZER",
+      "blush": "BLUSH",
+      "highlighter": "HIGHLIGHTER",
+      "color_correct": "COLOR CORRECT",
+      "light": "LIGHT",
+      "medium": "MEDIUM",
+      "dark": "DARK",
+      "prev": "Previous shades",
+      "next": "Next shades",
+      "grid_label": "Shade cards",
+      "no_results": "No shades match the selected filters."
     }
   },
   "products": {

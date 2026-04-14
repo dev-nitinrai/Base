@@ -1,5 +1,5 @@
 {{ 'section-shade-finder.css' | asset_url | stylesheet_tag }}
-<script src="{{ 'section-shade-finder.js' | asset_url }}" type="module"></script>
+<script src="{{ 'section-shade-finder.js' | asset_url }}" defer="defer"></script>
 
 {%- liquid
   assign heading           = section.settings.heading
@@ -49,10 +49,14 @@
   }
 </style>
 
-<section
+{%- comment -%}
+  The root element MUST be <shade-finder> so the custom element JS class
+  (registered via customElements.define('shade-finder', ShadeFinder)) fires
+  connectedCallback and wires up all interactivity.
+{%- endcomment -%}
+<shade-finder
   id="shade-finder-{{ section.id }}"
   class="shade-finder"
-  data-shade-finder
   data-section-id="{{ section.id }}"
   data-default-view="{{ default_view }}"
   data-view="{{ default_view }}"
@@ -63,16 +67,16 @@
     <span class="shade-finder__sr-announce visually-hidden" aria-live="polite" aria-atomic="true"></span>
 
     {%- comment -%} ── Heading ── {%- endcomment -%}
-    <div class="shade-finder__header">
-      {%- if heading != blank -%}
+    {%- if heading != blank -%}
+      <div class="shade-finder__header">
         <h2 class="shade-finder__heading">{{ heading | escape }}</h2>
-      {%- endif -%}
-    </div>
+      </div>
+    {%- endif -%}
 
     {%- comment -%} ── Controls: toggle + filter pills ── {%- endcomment -%}
     <div class="shade-finder__controls">
 
-      {%- comment -%} Swatches / Models toggle {%- endcomment -%}
+      {%- comment -%} Swatches / Models toggle — top-left {%- endcomment -%}
       <div class="shade-finder__toggle" role="group" aria-label="Image view">
         <span
           class="shade-finder__toggle-label"
@@ -83,8 +87,8 @@
         <button
           class="shade-finder__toggle-track"
           role="switch"
-          aria-checked="{{ default_view | default: 'models' | downcase | replace: 'models', 'true' | replace: 'swatches', 'false' }}"
-          aria-label="{{ 'Toggle between ' | append: label_swatches | append: ' and ' | append: label_models }}"
+          aria-checked="{{ default_view | downcase | replace: 'models', 'true' | replace: 'swatches', 'false' }}"
+          aria-label="Toggle between {{ label_swatches | escape }} and {{ label_models | escape }}"
         >
           <span class="shade-finder__toggle-thumb"></span>
         </button>
@@ -96,26 +100,30 @@
         >{{ label_models | escape }}</span>
       </div>
 
-      {%- comment -%} Filter groups {%- endcomment -%}
+      {%- comment -%} Filter groups — right side, two groups side by side {%- endcomment -%}
       <div class="shade-finder__filters" role="group" aria-label="Filter shades">
 
         {%- comment -%} USAGE filter {%- endcomment -%}
-        <div class="shade-finder__filter-group" role="group" aria-label="Filter by usage">
-          <span class="shade-finder__filter-label" aria-hidden="true">{{ 'sections.shade_finder.usage' | t | default: 'Usage' }}</span>
-          <button class="shade-finder__pill" data-group="usage" data-value="all" aria-pressed="true">{{ 'sections.shade_finder.all' | t | default: 'All' }}</button>
-          <button class="shade-finder__pill" data-group="usage" data-value="bronzer" aria-pressed="false">{{ 'sections.shade_finder.bronzer' | t | default: 'Bronzer' }}</button>
-          <button class="shade-finder__pill" data-group="usage" data-value="blush" aria-pressed="false">{{ 'sections.shade_finder.blush' | t | default: 'Blush' }}</button>
-          <button class="shade-finder__pill" data-group="usage" data-value="highlighter" aria-pressed="false">{{ 'sections.shade_finder.highlighter' | t | default: 'Highlighter' }}</button>
-          <button class="shade-finder__pill" data-group="usage" data-value="color_correct" aria-pressed="false">{{ 'sections.shade_finder.color_correct' | t | default: 'Color Correct' }}</button>
+        <div class="shade-finder__filter-group" role="group" aria-labelledby="sf-usage-label-{{ section.id }}">
+          <span id="sf-usage-label-{{ section.id }}" class="shade-finder__filter-label">USAGE</span>
+          <div class="shade-finder__pill-row">
+            <button class="shade-finder__pill shade-finder__pill--active" data-group="usage" data-value="all" aria-pressed="true">ALL</button>
+            <button class="shade-finder__pill" data-group="usage" data-value="bronzer" aria-pressed="false">BRONZER</button>
+            <button class="shade-finder__pill" data-group="usage" data-value="blush" aria-pressed="false">BLUSH</button>
+            <button class="shade-finder__pill" data-group="usage" data-value="highlighter" aria-pressed="false">HIGHLIGHTER</button>
+            <button class="shade-finder__pill" data-group="usage" data-value="color_correct" aria-pressed="false">COLOR CORRECT</button>
+          </div>
         </div>
 
         {%- comment -%} SKIN TONE filter {%- endcomment -%}
-        <div class="shade-finder__filter-group" role="group" aria-label="Filter by skin tone">
-          <span class="shade-finder__filter-label" aria-hidden="true">{{ 'sections.shade_finder.skin_tone' | t | default: 'Skin Tone' }}</span>
-          <button class="shade-finder__pill" data-group="tone" data-value="all" aria-pressed="true">{{ 'sections.shade_finder.all' | t | default: 'All' }}</button>
-          <button class="shade-finder__pill" data-group="tone" data-value="light" aria-pressed="false">{{ 'sections.shade_finder.light' | t | default: 'Light' }}</button>
-          <button class="shade-finder__pill" data-group="tone" data-value="medium" aria-pressed="false">{{ 'sections.shade_finder.medium' | t | default: 'Medium' }}</button>
-          <button class="shade-finder__pill" data-group="tone" data-value="dark" aria-pressed="false">{{ 'sections.shade_finder.dark' | t | default: 'Dark' }}</button>
+        <div class="shade-finder__filter-group" role="group" aria-labelledby="sf-tone-label-{{ section.id }}">
+          <span id="sf-tone-label-{{ section.id }}" class="shade-finder__filter-label">SKIN TONE</span>
+          <div class="shade-finder__pill-row">
+            <button class="shade-finder__pill shade-finder__pill--active" data-group="tone" data-value="all" aria-pressed="true">ALL</button>
+            <button class="shade-finder__pill" data-group="tone" data-value="light" aria-pressed="false">LIGHT</button>
+            <button class="shade-finder__pill" data-group="tone" data-value="medium" aria-pressed="false">MEDIUM</button>
+            <button class="shade-finder__pill" data-group="tone" data-value="dark" aria-pressed="false">DARK</button>
+          </div>
         </div>
 
       </div>
@@ -127,21 +135,16 @@
       {%- if show_arrows -%}
         <button
           class="shade-finder__arrow shade-finder__arrow--prev"
-          aria-label="{{ 'sections.shade_finder.prev' | t | default: 'Previous shades' }}"
+          aria-label="Previous shades"
           aria-disabled="true"
         >
-          <svg viewBox="0 0 24 24" aria-hidden="true">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
             <polyline points="15 18 9 12 15 6"></polyline>
           </svg>
         </button>
       {%- endif -%}
 
-      <div class="shade-finder__grid" role="list" aria-label="{{ 'sections.shade_finder.grid_label' | t | default: 'Shade cards' }}">
-
-        {%- comment -%}
-          Render from metaobject list when configured, otherwise fall back to
-          the 4 hardcoded sample shades so the section is never empty.
-        {%- endcomment -%}
+      <div class="shade-finder__grid" role="list" aria-label="Shade cards">
 
         {%- if has_metaobjects -%}
 
@@ -179,7 +182,7 @@
                   >
                 {%- else -%}
                   <div class="shade-finder__card-img shade-finder__card-img--model shade-finder__card-placeholder" aria-hidden="true">
-                    <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                    {{ 'lifestyle-1' | placeholder_svg_tag: 'shade-finder__placeholder-svg' }}
                   </div>
                 {%- endif -%}
 
@@ -196,7 +199,7 @@
                   >
                 {%- else -%}
                   <div class="shade-finder__card-img shade-finder__card-img--swatch shade-finder__card-placeholder" aria-hidden="true">
-                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg>
+                    {{ 'product-1' | placeholder_svg_tag: 'shade-finder__placeholder-svg' }}
                   </div>
                 {%- endif -%}
               </div>
@@ -225,10 +228,10 @@
           >
             <div class="shade-finder__card-image-wrap">
               <div class="shade-finder__card-img shade-finder__card-img--model shade-finder__card-placeholder" aria-hidden="true">
-                <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                {{ 'lifestyle-1' | placeholder_svg_tag: 'shade-finder__placeholder-svg' }}
               </div>
               <div class="shade-finder__card-img shade-finder__card-img--swatch shade-finder__card-placeholder" aria-hidden="true">
-                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg>
+                {{ 'product-1' | placeholder_svg_tag: 'shade-finder__placeholder-svg' }}
               </div>
             </div>
             <h3 class="shade-finder__card-name">AU NATUREL</h3>
@@ -244,10 +247,10 @@
           >
             <div class="shade-finder__card-image-wrap">
               <div class="shade-finder__card-img shade-finder__card-img--model shade-finder__card-placeholder" aria-hidden="true">
-                <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                {{ 'lifestyle-2' | placeholder_svg_tag: 'shade-finder__placeholder-svg' }}
               </div>
               <div class="shade-finder__card-img shade-finder__card-img--swatch shade-finder__card-placeholder" aria-hidden="true">
-                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg>
+                {{ 'product-2' | placeholder_svg_tag: 'shade-finder__placeholder-svg' }}
               </div>
             </div>
             <h3 class="shade-finder__card-name">HAPPY HOUR</h3>
@@ -263,10 +266,10 @@
           >
             <div class="shade-finder__card-image-wrap">
               <div class="shade-finder__card-img shade-finder__card-img--model shade-finder__card-placeholder" aria-hidden="true">
-                <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                {{ 'lifestyle-1' | placeholder_svg_tag: 'shade-finder__placeholder-svg' }}
               </div>
               <div class="shade-finder__card-img shade-finder__card-img--swatch shade-finder__card-placeholder" aria-hidden="true">
-                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg>
+                {{ 'product-3' | placeholder_svg_tag: 'shade-finder__placeholder-svg' }}
               </div>
             </div>
             <h3 class="shade-finder__card-name">MAGIC HOUR</h3>
@@ -282,10 +285,10 @@
           >
             <div class="shade-finder__card-image-wrap">
               <div class="shade-finder__card-img shade-finder__card-img--model shade-finder__card-placeholder" aria-hidden="true">
-                <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                {{ 'lifestyle-2' | placeholder_svg_tag: 'shade-finder__placeholder-svg' }}
               </div>
               <div class="shade-finder__card-img shade-finder__card-img--swatch shade-finder__card-placeholder" aria-hidden="true">
-                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg>
+                {{ 'product-4' | placeholder_svg_tag: 'shade-finder__placeholder-svg' }}
               </div>
             </div>
             <h3 class="shade-finder__card-name">GOLDEN HOUR</h3>
@@ -294,17 +297,17 @@
 
         {%- endif -%}
 
-        <p class="shade-finder__empty" hidden>{{ 'sections.shade_finder.no_results' | t | default: 'No shades match the selected filters.' }}</p>
+        <p class="shade-finder__empty" hidden>No shades match the selected filters.</p>
 
       </div>
 
       {%- if show_arrows -%}
         <button
           class="shade-finder__arrow shade-finder__arrow--next"
-          aria-label="{{ 'sections.shade_finder.next' | t | default: 'Next shades' }}"
+          aria-label="Next shades"
           aria-disabled="false"
         >
-          <svg viewBox="0 0 24 24" aria-hidden="true">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
             <polyline points="9 18 15 12 9 6"></polyline>
           </svg>
         </button>
@@ -322,24 +325,24 @@
           {%- if cta_url != blank -%}
             <a href="{{ cta_url }}" class="shade-finder__cta-btn">
               {{ cta_text | escape }}
-              <svg viewBox="0 0 24 24" aria-hidden="true">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <polyline points="9 18 15 12 9 6"></polyline>
               </svg>
             </a>
           {%- else -%}
-            <span class="shade-finder__cta-btn" role="presentation">
+            <button class="shade-finder__cta-btn" type="button">
               {{ cta_text | escape }}
-              <svg viewBox="0 0 24 24" aria-hidden="true">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <polyline points="9 18 15 12 9 6"></polyline>
               </svg>
-            </span>
+            </button>
           {%- endif -%}
         {%- endif -%}
       </div>
     {%- endif -%}
 
   </div>
-</section>
+</shade-finder>
 
 {% schema %}
 {
