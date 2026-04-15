@@ -3655,6 +3655,103 @@ sections:
       - slideshow.liquid
       - product-recommendations.liquid
       - multicolumn.liquid
+  - file: sections/shade-finder.liquid
+    name: shade-finder
+    label: Shade Finder
+    visual_role: Shade Finder section
+    settings:
+      - type: header
+      - id: heading
+        type: text
+        label: Heading
+      - id: toggle_label_left
+        type: text
+        label: Toggle label — left (swatches)
+      - id: toggle_label_right
+        type: text
+        label: Toggle label — right (models)
+      - id: usage_label
+        type: text
+        label: Usage filter label
+      - id: usage_filters
+        type: text
+        label: Usage filter options (comma-separated)
+      - id: skin_tone_label
+        type: text
+        label: Skin tone filter label
+      - id: skin_tone_filters
+        type: text
+        label: Skin tone filter options (comma-separated)
+      - id: filter_all_label
+        type: text
+        label: All filter button label
+      - type: header
+      - id: cta_label
+        type: text
+        label: CTA prefix text
+      - id: cta_button_text
+        type: text
+        label: CTA button text
+      - id: cta_url
+        type: url
+        label: CTA button link
+      - type: header
+      - id: padding_top
+        type: range
+        label: Top padding
+      - id: padding_bottom
+        type: range
+        label: Bottom padding
+    blocks:
+      - type: shade
+        name: Shade
+        settings:
+          - shade_name
+          - shade_description
+          - model_image
+          - swatch_image
+          - usage
+          - skin_tone
+    max_blocks: null
+    templates_allowed:
+      - "*"
+    presets:
+      - Shade Finder
+    uses_image: true
+    uses_video: false
+    uses_slider: true
+    uses_grid: false
+    uses_tabs: false
+    uses_accordion: false
+    uses_form: false
+    layout_type: block
+    mockup_keywords:
+      - shade finder
+      - color filter
+      - skin tone
+      - beauty
+      - toggle switch
+      - product filter
+      - makeup
+      - swatch
+      - filter buttons
+      - cosmetics
+    when_to_use: Use this section when a mockup shows an interactive shade or color finder tool with toggle, filter buttons
+      for usage type and skin tone, typically for beauty or cosmetics product pages.
+    when_to_create_new: Create a new section if the mockup requires a quiz-based shade finder, visual swatch grid without
+      filter buttons, or a non-beauty product filtering UI that does not include a toggle and dual filter groups.
+    requires_new_section_if:
+      - Mockup includes a multi-step quiz or questionnaire flow instead of filter buttons
+      - Mockup requires visual color swatches as filter selectors rather than text buttons
+      - Mockup needs more than two filter group categories (usage and skin tone)
+      - Mockup includes product cards or results displayed inline without a separate shade grid
+      - Mockup requires video or AR-based shade try-on functionality
+      - Mockup uses a horizontal slider or range input for shade selection rather than discrete buttons
+    similar_sections:
+      - section-product-filter.liquid
+      - section-color-swatches.liquid
+      - section-collection-filter.liquid
+      - section-product-recommendations.liquid
 snippets:
   - file: snippets/component-article-card.liquid
     name: component-article-card
@@ -4487,3 +4584,6 @@ assets:
     - file: assets/swiper7.4.1.min.css
       name: swiper7.4.1.min.css
       size_lines: 13
+    - file: assets/section-shade-finder.css
+      name: section-shade-finder.css
+      size_lines: 436

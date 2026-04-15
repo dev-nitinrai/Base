@@ -179,12 +179,75 @@
         "title": "Product Highlights Title",
         "description": "Product Highlights description will appear here."
       }
+    },
+    "shade_finder_main": {
+      "type": "shade-finder",
+      "blocks": {
+        "shade_au_naturel": {
+          "type": "shade",
+          "settings": {
+            "shade_name": "AU NATUREL",
+            "shade_description": "is a clear balm with subtle opal pearl for all skin tones",
+            "usage": "Blush",
+            "skin_tone": "Light"
+          }
+        },
+        "shade_happy_hour": {
+          "type": "shade",
+          "settings": {
+            "shade_name": "HAPPY HOUR",
+            "shade_description": "a cool sheer pink with silver shimmer for fair to medium tan skin tones",
+            "usage": "Blush",
+            "skin_tone": "Light"
+          }
+        },
+        "shade_magic_hour": {
+          "type": "shade",
+          "settings": {
+            "shade_name": "MAGIC HOUR",
+            "shade_description": "is a cool, sheer bronze with silver shimmer for light to medium-dark skin",
+            "usage": "Highlighter",
+            "skin_tone": "Dark"
+          }
+        },
+        "shade_golden_hour": {
+          "type": "shade",
+          "settings": {
+            "shade_name": "GOLDEN HOUR",
+            "shade_description": "is a warm, sheer gold with multidimensional shimmer for all skin tones",
+            "usage": "Highlighter",
+            "skin_tone": "Dark"
+          }
+        }
+      },
+      "block_order": [
+        "shade_au_naturel",
+        "shade_happy_hour",
+        "shade_magic_hour",
+        "shade_golden_hour"
+      ],
+      "name": "Shade Finder",
+      "settings": {
+        "heading": "What Shade Am I?",
+        "toggle_label_left": "Swatches",
+        "toggle_label_right": "Models",
+        "usage_label": "USAGE",
+        "usage_filters": "Bronzer, Blush, Highlighter, Color Correct",
+        "skin_tone_label": "SKIN TONE",
+        "skin_tone_filters": "Light, Medium, Dark",
+        "filter_all_label": "ALL",
+        "cta_label": "Still Not Sure?",
+        "cta_button_text": "FIND MY SHADE",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
     }
   },
   "order": [
     "hero_1",
     "featured_collections_hhETJ9",
     "selling_points_v2_6NgzaK",
-    "product_highlights_gUaG6E"
+    "product_highlights_gUaG6E",
+    "shade_finder_main"
   ]
 }

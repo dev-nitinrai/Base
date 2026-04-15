@@ -1,0 +1,435 @@
+.shade-finder {
+  background-color: #f0eeeb;
+}
+
+.shade-finder__inner {
+  max-width: 1400px;
+  margin-inline: auto;
+  padding-inline: 40px;
+}
+
+.shade-finder__top-bar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+
+.shade-finder__toggle-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: #1a1a1a;
+  padding-top: 4px;
+  width: 160px;
+  flex-shrink: 0;
+}
+
+.shade-finder__toggle {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.shade-finder__toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.shade-finder__toggle-slider {
+  position: absolute;
+  inset: 0;
+  background-color: #c8c4be;
+  border-radius: 24px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.shade-finder__toggle-slider::before {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  left: 3px;
+  top: 3px;
+  background-color: #fff;
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+}
+
+.shade-finder__toggle input:checked + .shade-finder__toggle-slider {
+  background-color: #1a1a1a;
+}
+
+.shade-finder__toggle input:checked + .shade-finder__toggle-slider::before {
+  transform: translateX(20px);
+}
+
+.shade-finder__toggle input:focus-visible + .shade-finder__toggle-slider {
+  outline: 2px solid #1a1a1a;
+  outline-offset: 2px;
+}
+
+.shade-finder__heading {
+  font-family: var(--font-heading-family);
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 400;
+  font-style: normal;
+  color: #1a1a1a;
+  text-align: center;
+  line-height: 1.1;
+  margin: 0;
+  flex: 1;
+}
+
+.shade-finder__top-bar-spacer {
+  width: 160px;
+  flex-shrink: 0;
+}
+
+.shade-finder__filters {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.shade-finder__filter-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.shade-finder__filter-label {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #1a1a1a;
+  text-transform: uppercase;
+  margin-right: 4px;
+  white-space: nowrap;
+}
+
+.shade-finder__filter-group-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.shade-finder__filter-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border: 1.5px solid #1a1a1a;
+  background-color: transparent;
+  color: #1a1a1a;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  white-space: nowrap;
+  line-height: 1;
+  min-height: 36px;
+}
+
+.shade-finder__filter-btn:hover {
+  background-color: #1a1a1a;
+  color: #fff;
+}
+
+.shade-finder__filter-btn[aria-pressed="true"],
+.shade-finder__filter-btn.is-active {
+  background-color: #1a1a1a;
+  color: #fff;
+}
+
+.shade-finder__carousel-wrap {
+  position: relative;
+}
+
+.shade-finder__carousel {
+  overflow: hidden;
+}
+
+.shade-finder__track {
+  display: flex;
+  gap: 20px;
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform;
+}
+
+.shade-finder__slide {
+  flex: 0 0 calc(25% - 15px);
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.shade-finder__image-wrap {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 3 / 4;
+  background-color: #e8e4df;
+}
+
+.shade-finder__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.3s ease;
+}
+
+.shade-finder__img--model {
+  position: absolute;
+  inset: 0;
+}
+
+.shade-finder__img--swatch {
+  position: absolute;
+  inset: 0;
+}
+
+.shade-finder__img-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ddd8d2;
+}
+
+.shade-finder__img-placeholder svg {
+  width: 60px;
+  height: 60px;
+  opacity: 0.4;
+}
+
+.shade-finder__card-body {
+  padding-top: 16px;
+  text-align: center;
+}
+
+.shade-finder__shade-name {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #1a1a1a;
+  margin: 0 0 8px;
+  line-height: 1.2;
+}
+
+.shade-finder__shade-desc {
+  font-size: 13px;
+  font-weight: 400;
+  color: #1a1a1a;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.shade-finder__nav {
+  position: absolute;
+  top: calc(50% - 40px);
+  transform: translateY(-50%);
+  z-index: 2;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1a1a1a;
+  transition: opacity 0.2s ease;
+}
+
+.shade-finder__nav:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+.shade-finder__nav--prev {
+  left: -36px;
+}
+
+.shade-finder__nav--next {
+  right: -36px;
+}
+
+.shade-finder__nav svg {
+  width: 20px;
+  height: 20px;
+}
+
+.shade-finder__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 40px;
+}
+
+.shade-finder__cta-label {
+  font-size: 14px;
+  color: #1a1a1a;
+  font-weight: 400;
+}
+
+.shade-finder__cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  background-color: #1a1a1a;
+  color: #fff;
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.shade-finder__cta-btn-text {
+  padding: 14px 20px;
+}
+
+.shade-finder__cta-btn-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background-color: #333;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.shade-finder__cta-btn:hover .shade-finder__cta-btn-arrow {
+  background-color: #555;
+}
+
+.shade-finder__empty {
+  text-align: center;
+  padding: 60px 20px;
+  font-size: 14px;
+  color: #666;
+  display: none;
+}
+
+.shade-finder__empty.is-visible {
+  display: block;
+}
+
+@media screen and (max-width: 1023px) {
+  .shade-finder__inner {
+    padding-inline: 24px;
+  }
+
+  .shade-finder__slide {
+    flex: 0 0 calc(50% - 10px);
+  }
+
+  .shade-finder__nav--prev {
+    left: -28px;
+  }
+
+  .shade-finder__nav--next {
+    right: -28px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .shade-finder__inner {
+    padding-inline: 20px;
+  }
+
+  .shade-finder__top-bar {
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 24px;
+  }
+
+  .shade-finder__heading {
+    order: 1;
+    margin-bottom: 28px;
+    font-size: clamp(32px, 10vw, 48px);
+  }
+
+  .shade-finder__top-bar-spacer {
+    display: none;
+  }
+
+  .shade-finder__toggle-wrap {
+    order: 3;
+    margin-top: 8px;
+    width: auto;
+  }
+
+  .shade-finder__filters {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    order: 2;
+    width: 100%;
+    margin-bottom: 24px;
+  }
+
+  .shade-finder__filter-group {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    gap: 8px;
+  }
+
+  .shade-finder__filter-group-buttons {
+    width: 100%;
+  }
+
+  .shade-finder__filter-btn {
+    flex: 1 1 calc(50% - 4px);
+    min-width: 0;
+    justify-content: center;
+  }
+
+  .shade-finder__slide {
+    flex: 0 0 calc(85% - 10px);
+  }
+
+  .shade-finder__nav--prev {
+    left: -16px;
+  }
+
+  .shade-finder__nav--next {
+    right: -16px;
+  }
+
+  .shade-finder__footer {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .shade-finder__cta-btn {
+    width: 100%;
+    max-width: 280px;
+    justify-content: center;
+  }
+}
