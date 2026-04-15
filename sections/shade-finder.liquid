@@ -1,0 +1,990 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+  @media screen and (min-width: 1024px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="shade-finder color-{{ section.settings.color_scheme }} section-{{ section.id }}-padding" data-section-id="{{ section.id }}">
+  <div class="shade-finder__inner">
+
+    <div class="shade-finder__top-bar">
+      <div class="shade-finder__toggle-wrap shade-finder__toggle-wrap--desktop">
+        <span class="shade-finder__toggle-label">{{ section.settings.toggle_label_left }}</span>
+        <button
+          type="button"
+          class="shade-finder__toggle"
+          role="switch"
+          aria-checked="false"
+          aria-label="{{ section.settings.toggle_label_left }} / {{ section.settings.toggle_label_right }}"
+          data-shade-toggle
+        >
+          <span class="shade-finder__toggle-thumb"></span>
+        </button>
+        <span class="shade-finder__toggle-label">{{ section.settings.toggle_label_right }}</span>
+      </div>
+
+      <h2 class="shade-finder__heading">{{ section.settings.heading }}</h2>
+    </div>
+
+    <div class="shade-finder__filters">
+      <div class="shade-finder__filter-group">
+        <span class="shade-finder__filter-label">USAGE</span>
+        <div class="shade-finder__filter-pills" role="group" aria-label="Filter by usage" data-filter-group="usage">
+          <button type="button" class="shade-finder__pill shade-finder__pill--active" data-filter-value="all" data-filter-group="usage">ALL</button>
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'usage_filter' -%}
+              <button type="button" class="shade-finder__pill" data-filter-value="{{ block.settings.filter_value | handleize }}" data-filter-group="usage" {{ block.shopify_attributes }}>
+                {{ block.settings.label }}
+              </button>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+
+      <div class="shade-finder__filter-group">
+        <span class="shade-finder__filter-label">SKIN TONE</span>
+        <div class="shade-finder__filter-pills" role="group" aria-label="Filter by skin tone" data-filter-group="skin_tone">
+          <button type="button" class="shade-finder__pill shade-finder__pill--active" data-filter-value="all" data-filter-group="skin_tone">ALL</button>
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'skin_tone_filter' -%}
+              <button type="button" class="shade-finder__pill" data-filter-value="{{ block.settings.filter_value | handleize }}" data-filter-group="skin_tone" {{ block.shopify_attributes }}>
+                {{ block.settings.label }}
+              </button>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+
+    <div class="shade-finder__toggle-wrap shade-finder__toggle-wrap--mobile">
+      <span class="shade-finder__toggle-label">{{ section.settings.toggle_label_left }}</span>
+      <button
+        type="button"
+        class="shade-finder__toggle shade-finder__toggle--mobile"
+        role="switch"
+        aria-checked="false"
+        aria-label="{{ section.settings.toggle_label_left }} / {{ section.settings.toggle_label_right }}"
+        data-shade-toggle
+      >
+        <span class="shade-finder__toggle-thumb"></span>
+      </button>
+      <span class="shade-finder__toggle-label">{{ section.settings.toggle_label_right }}</span>
+    </div>
+
+    <div class="shade-finder__carousel-wrap" data-shade-carousel-wrap>
+      <button type="button" class="shade-finder__nav shade-finder__nav--prev" aria-label="Previous shades" data-shade-prev>
+        <svg width="10" height="18" viewBox="0 0 10 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M9 1L1 9L9 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <div class="shade-finder__carousel" data-shade-carousel>
+        <div class="shade-finder__track" data-shade-track>
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'shade' -%}
+              <div
+                class="shade-finder__card"
+                data-usage="{{ block.settings.usage_tag | handleize }}"
+                data-skin-tone="{{ block.settings.skin_tone_tag | handleize }}"
+                {{ block.shopify_attributes }}
+              >
+                <div class="shade-finder__card-image-wrap">
+                  {%- if block.settings.model_image != blank -%}
+                    <img
+                      class="shade-finder__card-img shade-finder__card-img--model"
+                      src="{{ block.settings.model_image | image_url: width: 600 }}"
+                      srcset="
+                        {{ block.settings.model_image | image_url: width: 400 }} 400w,
+                        {{ block.settings.model_image | image_url: width: 600 }} 600w,
+                        {{ block.settings.model_image | image_url: width: 800 }} 800w
+                      "
+                      sizes="(min-width: 1024px) 25vw, 80vw"
+                      alt="{{ block.settings.model_image.alt | default: block.settings.shade_name | escape }}"
+                      loading="lazy"
+                      width="{{ block.settings.model_image.width }}"
+                      height="{{ block.settings.model_image.height }}"
+                    >
+                  {%- else -%}
+                    <div class="shade-finder__card-placeholder shade-finder__card-img--model">
+                      {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+                    </div>
+                  {%- endif -%}
+
+                  {%- if block.settings.swatch_image != blank -%}
+                    <img
+                      class="shade-finder__card-img shade-finder__card-img--swatch"
+                      src="{{ block.settings.swatch_image | image_url: width: 600 }}"
+                      srcset="
+                        {{ block.settings.swatch_image | image_url: width: 400 }} 400w,
+                        {{ block.settings.swatch_image | image_url: width: 600 }} 600w,
+                        {{ block.settings.swatch_image | image_url: width: 800 }} 800w
+                      "
+                      sizes="(min-width: 1024px) 25vw, 80vw"
+                      alt="{{ block.settings.swatch_image.alt | default: block.settings.shade_name | escape }}"
+                      loading="lazy"
+                      width="{{ block.settings.swatch_image.width }}"
+                      height="{{ block.settings.swatch_image.height }}"
+                    >
+                  {%- else -%}
+                    <div class="shade-finder__card-placeholder shade-finder__card-img--swatch">
+                      {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+                    </div>
+                  {%- endif -%}
+                </div>
+
+                <div class="shade-finder__card-info">
+                  <h3 class="shade-finder__card-name">{{ block.settings.shade_name }}</h3>
+                  <p class="shade-finder__card-desc">{{ block.settings.shade_description }}</p>
+                </div>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+
+      <button type="button" class="shade-finder__nav shade-finder__nav--next" aria-label="Next shades" data-shade-next>
+        <svg width="10" height="18" viewBox="0 0 10 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M1 1L9 9L1 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="shade-finder__cta-row">
+      <span class="shade-finder__cta-text">{{ section.settings.cta_label }}</span>
+      <a href="{{ section.settings.cta_url }}" class="shade-finder__cta-btn">
+        <span>{{ section.settings.cta_button_text }}</span>
+        <span class="shade-finder__cta-arrow" aria-hidden="true">
+          <svg width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 1L7 7L1 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </a>
+    </div>
+
+  </div>
+</div>
+
+{% stylesheet %}
+.shade-finder {
+  background-color: #f0eeeb;
+  font-family: var(--font-body-family, sans-serif);
+}
+
+.shade-finder__inner {
+  max-width: 1400px;
+  margin-inline: auto;
+  padding-inline: 40px;
+  padding-block: 48px 56px;
+}
+
+.shade-finder__top-bar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: flex-start;
+  margin-bottom: 40px;
+}
+
+.shade-finder__toggle-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  grid-column: 1;
+  padding-top: 6px;
+}
+
+.shade-finder__toggle-wrap--mobile {
+  display: none;
+}
+
+.shade-finder__toggle-label {
+  font-size: 13px;
+  font-weight: 400;
+  color: #1a1a1a;
+  letter-spacing: 0.01em;
+}
+
+.shade-finder__toggle {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  background-color: #c8c4be;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  padding: 0;
+  transition: background-color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.shade-finder__toggle[aria-checked="true"] {
+  background-color: #1a1a1a;
+}
+
+.shade-finder__toggle-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+  pointer-events: none;
+}
+
+.shade-finder__toggle[aria-checked="true"] .shade-finder__toggle-thumb {
+  transform: translateX(20px);
+}
+
+.shade-finder__heading {
+  grid-column: 2;
+  font-family: var(--font-heading-family, Georgia, serif);
+  font-size: clamp(32px, 4vw, 56px);
+  font-weight: 400;
+  color: #1a1a1a;
+  text-align: center;
+  margin: 0;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.shade-finder__filters {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.shade-finder__filter-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.shade-finder__filter-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1a1a1a;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+.shade-finder__filter-pills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.shade-finder__pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border: 1.5px solid #1a1a1a;
+  background-color: transparent;
+  color: #1a1a1a;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  white-space: nowrap;
+  font-family: var(--font-body-family, sans-serif);
+}
+
+.shade-finder__pill:hover {
+  background-color: #1a1a1a;
+  color: #ffffff;
+}
+
+.shade-finder__pill--active {
+  background-color: #1a1a1a;
+  color: #ffffff;
+}
+
+.shade-finder__carousel-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 48px;
+}
+
+.shade-finder__nav {
+  position: absolute;
+  top: 38%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1a1a1a;
+  padding: 0;
+  transition: opacity 0.2s ease;
+}
+
+.shade-finder__nav:hover {
+  opacity: 0.6;
+}
+
+.shade-finder__nav--prev {
+  left: -32px;
+}
+
+.shade-finder__nav--next {
+  right: -32px;
+}
+
+.shade-finder__nav[disabled] {
+  opacity: 0.25;
+  cursor: default;
+}
+
+.shade-finder__carousel {
+  overflow: hidden;
+  width: 100%;
+}
+
+.shade-finder__track {
+  display: flex;
+  gap: 20px;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.shade-finder__card {
+  flex: 0 0 calc(25% - 15px);
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.shade-finder__card[data-hidden] {
+  display: none;
+}
+
+.shade-finder__card-image-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.shade-finder__card-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.3s ease;
+}
+
+.shade-finder__card-img--swatch {
+  opacity: 0;
+}
+
+.shade-finder__card-placeholder {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #e0ddd8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.shade-finder__card-placeholder .placeholder-svg {
+  width: 60%;
+  height: 60%;
+  opacity: 0.3;
+}
+
+.shade-finder--show-swatches .shade-finder__card-img--model {
+  opacity: 0;
+}
+
+.shade-finder--show-swatches .shade-finder__card-img--swatch {
+  opacity: 1;
+}
+
+.shade-finder__card-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a1a1a;
+  letter-spacing: 0.06em;
+  margin: 0 0 8px;
+  text-transform: uppercase;
+}
+
+.shade-finder__card-desc {
+  font-size: 13px;
+  font-weight: 400;
+  color: #1a1a1a;
+  line-height: 1.5;
+  margin: 0;
+  max-width: 220px;
+}
+
+.shade-finder__cta-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+}
+
+.shade-finder__cta-text {
+  font-size: 15px;
+  color: #1a1a1a;
+  font-weight: 400;
+}
+
+.shade-finder__cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.shade-finder__cta-btn:hover {
+  background-color: #333333;
+}
+
+.shade-finder__cta-btn span:first-child {
+  padding: 14px 20px;
+}
+
+.shade-finder__cta-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-left: 1px solid rgba(255,255,255,0.3);
+  flex-shrink: 0;
+}
+
+@media screen and (max-width: 1023px) {
+  .shade-finder__inner {
+    padding-inline: 24px;
+  }
+
+  .shade-finder__top-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 32px;
+  }
+
+  .shade-finder__toggle-wrap--desktop {
+    display: none;
+  }
+
+  .shade-finder__heading {
+    order: 1;
+    margin-bottom: 0;
+  }
+
+  .shade-finder__filters {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .shade-finder__filter-group {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .shade-finder__filter-pills {
+    gap: 8px;
+    width: 100%;
+  }
+
+  .shade-finder__pill {
+    flex: 1 1 auto;
+    min-width: 80px;
+    justify-content: center;
+  }
+
+  .shade-finder__toggle-wrap--mobile {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 24px;
+  }
+
+  .shade-finder__card {
+    flex: 0 0 calc(80vw - 48px);
+  }
+
+  .shade-finder__nav--prev {
+    left: -20px;
+  }
+
+  .shade-finder__nav--next {
+    right: -20px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .shade-finder__inner {
+    padding-inline: 20px;
+    padding-block: 32px 40px;
+  }
+
+  .shade-finder__top-bar {
+    margin-bottom: 24px;
+  }
+
+  .shade-finder__heading {
+    margin-bottom: 0;
+  }
+
+  .shade-finder__filter-label {
+    text-align: center;
+    width: 100%;
+  }
+
+  .shade-finder__filter-pills {
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+  .shade-finder__card {
+    flex: 0 0 calc(80vw - 40px);
+  }
+
+  .shade-finder__nav--prev {
+    left: -16px;
+  }
+
+  .shade-finder__nav--next {
+    right: -16px;
+  }
+
+  .shade-finder__cta-row {
+    justify-content: center;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+  }
+}
+{% endstylesheet %}
+
+{% javascript %}
+(function() {
+  class ShadeFinder {
+    constructor(el) {
+      this.el = el;
+      this.track = el.querySelector('[data-shade-track]');
+      this.cards = Array.from(el.querySelectorAll('.shade-finder__card'));
+      this.prevBtn = el.querySelector('[data-shade-prev]');
+      this.nextBtn = el.querySelector('[data-shade-next]');
+      this.toggleBtns = Array.from(el.querySelectorAll('[data-shade-toggle]'));
+      this.pillGroups = el.querySelectorAll('[data-filter-group]');
+
+      this.activeFilters = { usage: 'all', skin_tone: 'all' };
+      this.offset = 0;
+      this.visibleCards = [];
+      this.cardsPerPage = 4;
+
+      this.init();
+    }
+
+    init() {
+      this.updateCardsPerPage();
+      this.applyFilters();
+      this.bindEvents();
+    }
+
+    updateCardsPerPage() {
+      const w = window.innerWidth;
+      if (w >= 1024) {
+        this.cardsPerPage = 4;
+      } else {
+        this.cardsPerPage = 1;
+      }
+    }
+
+    bindEvents() {
+      this.prevBtn.addEventListener('click', () => this.slide(-1));
+      this.nextBtn.addEventListener('click', () => this.slide(1));
+
+      this.toggleBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const checked = btn.getAttribute('aria-checked') === 'true';
+          const newState = String(!checked);
+          this.toggleBtns.forEach(b => b.setAttribute('aria-checked', newState));
+          this.el.classList.toggle('shade-finder--show-swatches', !checked);
+        });
+      });
+
+      this.pillGroups.forEach(group => {
+        group.addEventListener('click', (e) => {
+          const pill = e.target.closest('.shade-finder__pill');
+          if (!pill) return;
+          const groupName = group.dataset.filterGroup;
+          const value = pill.dataset.filterValue;
+
+          group.querySelectorAll('.shade-finder__pill').forEach(p => p.classList.remove('shade-finder__pill--active'));
+          pill.classList.add('shade-finder__pill--active');
+
+          this.activeFilters[groupName] = value;
+          this.offset = 0;
+          this.applyFilters();
+        });
+      });
+
+      let resizeTimer;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          this.updateCardsPerPage();
+          this.offset = 0;
+          this.renderTrack();
+        }, 150);
+      });
+    }
+
+    applyFilters() {
+      const { usage, skin_tone } = this.activeFilters;
+
+      this.visibleCards = this.cards.filter(card => {
+        const cardUsage = card.dataset.usage;
+        const cardTone = card.dataset.skinTone;
+
+        const usageMatch = usage === 'all' || cardUsage === usage;
+        const toneMatch = skin_tone === 'all' || cardTone === skin_tone;
+
+        return usageMatch && toneMatch;
+      });
+
+      this.cards.forEach(card => card.setAttribute('data-hidden', ''));
+      this.visibleCards.forEach(card => card.removeAttribute('data-hidden'));
+
+      this.renderTrack();
+    }
+
+    renderTrack() {
+      const total = this.visibleCards.length;
+      const maxOffset = Math.max(0, total - this.cardsPerPage);
+      this.offset = Math.min(this.offset, maxOffset);
+
+      const cardWidth = this.visibleCards[0] ? this.visibleCards[0].offsetWidth : 0;
+      const gap = 20;
+      const shift = this.offset * (cardWidth + gap);
+
+      this.track.style.transform = `translateX(-${shift}px)`;
+
+      this.prevBtn.disabled = this.offset <= 0;
+      this.nextBtn.disabled = this.offset >= maxOffset;
+    }
+
+    slide(dir) {
+      const total = this.visibleCards.length;
+      const maxOffset = Math.max(0, total - this.cardsPerPage);
+      this.offset = Math.max(0, Math.min(this.offset + dir, maxOffset));
+      this.renderTrack();
+    }
+  }
+
+  function initShadeFinders() {
+    document.querySelectorAll('.shade-finder').forEach(el => {
+      if (!el.dataset.shadeFinderInit) {
+        el.dataset.shadeFinderInit = '1';
+        new ShadeFinder(el);
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initShadeFinders);
+  } else {
+    initShadeFinders();
+  }
+})();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Shade Finder",
+  "tag": "section",
+  "class": "section-shade-finder",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What Shade Am I?"
+    },
+    {
+      "type": "text",
+      "id": "toggle_label_left",
+      "label": "Toggle label — left",
+      "default": "Swatches"
+    },
+    {
+      "type": "text",
+      "id": "toggle_label_right",
+      "label": "Toggle label — right",
+      "default": "Models"
+    },
+    {
+      "type": "header",
+      "content": "Call to action"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "CTA label text",
+      "default": "Still Not Sure?"
+    },
+    {
+      "type": "text",
+      "id": "cta_button_text",
+      "label": "CTA button text",
+      "default": "FIND MY SHADE"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "CTA button link"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 60
+    }
+  ],
+  "blocks": [
+    {
+      "type": "usage_filter",
+      "name": "Usage filter",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Button label",
+          "default": "BRONZER"
+        },
+        {
+          "type": "text",
+          "id": "filter_value",
+          "label": "Filter value",
+          "info": "Must match the 'Usage tag' on shade blocks. Use lowercase with hyphens (e.g. color-correct).",
+          "default": "bronzer"
+        }
+      ]
+    },
+    {
+      "type": "skin_tone_filter",
+      "name": "Skin tone filter",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Button label",
+          "default": "LIGHT"
+        },
+        {
+          "type": "text",
+          "id": "filter_value",
+          "label": "Filter value",
+          "info": "Must match the 'Skin tone tag' on shade blocks. Use lowercase (e.g. light, medium, dark).",
+          "default": "light"
+        }
+      ]
+    },
+    {
+      "type": "shade",
+      "name": "Shade card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "shade_name",
+          "label": "Shade name",
+          "default": "AU NATUREL"
+        },
+        {
+          "type": "textarea",
+          "id": "shade_description",
+          "label": "Shade description",
+          "default": "is a clear balm with subtle opal pearl for all skin tones"
+        },
+        {
+          "type": "image_picker",
+          "id": "model_image",
+          "label": "Model image"
+        },
+        {
+          "type": "image_picker",
+          "id": "swatch_image",
+          "label": "Swatch image"
+        },
+        {
+          "type": "text",
+          "id": "usage_tag",
+          "label": "Usage tag",
+          "info": "Must match a usage filter value (e.g. bronzer, blush, highlighter, color-correct).",
+          "default": "blush"
+        },
+        {
+          "type": "text",
+          "id": "skin_tone_tag",
+          "label": "Skin tone tag",
+          "info": "Must match a skin tone filter value (e.g. light, medium, dark).",
+          "default": "all"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shade Finder",
+      "blocks": [
+        {
+          "type": "usage_filter",
+          "settings": {
+            "label": "BRONZER",
+            "filter_value": "bronzer"
+          }
+        },
+        {
+          "type": "usage_filter",
+          "settings": {
+            "label": "BLUSH",
+            "filter_value": "blush"
+          }
+        },
+        {
+          "type": "usage_filter",
+          "settings": {
+            "label": "HIGHLIGHTER",
+            "filter_value": "highlighter"
+          }
+        },
+        {
+          "type": "usage_filter",
+          "settings": {
+            "label": "COLOR CORRECT",
+            "filter_value": "color-correct"
+          }
+        },
+        {
+          "type": "skin_tone_filter",
+          "settings": {
+            "label": "LIGHT",
+            "filter_value": "light"
+          }
+        },
+        {
+          "type": "skin_tone_filter",
+          "settings": {
+            "label": "MEDIUM",
+            "filter_value": "medium"
+          }
+        },
+        {
+          "type": "skin_tone_filter",
+          "settings": {
+            "label": "DARK",
+            "filter_value": "dark"
+          }
+        },
+        {
+          "type": "shade",
+          "settings": {
+            "shade_name": "AU NATUREL",
+            "shade_description": "is a clear balm with subtle opal pearl for all skin tones",
+            "usage_tag": "highlighter",
+            "skin_tone_tag": "all"
+          }
+        },
+        {
+          "type": "shade",
+          "settings": {
+            "shade_name": "HAPPY HOUR",
+            "shade_description": "a cool sheer pink with silver shimmer for fair to medium tan skin tones",
+            "usage_tag": "blush",
+            "skin_tone_tag": "light"
+          }
+        },
+        {
+          "type": "shade",
+          "settings": {
+            "shade_name": "MAGIC HOUR",
+            "shade_description": "is a cool, sheer bronze with silver shimmer for light to medium-dark skin",
+            "usage_tag": "highlighter",
+            "skin_tone_tag": "dark"
+          }
+        },
+        {
+          "type": "shade",
+          "settings": {
+            "shade_name": "GOLDEN HOUR",
+            "shade_description": "is a warm, sheer gold with multidimensional shimmer for all skin tones",
+            "usage_tag": "highlighter",
+            "skin_tone_tag": "dark"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -3655,6 +3655,100 @@ sections:
       - slideshow.liquid
       - product-recommendations.liquid
       - multicolumn.liquid
+  - file: sections/shade-finder.liquid
+    name: shade-finder
+    label: Shade Finder
+    visual_role: Shade Finder section
+    settings:
+      - id: color_scheme
+        type: color_scheme
+        label: t:sections.all.colors.label
+      - id: heading
+        type: text
+        label: Heading
+      - id: toggle_label_left
+        type: text
+        label: Toggle label — left
+      - id: toggle_label_right
+        type: text
+        label: Toggle label — right
+      - type: header
+      - id: cta_label
+        type: text
+        label: CTA label text
+      - id: cta_button_text
+        type: text
+        label: CTA button text
+      - id: cta_url
+        type: url
+        label: CTA button link
+      - type: header
+      - id: padding_top
+        type: range
+        label: Padding top
+      - id: padding_bottom
+        type: range
+        label: Padding bottom
+    blocks:
+      - type: usage_filter
+        name: Usage filter
+        settings:
+          - label
+          - filter_value
+      - type: skin_tone_filter
+        name: Skin tone filter
+        settings:
+          - label
+          - filter_value
+      - type: shade
+        name: Shade card
+        settings:
+          - shade_name
+          - shade_description
+          - model_image
+          - swatch_image
+          - usage_tag
+          - skin_tone_tag
+    max_blocks: null
+    templates_allowed:
+      - "*"
+    presets:
+      - Shade Finder
+    uses_image: true
+    uses_video: false
+    uses_slider: false
+    uses_grid: true
+    uses_tabs: false
+    uses_accordion: false
+    uses_form: false
+    layout_type: grid
+    mockup_keywords:
+      - shade finder
+      - skin tone filter
+      - beauty filter
+      - color match
+      - foundation finder
+      - product filter pills
+      - toggle view
+      - usage filter
+      - cosmetics selector
+      - swatch filter
+    when_to_use: Use this section when a mockup shows a beauty/cosmetics product filtering interface with pill-style filter
+      buttons for usage and skin tone categories, a toggle switch for view modes, and a heading.
+    when_to_create_new: Create a new section if the mockup requires a quiz-style shade finder flow, a visual swatch grid as
+      filters, or lacks the dual-filter (usage + skin tone) pill group pattern.
+    requires_new_section_if:
+      - Mockup shows a step-by-step quiz or multi-page flow instead of filter pills
+      - Filters are represented as visual color swatches rather than text pill buttons
+      - No toggle switch is present in the design
+      - Mockup requires more than two filter group categories
+      - Design includes a skin tone image selector or face photo upload
+      - Layout requires a sidebar filter panel instead of horizontal pills
+    similar_sections:
+      - product-filter-bar.liquid
+      - collection-filters.liquid
+      - faceted-filters.liquid
+      - product-recommendations.liquid
 snippets:
   - file: snippets/component-article-card.liquid
     name: component-article-card

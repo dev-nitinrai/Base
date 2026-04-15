@@ -179,12 +179,126 @@
         "title": "Product Highlights Title",
         "description": "Product Highlights description will appear here."
       }
+    },
+    "shade_finder_1": {
+      "type": "shade-finder",
+      "blocks": {
+        "usage_filter_bronzer": {
+          "type": "usage_filter",
+          "settings": {
+            "label": "BRONZER",
+            "filter_value": "bronzer"
+          }
+        },
+        "usage_filter_blush": {
+          "type": "usage_filter",
+          "settings": {
+            "label": "BLUSH",
+            "filter_value": "blush"
+          }
+        },
+        "usage_filter_highlighter": {
+          "type": "usage_filter",
+          "settings": {
+            "label": "HIGHLIGHTER",
+            "filter_value": "highlighter"
+          }
+        },
+        "usage_filter_color_correct": {
+          "type": "usage_filter",
+          "settings": {
+            "label": "COLOR CORRECT",
+            "filter_value": "color-correct"
+          }
+        },
+        "skin_tone_filter_light": {
+          "type": "skin_tone_filter",
+          "settings": {
+            "label": "LIGHT",
+            "filter_value": "light"
+          }
+        },
+        "skin_tone_filter_medium": {
+          "type": "skin_tone_filter",
+          "settings": {
+            "label": "MEDIUM",
+            "filter_value": "medium"
+          }
+        },
+        "skin_tone_filter_dark": {
+          "type": "skin_tone_filter",
+          "settings": {
+            "label": "DARK",
+            "filter_value": "dark"
+          }
+        },
+        "shade_au_naturel": {
+          "type": "shade",
+          "settings": {
+            "shade_name": "AU NATUREL",
+            "shade_description": "is a clear balm with subtle opal pearl for all skin tones",
+            "usage_tag": "highlighter",
+            "skin_tone_tag": "all"
+          }
+        },
+        "shade_happy_hour": {
+          "type": "shade",
+          "settings": {
+            "shade_name": "HAPPY HOUR",
+            "shade_description": "a cool sheer pink with silver shimmer for fair to medium tan skin tones",
+            "usage_tag": "blush",
+            "skin_tone_tag": "light"
+          }
+        },
+        "shade_magic_hour": {
+          "type": "shade",
+          "settings": {
+            "shade_name": "MAGIC HOUR",
+            "shade_description": "is a cool, sheer bronze with silver shimmer for light to medium-dark skin",
+            "usage_tag": "highlighter",
+            "skin_tone_tag": "dark"
+          }
+        },
+        "shade_golden_hour": {
+          "type": "shade",
+          "settings": {
+            "shade_name": "GOLDEN HOUR",
+            "shade_description": "is a warm, sheer gold with multidimensional shimmer for all skin tones",
+            "usage_tag": "highlighter",
+            "skin_tone_tag": "dark"
+          }
+        }
+      },
+      "block_order": [
+        "usage_filter_bronzer",
+        "usage_filter_blush",
+        "usage_filter_highlighter",
+        "usage_filter_color_correct",
+        "skin_tone_filter_light",
+        "skin_tone_filter_medium",
+        "skin_tone_filter_dark",
+        "shade_au_naturel",
+        "shade_happy_hour",
+        "shade_magic_hour",
+        "shade_golden_hour"
+      ],
+      "settings": {
+        "heading": "What Shade Am I?",
+        "toggle_label_left": "Swatches",
+        "toggle_label_right": "Models",
+        "cta_label": "Still Not Sure?",
+        "cta_button_text": "FIND MY SHADE",
+        "cta_url": "",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
     }
   },
   "order": [
     "hero_1",
     "featured_collections_hhETJ9",
     "selling_points_v2_6NgzaK",
-    "product_highlights_gUaG6E"
+    "product_highlights_gUaG6E",
+    "shade_finder_1"
   ]
 }
