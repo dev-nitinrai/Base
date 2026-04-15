@@ -8914,14 +8914,13 @@ files:
     fix_guidance: Check gift_card object availability and enabled/expired states first, verify settings.logo fallback works,
       ensure inline styles remain for standalone rendering outside theme context
   - file: templates/index.json
-    responsibility: Defines the homepage layout and section configuration with their settings and block order
+    responsibility: Defines the homepage layout by declaring which sections render on the index template and their saved
+      configuration settings.
     owns:
-      - Homepage section assembly and ordering
-      - Section-specific settings for hero, featured-collections, selling-points-v2, product-highlights,
-        featured-products, brand-story-v2, promo-banner, logos, and animated-features-v2
-      - Block configurations within each section (collection cards, selling points, features, product selections, story
-        content, promo content, logo images, feature cards)
-      - Visual styling parameters (color schemes, alignments, spacing, overlay settings)
+      - Homepage section order and composition
+      - Per-section settings values (colors, text, links, toggles)
+      - Block definitions and block ordering within sections
+      - Section instance IDs for the homepage
     depends_on:
       js: []
       snippets: []
@@ -8930,39 +8929,16 @@ files:
         - sections/featured-collections.liquid
         - sections/selling-points-v2.liquid
         - sections/product-highlights.liquid
-        - sections/featured-products.liquid
-        - sections/brand-story-v2.liquid
-        - sections/promo-banner.liquid
-        - sections/logos.liquid
-        - sections/animated-features-v2.liquid
-      global_objects:
-        - Shopify theme editor
-        - Shopify collections
-        - Shopify products
-      custom_elements: []
-    depended_on_by:
-      - Shopify theme rendering engine when displaying homepage
-      - Shopify theme editor for homepage customization
-      - layout/theme.liquid as the parent template wrapper
     common_mistakes:
-      - Manually editing this file instead of using Shopify theme editor (changes may be overwritten)
-      - Breaking JSON syntax when adding or removing sections or blocks
-      - Referencing non-existent section types that don't have corresponding liquid files
-      - Forgetting to maintain block_order array when adding/removing blocks
-      - Using incorrect handle format for Shopify resource references (collections, products)
-    fix_guidance: Check that all section types referenced exist in sections/ directory, verify JSON syntax is valid, ensure
-      block_order arrays match actual block keys, and prefer making changes through Shopify admin to avoid overwrite
-      conflicts
-    state_ownership:
-      - Homepage visual layout state
-      - Section visibility and ordering on homepage
-      - Block-level content and configuration per section
-    key_identifiers:
-      css_classes: []
-      data_attributes: []
-      js_events_emitted: []
-      js_events_listened: []
-      custom_elements: []
+      - Editing this file manually expecting changes to persist when the Shopify theme editor will overwrite them
+      - Adding a section type here that does not have a matching liquid file in the sections directory causing a render
+        error
+      - Assuming empty string collection settings will resolve to a default collection rather than rendering nothing
+      - Confusing section instance IDs like featured_collections_hhETJ9 with the section type name featured-collections
+      - Expecting block settings changes here to reflect without also having matching schema block definitions in the
+        referenced section liquid file
+    fix_guidance: Cross-reference the type value of each section entry against the available sections files to confirm a
+      matching liquid file exists, then verify block types match the schema defined inside that section file.
   - file: templates/list-collections.json
     responsibility: Defines the page template structure for the collections list page displaying all store collections
     owns:
@@ -9390,3 +9366,97 @@ files:
     fix_guidance: When customizer text is wrong, check if schema keys in section files match translation keys here; if
       translations are missing, add them via Shopify admin language editor or ensure schema keys exist in corresponding
       section files
+  - file: assets/section-shade-finder.css
+    responsibility: Provides all layout, typography, toggle, filter, carousel, and responsive styles for the Shade Finder section UI.
+    owns:
+      - .shade-finder root container and background
+      - .shade-finder__header and heading typography with clamp() fluid sizing
+      - .shade-finder__toggle-switch custom CSS toggle with checked/focus-visible states
+      - .shade-finder__filter-btn active/hover/aria-pressed states
+      - .shade-finder__controls-desktop and .shade-finder__controls-mobile responsive visibility switching at 750px
+        breakpoint
+      - .shade-finder__top-bar 3-column grid layout (toggle left, heading center)
+      - .shade-finder__filter-bar desktop split layout
+      - .shade-finder__mobile-* mobile-specific filter and toggle layouts
+      - .shade-finder__carousel-wrapper and .shade-finder__track flex carousel base
+    depends_on:
+      js:
+        - JavaScript controlling aria-pressed state on .shade-finder__filter-btn
+        - JavaScript controlling input:checked state on toggle to trigger track color transition
+        - JavaScript animating .shade-finder__track transform for carousel scroll
+      snippets: []
+      sections:
+        - sections/product.liquid or a dedicated shade-finder section liquid file that renders the HTML consuming these
+          classes
+    common_mistakes:
+      - Assuming .shade-finder__controls-desktop and .shade-finder__controls-mobile are toggled by JS when they are
+        purely CSS display switches at the 750px breakpoint
+      - Editing filter button active state only via .is-active and missing the aria-pressed='true' selector, or vice
+        versa, causing inconsistent visual state
+      - Overriding .shade-finder__heading font properties without accounting for all three CSS custom properties
+        (family, style, weight) inherited from --font-heading-* tokens
+      - Setting carousel item widths in this file without coordinating with JS that calculates transform offsets based
+        on track child dimensions
+      - "Using hardcoded #1a1a1a and #f0eeeb color values instead of CSS custom properties, missing that these are not
+        connected to the theme's color scheme tokens"
+    fix_guidance: Check the corresponding shade-finder section liquid file for class naming mismatches first, then verify JS
+      is correctly toggling aria-pressed and input:checked before investigating CSS specificity issues.
+  - file: assets/section-shade-finder.js
+    responsibility: Defines the ShadeFinder custom element that manages usage/skin-tone filtering, swatch/model image
+      toggling, and CSS-transform carousel navigation for the shade finder section.
+    owns:
+      - ShadeFinder custom element (shade-finder)
+      - Filter state (activeUsage, activeTone)
+      - Toggle state (showSwatches)
+      - Carousel state (currentIndex, track transform, prev/next button disabled states)
+      - Slide visibility logic (slide.hidden)
+      - No-results visibility (shade-finder__no-results)
+      - Per-page breakpoint logic (mobile/tablet/desktop)
+    depends_on:
+      js: []
+      snippets: []
+      sections:
+        - sections/product.liquid
+        - sections/featured-products.liquid
+        - sections/custom-section.liquid
+    common_mistakes:
+      - Assuming carousel offset accounts for CSS gap automatically; the hardcoded gap value (20px) must match the
+        actual CSS gap on .shade-finder__track or slides will misalign
+      - Forgetting that hidden slides are still in the DOM and included in this.slides; only
+      - Expecting slide data attributes (data-usage, data-tone, data-image-type) to be auto-populated; they must be set
+        in the Liquid template rendering each slide
+      - Calling
+      - Not resetting currentIndex to 0 after filtering, causing out-of-bounds carousel positions on the remaining
+        visible slides
+      - Toggle inputs are synced across multiple instances by iterating all .shade-finder__toggle-input inside the
+        element, but if scoping is wrong it could affect sibling components
+    fix_guidance: Check that data-usage, data-tone, and data-image-type attributes are correctly rendered on each
+      .shade-finder__slide in the Liquid template, then verify the hardcoded gap (20px) matches the CSS gap property on
+      .shade-finder__track.
+  - file: sections/shade-finder.liquid
+    responsibility: Renders an interactive shade-finder tool with desktop/mobile layouts, swatch/model toggle, and
+      usage/skin-tone filter controls for browsing product shades.
+    owns:
+      - shade-finder section wrapper and responsive layout (desktop/mobile)
+      - toggle switch between swatches and model views
+      - usage filter button group (driven by usage_filter blocks)
+      - tone filter button group (driven by tone_filter blocks)
+      - responsive padding via dynamic inline styles scoped to section.id
+      - section settings: heading, toggle labels, filter labels, padding_top, padding_bottom, filter_all
+    depends_on:
+      js:
+        - assets/section-shade-finder.js
+      snippets: []
+      sections: []
+    common_mistakes:
+      - Editing filter button logic in the Liquid without updating matching selectors in section-shade-finder.js,
+        breaking data-filter-usage and data-filter-tone bindings
+      - Adding new block types without handling them in both desktop and mobile filter loops, causing filters to appear
+        on one layout only
+      - Assuming the toggle state is managed in Liquid when it is entirely JS-driven via the shade-finder custom element
+      - Forgetting that mobile and desktop filter buttons are separate DOM nodes, so JS must sync filter state across
+        both sets
+      - Modifying block settings keys (e.g. value, label) without updating the JS attribute selectors that read those
+        data attributes
+    fix_guidance: Check section-shade-finder.js first for custom element logic, data-filter-* attribute handling, and toggle
+      state; then verify block type names match exactly between the schema and both desktop/mobile Liquid loops.

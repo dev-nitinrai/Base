@@ -1,0 +1,477 @@
+/* Shade Finder Section */
+
+.shade-finder {
+  background-color: #f0eeeb;
+  overflow: hidden;
+}
+
+.shade-finder__inner {
+  position: relative;
+}
+
+/* Header */
+.shade-finder__header {
+  text-align: center;
+  padding-block-end: 3.2rem;
+}
+
+.shade-finder__heading {
+  font-family: var(--font-heading-family);
+  font-style: var(--font-heading-style);
+  font-weight: var(--font-heading-weight);
+  font-size: clamp(3.6rem, 6vw, 7.2rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+/* Toggle */
+.shade-finder__toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.4rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: #1a1a1a;
+}
+
+.shade-finder__toggle-label {
+  cursor: pointer;
+  user-select: none;
+}
+
+.shade-finder__toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 4rem;
+  height: 2.2rem;
+  flex-shrink: 0;
+}
+
+.shade-finder__toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.shade-finder__toggle-track {
+  position: absolute;
+  inset: 0;
+  background-color: #ccc;
+  border-radius: 2.2rem;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+}
+
+.shade-finder__toggle-track::before {
+  content: '';
+  position: absolute;
+  width: 1.6rem;
+  height: 1.6rem;
+  left: 0.3rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #fff;
+  border-radius: 50%;
+  transition: transform 0.25s ease;
+}
+
+.shade-finder__toggle-switch input:checked + .shade-finder__toggle-track {
+  background-color: #555;
+}
+
+.shade-finder__toggle-switch input:checked + .shade-finder__toggle-track::before {
+  transform: translateY(-50%) translateX(1.8rem);
+}
+
+.shade-finder__toggle-switch input:focus-visible + .shade-finder__toggle-track {
+  outline: 2px solid #1a1a1a;
+  outline-offset: 2px;
+}
+
+/* Filters */
+.shade-finder__filters {
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+  flex-wrap: wrap;
+}
+
+.shade-finder__filter-group {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.shade-finder__filter-label {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #1a1a1a;
+  text-transform: uppercase;
+  white-space: nowrap;
+  margin-inline-end: 0.4rem;
+}
+
+.shade-finder__filter-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.7rem 1.4rem;
+  border: 1.5px solid #1a1a1a;
+  background-color: transparent;
+  color: #1a1a1a;
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 0;
+  transition: background-color 0.18s ease, color 0.18s ease;
+  white-space: nowrap;
+  min-height: 3.6rem;
+}
+
+.shade-finder__filter-btn:hover {
+  background-color: rgba(26, 26, 26, 0.08);
+}
+
+.shade-finder__filter-btn[aria-pressed="true"],
+.shade-finder__filter-btn.is-active {
+  background-color: #1a1a1a;
+  color: #fff;
+}
+
+.shade-finder__filter-btn:focus-visible {
+  outline: 2px solid #1a1a1a;
+  outline-offset: 2px;
+}
+
+/* Desktop layout: toggle top-left, heading centered, filters below */
+.shade-finder__controls-desktop {
+  display: none;
+}
+
+.shade-finder__controls-mobile {
+  display: block;
+}
+
+@media screen and (min-width: 750px) {
+  .shade-finder__controls-desktop {
+    display: block;
+  }
+
+  .shade-finder__controls-mobile {
+    display: none;
+  }
+}
+
+/* Desktop top bar: toggle left, heading center */
+.shade-finder__top-bar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  margin-block-end: 2.4rem;
+}
+
+.shade-finder__top-bar .shade-finder__toggle-row {
+  grid-column: 1;
+  justify-self: start;
+}
+
+.shade-finder__top-bar .shade-finder__header {
+  grid-column: 2;
+  padding-block-end: 0;
+}
+
+/* Desktop filter bar: usage left, skin tone right */
+.shade-finder__filter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-block-end: 3.2rem;
+}
+
+/* Mobile layout */
+.shade-finder__mobile-header {
+  text-align: center;
+  margin-block-end: 2.4rem;
+}
+
+.shade-finder__mobile-filters {
+  margin-block-end: 2rem;
+}
+
+.shade-finder__mobile-filter-group {
+  margin-block-end: 1.6rem;
+}
+
+.shade-finder__mobile-filter-label {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: center;
+  color: #1a1a1a;
+  display: block;
+  margin-block-end: 1rem;
+}
+
+.shade-finder__mobile-filter-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  justify-content: flex-start;
+}
+
+.shade-finder__mobile-filter-buttons .shade-finder__filter-btn {
+  flex: 1 1 auto;
+  min-width: calc(50% - 0.3rem);
+}
+
+.shade-finder__mobile-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-block-end: 2rem;
+}
+
+/* Carousel */
+.shade-finder__carousel-wrapper {
+  position: relative;
+}
+
+.shade-finder__carousel {
+  overflow: hidden;
+  position: relative;
+}
+
+.shade-finder__track {
+  display: flex;
+  gap: 2rem;
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform;
+}
+
+.shade-finder__slide {
+  flex: 0 0 calc(25% - 1.5rem);
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.shade-finder__slide[hidden] {
+  display: none;
+}
+
+@media screen and (max-width: 749px) {
+  .shade-finder__slide {
+    flex: 0 0 calc(85% - 1rem);
+  }
+}
+
+@media screen and (min-width: 750px) and (max-width: 989px) {
+  .shade-finder__slide {
+    flex: 0 0 calc(50% - 1rem);
+  }
+}
+
+/* Shade image */
+.shade-finder__image-wrap {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background-color: #e8e5e0;
+  margin-block-end: 1.6rem;
+}
+
+.shade-finder__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+}
+
+.shade-finder__image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ddd9d3;
+}
+
+.shade-finder__image-placeholder svg {
+  width: 4rem;
+  height: 4rem;
+  opacity: 0.3;
+}
+
+/* Swatch image (alternate view) */
+.shade-finder__swatch-wrap {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background-color: #e8e5e0;
+  margin-block-end: 1.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.shade-finder__swatch-circle {
+  width: 60%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  display: block;
+}
+
+/* Shade info */
+.shade-finder__shade-name {
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #1a1a1a;
+  margin: 0 0 0.8rem;
+}
+
+.shade-finder__shade-desc {
+  font-size: 1.4rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #1a1a1a;
+  margin: 0;
+  max-width: 26rem;
+}
+
+/* Navigation arrows */
+.shade-finder__nav {
+  position: absolute;
+  top: 38%;
+  transform: translateY(-50%);
+  z-index: 2;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.8rem;
+  color: #1a1a1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease;
+}
+
+.shade-finder__nav:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+.shade-finder__nav:focus-visible {
+  outline: 2px solid #1a1a1a;
+  outline-offset: 2px;
+}
+
+.shade-finder__nav svg {
+  width: 2rem;
+  height: 2rem;
+}
+
+.shade-finder__nav--prev {
+  left: -3.6rem;
+}
+
+.shade-finder__nav--next {
+  right: -3.6rem;
+}
+
+@media screen and (max-width: 749px) {
+  .shade-finder__nav--prev {
+    left: 0.4rem;
+  }
+
+  .shade-finder__nav--next {
+    right: 0.4rem;
+  }
+}
+
+/* Footer CTA */
+.shade-finder__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1.6rem;
+  margin-block-start: 3.2rem;
+}
+
+.shade-finder__footer-text {
+  font-size: 1.5rem;
+  color: #1a1a1a;
+  font-weight: 400;
+}
+
+.shade-finder__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  text-decoration: none;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fff;
+  background-color: #1a1a1a;
+}
+
+.shade-finder__cta-text {
+  padding: 1.2rem 1.8rem;
+}
+
+.shade-finder__cta-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.2rem 1.2rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.25);
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.shade-finder__cta:hover {
+  background-color: #333;
+}
+
+.shade-finder__cta:focus-visible {
+  outline: 2px solid #1a1a1a;
+  outline-offset: 2px;
+}
+
+@media screen and (max-width: 749px) {
+  .shade-finder__footer {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}
+
+/* No results message */
+.shade-finder__no-results {
+  text-align: center;
+  padding: 4rem 2rem;
+  font-size: 1.5rem;
+  color: rgba(26, 26, 26, 0.5);
+  display: none;
+}
+
+.shade-finder__no-results.is-visible {
+  display: block;
+}

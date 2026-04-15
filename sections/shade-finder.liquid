@@ -1,0 +1,524 @@
+{{ 'section-shade-finder.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'section-shade-finder.js' | asset_url }}" defer="defer"></script>
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="shade-finder section-{{ section.id }}-padding">
+  <shade-finder>
+    <div class="page-width shade-finder__inner">
+
+      {%- comment -%} ── DESKTOP LAYOUT ── {%- endcomment -%}
+      <div class="shade-finder__controls-desktop">
+
+        {%- comment -%} Top bar: toggle (left) + heading (center) {%- endcomment -%}
+        <div class="shade-finder__top-bar">
+          <div class="shade-finder__toggle-row">
+            <span class="shade-finder__toggle-label" id="label-swatches-desktop">{{ section.settings.toggle_label_swatches }}</span>
+            <label class="shade-finder__toggle-switch" aria-label="{{ section.settings.toggle_label_models }}">
+              <input
+                type="checkbox"
+                class="shade-finder__toggle-input"
+                aria-labelledby="label-swatches-desktop"
+              >
+              <span class="shade-finder__toggle-track"></span>
+            </label>
+            <span class="shade-finder__toggle-label">{{ section.settings.toggle_label_models }}</span>
+          </div>
+
+          <div class="shade-finder__header">
+            <h2 class="shade-finder__heading">{{ section.settings.heading }}</h2>
+          </div>
+
+          <div></div>
+        </div>
+
+        {%- comment -%} Filter bar: usage (left) + skin tone (right) {%- endcomment -%}
+        <div class="shade-finder__filter-bar">
+          <div class="shade-finder__filter-group" role="group" aria-label="{{ section.settings.usage_label }}">
+            <span class="shade-finder__filter-label">{{ section.settings.usage_label }}</span>
+            <button class="shade-finder__filter-btn is-active" data-filter-usage="all" aria-pressed="true">{{ section.settings.filter_all }}</button>
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'usage_filter' -%}
+                <button class="shade-finder__filter-btn" data-filter-usage="{{ block.settings.value }}" aria-pressed="false" {{ block.shopify_attributes }}>
+                  {{ block.settings.label }}
+                </button>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+
+          <div class="shade-finder__filter-group" role="group" aria-label="{{ section.settings.tone_label }}">
+            <span class="shade-finder__filter-label">{{ section.settings.tone_label }}</span>
+            <button class="shade-finder__filter-btn is-active" data-filter-tone="all" aria-pressed="true">{{ section.settings.filter_all }}</button>
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'tone_filter' -%}
+                <button class="shade-finder__filter-btn" data-filter-tone="{{ block.settings.value }}" aria-pressed="false" {{ block.shopify_attributes }}>
+                  {{ block.settings.label }}
+                </button>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+
+      </div>
+
+      {%- comment -%} ── MOBILE LAYOUT ── {%- endcomment -%}
+      <div class="shade-finder__controls-mobile">
+
+        <div class="shade-finder__mobile-header">
+          <h2 class="shade-finder__heading">{{ section.settings.heading }}</h2>
+        </div>
+
+        <div class="shade-finder__mobile-filters">
+          <div class="shade-finder__mobile-filter-group">
+            <span class="shade-finder__mobile-filter-label">{{ section.settings.tone_label }}</span>
+            <div class="shade-finder__mobile-filter-buttons" role="group" aria-label="{{ section.settings.tone_label }}">
+              <button class="shade-finder__filter-btn is-active" data-filter-tone="all" aria-pressed="true">{{ section.settings.filter_all }}</button>
+              {%- for block in section.blocks -%}
+                {%- if block.type == 'tone_filter' -%}
+                  <button class="shade-finder__filter-btn" data-filter-tone="{{ block.settings.value }}" aria-pressed="false">
+                    {{ block.settings.label }}
+                  </button>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          </div>
+
+          <div class="shade-finder__mobile-filter-group">
+            <span class="shade-finder__mobile-filter-label">{{ section.settings.usage_label }}</span>
+            <div class="shade-finder__mobile-filter-buttons" role="group" aria-label="{{ section.settings.usage_label }}">
+              <button class="shade-finder__filter-btn is-active" data-filter-usage="all" aria-pressed="true">{{ section.settings.filter_all }}</button>
+              {%- for block in section.blocks -%}
+                {%- if block.type == 'usage_filter' -%}
+                  <button class="shade-finder__filter-btn" data-filter-usage="{{ block.settings.value }}" aria-pressed="false">
+                    {{ block.settings.label }}
+                  </button>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          </div>
+        </div>
+
+        <div class="shade-finder__mobile-toggle-row">
+          <span class="shade-finder__toggle-label" id="label-swatches-mobile">{{ section.settings.toggle_label_swatches }}</span>
+          <label class="shade-finder__toggle-switch" aria-label="{{ section.settings.toggle_label_models }}">
+            <input
+              type="checkbox"
+              class="shade-finder__toggle-input"
+              aria-labelledby="label-swatches-mobile"
+            >
+            <span class="shade-finder__toggle-track"></span>
+          </label>
+          <span class="shade-finder__toggle-label">{{ section.settings.toggle_label_models }}</span>
+        </div>
+
+      </div>
+
+      {%- comment -%} ── CAROUSEL ── {%- endcomment -%}
+      <div class="shade-finder__carousel-wrapper" role="region" aria-label="{{ section.settings.heading | escape }}">
+
+        <button
+          class="shade-finder__nav shade-finder__nav--prev"
+          aria-label="{{ 'general.accessibility.previous' | t }}"
+          disabled
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+
+        <div class="shade-finder__carousel" aria-live="polite">
+          <div class="shade-finder__track">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'shade' -%}
+                {%- assign usage_val = block.settings.usage | downcase | strip -%}
+                {%- assign tone_val = block.settings.skin_tone | downcase | strip -%}
+                <div
+                  class="shade-finder__slide"
+                  data-usage="{{ usage_val }}"
+                  data-tone="{{ tone_val }}"
+                  data-image-type="model"
+                  role="group"
+                  aria-roledescription="{{ 'general.accessibility.slide' | t | default: 'slide' }}"
+                  aria-label="{{ block.settings.name | escape }}"
+                  {{ block.shopify_attributes }}
+                >
+                  <div class="shade-finder__image-wrap">
+                    {%- if block.settings.model_image != blank -%}
+                      <img
+                        srcset="
+                          {%- if block.settings.model_image.width >= 400 -%}{{ block.settings.model_image | image_url: width: 400 }} 400w,{%- endif -%}
+                          {%- if block.settings.model_image.width >= 600 -%}{{ block.settings.model_image | image_url: width: 600 }} 600w,{%- endif -%}
+                          {{ block.settings.model_image | image_url: width: 800 }} 800w
+                        "
+                        src="{{ block.settings.model_image | image_url: width: 600 }}"
+                        sizes="(min-width: 990px) 25vw, (min-width: 750px) 50vw, 85vw"
+                        alt="{{ block.settings.model_image.alt | default: block.settings.name | escape }}"
+                        loading="lazy"
+                        width="{{ block.settings.model_image.width }}"
+                        height="{{ block.settings.model_image.height }}"
+                        class="shade-finder__image"
+                      >
+                    {%- else -%}
+                      <div class="shade-finder__image-placeholder">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true">
+                          <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+                        </svg>
+                      </div>
+                    {%- endif -%}
+                  </div>
+                  <h3 class="shade-finder__shade-name">{{ block.settings.name }}</h3>
+                  <p class="shade-finder__shade-desc">{{ block.settings.description }}</p>
+                </div>
+
+                {%- comment -%} Swatch slide (same shade, alternate image type) {%- endcomment -%}
+                <div
+                  class="shade-finder__slide"
+                  data-usage="{{ usage_val }}"
+                  data-tone="{{ tone_val }}"
+                  data-image-type="swatch"
+                  role="group"
+                  aria-roledescription="{{ 'general.accessibility.slide' | t | default: 'slide' }}"
+                  aria-label="{{ block.settings.name | escape }}"
+                  hidden
+                >
+                  <div class="shade-finder__swatch-wrap">
+                    {%- if block.settings.swatch_image != blank -%}
+                      <img
+                        src="{{ block.settings.swatch_image | image_url: width: 400 }}"
+                        alt="{{ block.settings.swatch_image.alt | default: block.settings.name | escape }}"
+                        loading="lazy"
+                        width="{{ block.settings.swatch_image.width }}"
+                        height="{{ block.settings.swatch_image.height }}"
+                        class="shade-finder__image"
+                        style="object-fit: cover; width: 100%; height: 100%;"
+                      >
+                    {%- else -%}
+                      <span
+                        class="shade-finder__swatch-circle"
+                        style="background-color: {{ block.settings.swatch_color }};"
+                        aria-hidden="true"
+                      ></span>
+                    {%- endif -%}
+                  </div>
+                  <h3 class="shade-finder__shade-name">{{ block.settings.name }}</h3>
+                  <p class="shade-finder__shade-desc">{{ block.settings.description }}</p>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+
+        <button
+          class="shade-finder__nav shade-finder__nav--next"
+          aria-label="{{ 'general.accessibility.next' | t }}"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+
+        <p class="shade-finder__no-results">{{ section.settings.no_results_text }}</p>
+      </div>
+
+      {%- comment -%} ── FOOTER CTA ── {%- endcomment -%}
+      {%- if section.settings.cta_text != blank -%}
+        <div class="shade-finder__footer">
+          {%- if section.settings.cta_prefix != blank -%}
+            <span class="shade-finder__footer-text">{{ section.settings.cta_prefix }}</span>
+          {%- endif -%}
+          <a
+            href="{{ section.settings.cta_url | default: '#' }}"
+            class="shade-finder__cta"
+            {% if section.settings.cta_url == blank %}aria-disabled="true"{% endif %}
+          >
+            <span class="shade-finder__cta-text">{{ section.settings.cta_text }}</span>
+            <span class="shade-finder__cta-arrow" aria-hidden="true">&rsaquo;</span>
+          </a>
+        </div>
+      {%- endif -%}
+
+    </div>
+  </shade-finder>
+</div>
+
+{% schema %}
+{
+  "name": "Shade finder",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What Shade Am I?"
+    },
+    {
+      "type": "text",
+      "id": "toggle_label_swatches",
+      "label": "Toggle label — swatches",
+      "default": "Swatches"
+    },
+    {
+      "type": "text",
+      "id": "toggle_label_models",
+      "label": "Toggle label — models",
+      "default": "Models"
+    },
+    {
+      "type": "text",
+      "id": "usage_label",
+      "label": "Usage filter label",
+      "default": "USAGE"
+    },
+    {
+      "type": "text",
+      "id": "tone_label",
+      "label": "Skin tone filter label",
+      "default": "SKIN TONE"
+    },
+    {
+      "type": "text",
+      "id": "filter_all",
+      "label": "\"All\" filter button label",
+      "default": "ALL"
+    },
+    {
+      "type": "text",
+      "id": "cta_prefix",
+      "label": "CTA prefix text",
+      "default": "Still Not Sure?"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA button text",
+      "default": "FIND MY SHADE"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "CTA button URL"
+    },
+    {
+      "type": "text",
+      "id": "no_results_text",
+      "label": "No results message",
+      "default": "No shades match your selection."
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    }
+  ],
+  "blocks": [
+    {
+      "type": "usage_filter",
+      "name": "Usage filter",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Button label",
+          "default": "Bronzer"
+        },
+        {
+          "type": "text",
+          "id": "value",
+          "label": "Filter value (lowercase, no spaces)",
+          "default": "bronzer",
+          "info": "Must match the Usage field on shade blocks exactly."
+        }
+      ]
+    },
+    {
+      "type": "tone_filter",
+      "name": "Skin tone filter",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Button label",
+          "default": "Light"
+        },
+        {
+          "type": "text",
+          "id": "value",
+          "label": "Filter value (lowercase, no spaces)",
+          "default": "light",
+          "info": "Must match the Skin tone field on shade blocks exactly."
+        }
+      ]
+    },
+    {
+      "type": "shade",
+      "name": "Shade",
+      "settings": [
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Shade name",
+          "default": "AU NATUREL"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "is a clear balm with subtle opal pearl for all skin tones"
+        },
+        {
+          "type": "image_picker",
+          "id": "model_image",
+          "label": "Model image"
+        },
+        {
+          "type": "image_picker",
+          "id": "swatch_image",
+          "label": "Swatch image (optional)"
+        },
+        {
+          "type": "color",
+          "id": "swatch_color",
+          "label": "Swatch color (fallback if no swatch image)",
+          "default": "#c8a090"
+        },
+        {
+          "type": "text",
+          "id": "usage",
+          "label": "Usage (comma-separated)",
+          "default": "highlighter",
+          "info": "e.g. bronzer, blush, highlighter, color correct"
+        },
+        {
+          "type": "text",
+          "id": "skin_tone",
+          "label": "Skin tone (comma-separated)",
+          "default": "all",
+          "info": "e.g. all, light, medium, dark"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shade finder",
+      "blocks": [
+        {
+          "type": "usage_filter",
+          "settings": {
+            "label": "BRONZER",
+            "value": "bronzer"
+          }
+        },
+        {
+          "type": "usage_filter",
+          "settings": {
+            "label": "BLUSH",
+            "value": "blush"
+          }
+        },
+        {
+          "type": "usage_filter",
+          "settings": {
+            "label": "HIGHLIGHTER",
+            "value": "highlighter"
+          }
+        },
+        {
+          "type": "usage_filter",
+          "settings": {
+            "label": "COLOR CORRECT",
+            "value": "color correct"
+          }
+        },
+        {
+          "type": "tone_filter",
+          "settings": {
+            "label": "LIGHT",
+            "value": "light"
+          }
+        },
+        {
+          "type": "tone_filter",
+          "settings": {
+            "label": "MEDIUM",
+            "value": "medium"
+          }
+        },
+        {
+          "type": "tone_filter",
+          "settings": {
+            "label": "DARK",
+            "value": "dark"
+          }
+        },
+        {
+          "type": "shade",
+          "settings": {
+            "name": "AU NATUREL",
+            "description": "is a clear balm with subtle opal pearl for all skin tones",
+            "swatch_color": "#e8d5c4",
+            "usage": "highlighter",
+            "skin_tone": "all"
+          }
+        },
+        {
+          "type": "shade",
+          "settings": {
+            "name": "HAPPY HOUR",
+            "description": "a cool sheer pink with silver shimmer for fair to medium tan skin tones",
+            "swatch_color": "#d4a0a0",
+            "usage": "blush, highlighter",
+            "skin_tone": "light, medium"
+          }
+        },
+        {
+          "type": "shade",
+          "settings": {
+            "name": "MAGIC HOUR",
+            "description": "is a cool, sheer bronze with silver shimmer for light to medium-dark skin",
+            "swatch_color": "#b87c5a",
+            "usage": "bronzer, highlighter",
+            "skin_tone": "light, medium, dark"
+          }
+        },
+        {
+          "type": "shade",
+          "settings": {
+            "name": "GOLDEN HOUR",
+            "description": "is a warm, sheer gold with multidimensional shimmer for all skin tones",
+            "swatch_color": "#c8924a",
+            "usage": "highlighter",
+            "skin_tone": "all"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

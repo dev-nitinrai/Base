@@ -3655,6 +3655,108 @@ sections:
       - slideshow.liquid
       - product-recommendations.liquid
       - multicolumn.liquid
+  - file: sections/shade-finder.liquid
+    name: shade-finder
+    label: Shade finder
+    visual_role: Shade finder section
+    settings:
+      - id: heading
+        type: text
+        label: Heading
+      - id: toggle_label_swatches
+        type: text
+        label: Toggle label — swatches
+      - id: toggle_label_models
+        type: text
+        label: Toggle label — models
+      - id: usage_label
+        type: text
+        label: Usage filter label
+      - id: tone_label
+        type: text
+        label: Skin tone filter label
+      - id: filter_all
+        type: text
+        label: '"All" filter button label'
+      - id: cta_prefix
+        type: text
+        label: CTA prefix text
+      - id: cta_text
+        type: text
+        label: CTA button text
+      - id: cta_url
+        type: url
+        label: CTA button URL
+      - id: no_results_text
+        type: text
+        label: No results message
+      - id: padding_top
+        type: range
+        label: Top padding
+      - id: padding_bottom
+        type: range
+        label: Bottom padding
+    blocks:
+      - type: usage_filter
+        name: Usage filter
+        settings:
+          - label
+          - value
+      - type: tone_filter
+        name: Skin tone filter
+        settings:
+          - label
+          - value
+      - type: shade
+        name: Shade
+        settings:
+          - name
+          - description
+          - model_image
+          - swatch_image
+          - swatch_color
+          - usage
+          - skin_tone
+    max_blocks: null
+    templates_allowed:
+      - "*"
+    presets:
+      - Shade finder
+    uses_image: true
+    uses_video: false
+    uses_slider: false
+    uses_grid: false
+    uses_tabs: false
+    uses_accordion: false
+    uses_form: false
+    layout_type: block
+    mockup_keywords:
+      - shade finder
+      - foundation matcher
+      - skin tone filter
+      - swatch toggle
+      - beauty filter
+      - makeup selector
+      - color range
+      - usage filter
+      - model view toggle
+      - cosmetics tool
+    when_to_use: Use this section when a design mockup shows a beauty/cosmetics shade-matching interface with filterable
+      swatches or model images, a swatch/model view toggle switch, and filter bars for usage type and skin tone.
+    when_to_create_new: Create a new section if the mockup requires a quiz-style shade finder, AI-powered skin analysis, a
+      fundamentally different layout without toggle/filter-bar structure, or non-beauty product matching logic.
+    requires_new_section_if:
+      - Mockup includes a multi-step quiz or wizard flow instead of filter buttons
+      - Mockup requires AI or camera-based skin tone detection
+      - Mockup shows a single filter dimension rather than dual usage/tone filter bars
+      - Mockup omits the swatch-vs-model toggle entirely
+      - Mockup requires integration with an external shade-finder app or iframe embed
+      - Mockup displays products in a carousel rather than a filterable grid
+      - Mockup requires a sidebar filter panel layout instead of a top filter bar
+    similar_sections:
+      - sections/product-recommendations.liquid
+      - sections/collection-list.liquid
+      - sections/main-collection-product-grid.liquid
 snippets:
   - file: snippets/component-article-card.liquid
     name: component-article-card
@@ -4357,6 +4459,16 @@ assets:
       registers_elements: []
       listens_events: []
       minified_vendor: false
+    - file: assets/section-shade-finder.js
+      name: section-shade-finder.js
+      size_lines: 138
+      exports_class:
+        - ShadeFinder
+      registers_elements:
+        - shade-finder
+      listens_events:
+        - click
+        - change
   css:
     - file: assets/cart.css
       name: cart.css
@@ -4487,3 +4599,6 @@ assets:
     - file: assets/swiper7.4.1.min.css
       name: swiper7.4.1.min.css
       size_lines: 13
+    - file: assets/section-shade-finder.css
+      name: section-shade-finder.css
+      size_lines: 478
