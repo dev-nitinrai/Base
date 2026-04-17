@@ -2235,95 +2235,43 @@ files:
     fix_guidance: Check section schema for correct setting IDs and block structure; verify CSS file exists at
       assets/section-product-highlights.css; ensure images have proper alt text fallbacks to title or feature_text
   - file: sections/product.liquid
-    responsibility: Main product detail page (PDP) section that orchestrates the product media gallery, variant selection,
-      pricing, add-to-cart form, and all product information blocks
+    responsibility: Renders the full product detail page layout including media gallery, variant selection, pricing, and
+      add-to-cart functionality via composable blocks.
     owns:
-      - Product page layout and structure (media + info wrapper grid)
-      - Dynamic loading of stylesheets based on enabled features (zoom, complementary products, quick add)
-      - Inline CSS for section padding and typography (title, description, price, variant labels)
-      - Product form rendering via blocks system
-      - Conditional rendering of product blocks (title, price, description, variants, quantity, buy buttons, etc.)
-      - Data layer JSON script for product data
-      - Integration of pickup availability modal
-      - Volume pricing display
-      - Product share button integration
+      - Product media gallery wrapper and layout
+      - Product info block rendering loop (title, price, description, text, variant picker, buy buttons, complementary
+        products)
+      - Inline dynamic CSS for padding, typography, and font settings per block
+      - Product JSON data layer script tag
+      - Conditional CSS/JS asset loading based on block types and settings
+      - Sticky info panel and constrain-to-viewport layout logic
     depends_on:
       js:
-        - assets/section-product.js
-        - assets/component-product-card.js
-        - assets/product-recommendations.js
-        - assets/component-quick-add.js
-        - assets/component-modal-opener.js
-        - assets/component-pickup-availability.js
-        - assets/component-product-share-button.js
+        - component-product-card.js
+        - product-recommendations.js
+        - component-quick-add.js
+        - component-modal-opener.js
       snippets:
-        - snippets/component-product-media-gallery.liquid
-        - snippets/component-product-price.liquid
-        - snippets/component-product-share-button.liquid
-        - sections/pickup-availability.liquid
+        - component-product-media-gallery
+        - component-product-price
       sections:
         - sections/pickup-availability.liquid
-      global_objects:
-        - product (Shopify product object)
-        - section (section settings and blocks)
-      custom_elements:
-        - product-info
-        - product-form
-        - variant-selects
-        - variant-radios
-        - volume-pricing
-        - price-per-item
-        - pickup-availability
-    depended_on_by:
-      - templates/product.json
-      - assets/section-product.js
-      - assets/component-data-layer.js
-      - Quick view modals (if implemented)
-    key_identifiers:
-      css_classes:
-        - product
-        - product__media-wrapper
-        - product__info-wrapper
-        - product__info-sticky
-        - product__title
-        - product__price
-        - product__description
-        - product__text
-        - option__label
-        - price-item
-        - volume-pricing-note
-        - section-{{ section.id }}-padding
-      data_attributes:
-        - data-url
-        - data-section
-        - data-product (JSON script)
-      js_events_emitted:
-        - variant:change (likely from variant selectors)
-      js_events_listened:
-        - None directly in Liquid
-      custom_elements:
-        - product-info
-        - product-form
-        - variant-selects
-        - variant-radios
-        - volume-pricing
-        - price-per-item
-    state_ownership:
-      - Selected product variant (via selected_or_first_available_variant)
-      - Product form ID generation (product-form-{section.id})
-      - Section-specific styling via inline style block
-      - Block rendering order and visibility
+        - sections/product-details.liquid
+        - sections/product-highlights.liquid
+        - sections/related-products.liquid
     common_mistakes:
-      - Modifying block rendering logic without checking all block types (text, title, price, description, variants,
-        quantity, buy_buttons, pickup_availability, complementary, share, custom_liquid, collapsible_tab, popup, rating,
-        icon)
-      - Forgetting that stylesheet and script loading is conditional based on block types and settings
-      - Not accounting for the dynamic product form ID when targeting forms in JavaScript
-      - Assuming media gallery is always present (check product.media exists)
-      - Modifying price rendering without updating component-product-price.liquid snippet
-    fix_guidance: Check section.blocks loop for the specific block type causing issues; verify conditional stylesheet/script
-      loading matches enabled features; ensure product object is available and has required properties; check inline CSS
-      generation in style tag for typography and spacing issues
+      - Editing font or padding styles directly in CSS files instead of the inline style block which overrides them
+      - Assuming all blocks are always present; blocks are optional and schema-driven so checking block.type before
+        rendering is required
+      - Modifying product JSON data layer script expecting it to reactively update on variant change; it is static on
+        page load
+      - Adding JS assets at the section level unconditionally instead of inside the complementary block conditional,
+        causing unnecessary script loads
+      - Confusing selected_variant assignment with live variant selection; selected_variant is a Liquid-time snapshot
+        not a reactive value
+      - Targeting .product__info-wrapper for sticky behavior without accounting for the enable_sticky_info setting toggle
+    fix_guidance: Check the section schema settings and block type conditionals first; most rendering and style issues trace
+      back to block.settings values or missing block types in the customizer configuration.
   - file: sections/promo-banner.liquid
     responsibility: Renders a promotional banner section displaying a selected product with image, title, description, price
       and CTA button with configurable layout and styling options
@@ -6030,163 +5978,81 @@ files:
     fix_guidance: Check media query at 749px for mobile layout issues; verify CSS variable references for color-background
       and color-foreground if colors are wrong; ensure feature icon and placeholder have matching dimensions (58px)
   - file: assets/section-product.css
-    responsibility: Styles the product detail page layout, media gallery (Swiper carousel), product info section, variant
-      selectors, quantity inputs, and add-to-cart functionality
+    responsibility: Styles the product detail page layout including media gallery (Swiper slider), product info panel,
+      variant selectors, quantity input, and responsive behavior.
     owns:
-      - Product page grid layout with responsive mobile/desktop breakpoints
-      - Swiper carousel styling for product media gallery
-      - Product info wrapper styling (title, price, description)
-      - Variant selector pill buttons and dropdown styles
-      - Quantity selector component styling
-      - Add to cart button and product form styles
-      - Dynamic checkout buttons styling
-      - Product share button styling
-      - Pickup availability styling
-      - Complementary products section
-      - Sticky add-to-cart bar for mobile
+      - product-info custom element display
+      - flex layout for .product media/info split
+      - Swiper slider overrides (navigation, pagination, slide media sizing)
+      - media-cover and media-contain object-fit modes
+      - pill-style variant radio buttons (checked, disabled, hover states)
+      - dropdown variant selector styling
+      - quantity-selector layout and input styling
+      - price display (.price__item, sale vs regular)
+      - mobile responsive stacking of media and info wrappers
+      - constrain-height media max-height (75vh)
     depends_on:
       js:
-        - assets/section-product.js
-        - assets/swiper7.4.1.min.js
-        - assets/component-product-media-modal.js
-        - assets/component-pickup-availability.js
-      snippets:
-        - snippets/component-product-media-gallery.liquid
-        - snippets/component-product-price.liquid
-        - snippets/component-product-card.liquid
+        - assets/swiper.js (or Swiper CDN) — drives .swiper, .swiper-slide, .swiper-button-next/prev
+        - assets/quantity-selector.js — drives quantity-selector custom element
+        - assets/product-info.js — drives product-info custom element
+      snippets: []
       sections:
-        - sections/product.liquid
-      global_objects:
-        - Swiper
-      custom_elements:
-        - product-info
-        - quantity-selector
-        - product-form
-        - shopify-payment-terms
-    depended_on_by:
-      - sections/product.liquid
-      - sections/related-products.liquid
-      - sections/product-details.liquid
-      - templates/product.json
-    key_identifiers:
-      css_classes:
-        - flex
-        - flex__item
-        - product__media-wrapper
-        - product__info-wrapper
-        - product__title
-        - product__price
-        - price__item
-        - product-regular__price
-        - product-sale__price
-        - pill-radio
-        - pill-label
-        - pill-disabled
-        - option__label
-        - variant-block__dropdown
-        - product__quantity
-        - product-form__submit
-        - sticky-addtocart
-        - media-cover
-        - media-contain
-        - constrain-height
-        - swiper
-        - swiper-slide
-        - swiper-button-next
-        - swiper-button-prev
-        - swiper-pagination-bullet-active
-      data_attributes: []
-      js_events_emitted: []
-      js_events_listened: []
-      custom_elements:
-        - product-info
-        - quantity-selector
-        - product-form
-    state_ownership:
-      - Variant selector UI state (selected/disabled pills)
-      - Quantity input display value
-      - Sticky add-to-cart visibility on scroll
-      - Media gallery cover vs contain display mode
+        - sections/product.liquid — primary consumer of these styles
+        - sections/featured-products.liquid — may reuse product card/info styles
+        - sections/related-products.liquid — may reuse product card/info styles
     common_mistakes:
-      - Breaking mobile layout by modifying flex direction without testing mobile viewport
-      - Changing z-index of swiper without considering modal overlays
-      - Modifying pill-label padding without checking text overflow on longer variant names
-      - Removing media query that forces column layout on mobile causing layout collapse
-      - Changing product__info-wrapper padding without considering sticky-addtocart positioning
-    fix_guidance: Check mobile-specific media query at line 33 for layout issues; verify Swiper navigation z-index (line 46)
-      if carousel controls disappear; inspect pill-radio:checked selector for variant selection styling problems; review
-      sticky-addtocart bottom positioning if floating cart button misaligns
+      - "Editing media-contain expecting contain behavior — it is incorrectly set to object-fit: cover, same as
+        media-cover"
+      - Assuming .swiper z-index:0 override won't conflict with sticky headers or modals in layout/theme.liquid
+      - Adding new variant UI outside .product-form__input without mirroring pill-radio/pill-label pattern, breaking
+        checked-state styling
+      - Expecting mobile padding changes on .product__info-wrapper to apply on desktop — mobile block only applies below
+        768px
+      - Treating --color-foreground and --color-background as hex values; they are RGB channel triplets requiring rgb()
+        wrapper
+      - Modifying quantity-selector dimensions without accounting for the calc() border offset (1px * 2) causing
+        misalignment
+    fix_guidance: Start with sections/product.liquid to confirm class names match, then check Swiper initialisation in JS
+      for z-index or navigation conflicts; verify CSS variable format in layout/theme.liquid before debugging colour
+      issues.
   - file: assets/section-product.js
-    responsibility: Manages product detail page interactions including variant selection, quantity updates, media gallery
-      navigation, and dynamic section rendering
+    responsibility: Manages the ProductInfo custom element lifecycle including variant selection, quantity controls, media
+      gallery (Swiper), and sticky add-to-cart bar synchronization on the product page.
     owns:
-      - ProductInfo custom element handling variant changes and quantity adjustments
-      - Swiper initialization for product media galleries (thumbnail, carousel)
-      - Dynamic section updates via Shopify Section Rendering API
-      - URL updates and browser history management for variant changes
-      - Media gallery synchronization with selected variant
-      - Quantity selector increment/decrement logic
+      - ProductInfo custom HTML element
+      - Variant change event handling and URL/DOM updates
+      - Quantity selector increment/decrement event handling
+      - Swiper initialization for thumbnail gallery and carousel gallery layouts
+      - Sticky ATC bar visibility via IntersectionObserver
+      - Sticky ATC bar price, variant label, and button state sync
     depends_on:
       js:
-        - assets/swiper7.4.1.min.js
-        - window.fetch
+        - Swiper (global, expected from CDN or theme bundle)
+        - variant-selector custom element (defined elsewhere in theme JS)
+        - quantity-selector custom element (defined elsewhere in theme JS)
       snippets:
-        - snippets/component-product-media-gallery.liquid
+        - snippets/product-media-gallery (renders .product-media-gallery__thumbnails, .product-media-gallery__main,
+          .product-media-gallery__carousel)
+        - snippets/variant-selector (renders variant-selector element)
+        - snippets/quantity-selector (renders quantity-selector element)
       sections:
         - sections/product.liquid
-      global_objects:
-        - window.Shopify
-        - window.location
-        - Swiper
-      custom_elements:
-        - variant-selector
-        - quantity-selector
-        - share-button
-    depended_on_by:
-      - sections/product.liquid
-      - assets/component-quick-add.js
-      - templates/product.json
-    key_identifiers:
-      css_classes:
-        - product-media-gallery__thumbnails
-        - product-media-gallery__thumbnails-wrapper
-        - product-media-gallery__main
-        - product-media-gallery__carousel
-        - swiper-slide
-        - swiper-button-prev
-        - swiper-button-next
-        - swiper-pagination
-      data_attributes:
-        - data-selected-variant
-        - data-product-url
-        - data-option-value-id
-        - data-media-id
-        - data-media-index
-        - data-update-url
-        - data-url
-        - data-picker-type
-      js_events_emitted:
-        - None directly but triggers section re-renders
-      js_events_listened:
-        - change (on variant-selector and quantity-selector)
-        - click (on quantity plus/minus buttons)
-      custom_elements:
-        - product-info
-    state_ownership:
-      - Selected product variant state
-      - Product quantity value
-      - Active media slide index in Swiper instances
-      - Abort controller for fetch requests
-      - Swiper instance references
+        - sections/product-details.liquid
+        - sections/featured-products.liquid
     common_mistakes:
-      - Forgetting that ProductInfo manages two different gallery types (thumbnail and carousel)
-      - Not recognizing the data-update-url flag that prevents URL updates in modal/quick-add contexts
-      - Assuming variant-selector always uses radio buttons when it can also be dropdown type
-      - Missing that media updates only work when variant has featured media ID
-      - Not handling the productUrlChanged flag for cross-product variant changes
-    fix_guidance: Check selectedOptionValues getter for correct picker type handling; verify Swiper initialization selectors
-      match DOM structure; ensure data-selected-variant JSON exists in rendered HTML; validate that variant changes
-      trigger renderSection with correct product URL
+      - Assuming a single Swiper instance exists when both thumbnail and carousel galleries could overwrite this.swiper
+        with the second initialization
+      - Forgetting that variantSelector may be null (no variants) causing selectedOptionValues getter to throw
+      - Using dataset.section to scope IDs without realizing the same section ID must match across product.liquid sticky
+        bar markup
+      - Missing that stickyBtn disabled state check uses variant !== undefined not null, so an unavailable variant still
+        enables the button incorrectly if logic is misread
+      - Expecting onVariantChange to be defined in this file when the truncated portion suggests it may fetch updated
+        section HTML via abortController
+    fix_guidance: Check sections/product.liquid and sections/product-details.liquid for matching data-section attributes and
+      sticky bar element IDs, then verify variant-selector and quantity-selector custom element definitions in other JS
+      assets.
   - file: assets/section-promo-banner.css
     responsibility: Styles the promotional banner section with responsive layout, image positioning, and content arrangement controls.
     owns:
@@ -9310,45 +9176,51 @@ files:
     fix_guidance: Check translation keys exist in locales/en.default.schema.json, verify settings_data.json contains actual
       values, ensure color scheme roles map correctly to CSS variables in snippets/css-variables.liquid
   - file: locales/en.default.json
-    responsibility: Stores English language translations for all user-facing text and labels throughout the Shopify theme.
+    responsibility: Provides all default English UI strings for the theme, serving as the single source of truth for
+      translatable text across all sections, layouts, and customer-facing messages.
     owns:
-      - All English translation strings for UI elements (buttons, labels, error messages)
-      - Customer account and authentication text (login, register, reset password)
-      - Cart and checkout related messaging
-      - Product and collection page labels
-      - Form validation and error messages
-      - Blog and article interface text
-      - Navigation and menu labels
-      - Footer and general UI text
+      - All default English translation keys for 404, blog, blogs, cart, customer
+        account/order/addresses/register/reset_password/login flows
+      - Locale strings consumed via Liquid t filter (e.g., 'cart.checkout' | t)
+      - Default fallback values when no other locale file overrides them
+      - Auto-generated content managed by Shopify admin language editor
     depends_on:
       js: []
       snippets: []
-      sections: []
-      global_objects:
-        - Shopify theme translation system (t filter in Liquid)
-      custom_elements: []
-    depended_on_by:
-      - All .liquid template and section files that use translation filters
-      - Shopify admin language editor
-      - Any JavaScript that references translation keys
-      - All customer-facing UI components (cart, product cards, forms, etc.)
-    key_identifiers:
-      css_classes: []
-      data_attributes: []
-      js_events_emitted: []
-      js_events_listened: []
-      custom_elements: []
-    state_ownership:
-      - none
+      sections:
+        - sections/404.liquid
+        - sections/article.liquid
+        - sections/blog.liquid
+        - sections/blogs.liquid
+        - sections/cart.liquid
+        - sections/account.liquid
+        - sections/activate-account.liquid
+        - sections/addresses.liquid
+        - sections/order.liquid
+        - sections/login.liquid
+        - sections/register.liquid
+        - sections/reset-password.liquid
+        - sections/search.liquid
+        - sections/product.liquid
+        - sections/product-details.liquid
+        - sections/related-products.liquid
+        - sections/header.liquid
+        - sections/footer.liquid
+        - sections/password.liquid
+        - layout/theme.liquid
+        - layout/password.liquid
     common_mistakes:
-      - Modifying translation keys without updating corresponding Liquid template references
-      - Adding translations without matching schema counterpart in en.default.schema.json
-      - Forgetting that this file may be auto-regenerated by Shopify admin language editor
-      - Hardcoding text in templates instead of using translation keys from this file
-      - Not maintaining consistency in terminology across different sections
-    fix_guidance: When text displays incorrectly or is missing, search for the translation key (e.g., cart.checkout,
-      customer.login_page.title) in Liquid files using {{ 't' filter, verify the key exists in this JSON structure, and
-      ensure nested object paths match exactly.
+      - Editing this file directly when Shopify admin language editor will overwrite changes silently
+      - Adding new translation keys here but forgetting to add matching keys in all other locale files causing missing
+        translations for non-English storefronts
+      - Using hardcoded strings in Liquid files instead of referencing locale keys, making text untranslatable
+      - Referencing a locale key path incorrectly in Liquid (e.g., wrong nesting level) and getting a blank render
+        instead of an error
+      - Assuming removing a key here removes the string from the UI without auditing all Liquid files that call that key
+        via the t filter
+      - Confusing blog vs blogs key namespaces which have overlapping but distinct comment-related keys
+    fix_guidance: When a UI string is missing or blank, first verify the exact key path in this file matches what the Liquid
+      t filter is calling, then check if a Shopify admin language override is shadowing the default value.
   - file: locales/en.default.schema.json
     responsibility: Provides default English translations for all Shopify theme editor schema settings, labels, and section
       configurations

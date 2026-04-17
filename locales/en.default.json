@@ -263,6 +263,12 @@
       "payment": "Payment methods"
     },
     "main-product": {
+      "settings": {
+        "enable_sticky_atc_bar": {
+          "label": "Enable sticky add-to-cart bar",
+          "info": "Shows a fixed bar at the bottom of the page when the main add-to-cart button scrolls out of view"
+        }
+      },
       "blocks": {
         "pickup_availability": {
           "view_store_info": "View store information",
