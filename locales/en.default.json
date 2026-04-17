@@ -281,6 +281,39 @@
       "close_tooltip": "Close",
       "previous": "Previous slide",
       "next": "Next slide"
+    },
+    "announcement_countdown": {
+      "name": "Announcement countdown",
+      "close": "Dismiss announcement",
+      "days": "Days",
+      "hours": "Hrs",
+      "minutes": "Min",
+      "seconds": "Sec",
+      "settings": {
+        "enabled": {
+          "label": "Enable bar"
+        },
+        "message": {
+          "label": "Message text"
+        },
+        "end_datetime": {
+          "label": "Countdown end date and time",
+          "info": "Enter an ISO 8601 datetime, e.g. 2026-12-31T23:59:00Z. The bar hides automatically when this time passes."
+        },
+        "background_color": {
+          "label": "Background color"
+        },
+        "text_color": {
+          "label": "Text color"
+        },
+        "show_on_mobile": {
+          "label": "Show on mobile"
+        },
+        "link_url": {
+          "label": "Link URL",
+          "info": "When set, the entire bar becomes a clickable link."
+        }
+      }
     }
   },
   "products": {

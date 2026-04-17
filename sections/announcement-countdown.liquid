@@ -1,0 +1,276 @@
+{% style %}
+  #shopify-section-{{ section.id }} {
+    background-color: {{ section.settings.background_color }};
+    color: {{ section.settings.text_color }};
+  }
+
+  .announcement-countdown {
+    width: 100%;
+    position: relative;
+  }
+
+  .announcement-countdown__inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.2rem;
+    padding: 0.8rem 4.8rem 0.8rem 1.6rem;
+    min-height: 4rem;
+    position: relative;
+  }
+
+  .announcement-countdown__message {
+    font-size: 1.4rem;
+    font-weight: 500;
+    line-height: 1.4;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-shrink: 1;
+    min-width: 0;
+  }
+
+  .announcement-countdown__link {
+    display: contents;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .announcement-countdown__link:focus-visible .announcement-countdown__inner {
+    outline: 2px solid currentColor;
+    outline-offset: -2px;
+  }
+
+  .countdown-timer {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 1.4rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .countdown-timer__segment {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.1;
+  }
+
+  .countdown-timer__value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+
+  .countdown-timer__label {
+    font-size: 0.9rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    opacity: 0.8;
+  }
+
+  .countdown-timer__separator {
+    font-weight: 700;
+    font-size: 1.4rem;
+    align-self: flex-start;
+    padding-top: 0.1rem;
+    opacity: 0.7;
+  }
+
+  .announcement-countdown__close {
+    position: absolute;
+    inset-inline-end: 1.2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.2rem;
+    height: 3.2rem;
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    padding: 0;
+    border-radius: 50%;
+    opacity: 0.75;
+    transition: opacity 0.2s ease, background-color 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .announcement-countdown__close:hover {
+    opacity: 1;
+    background-color: rgba(255, 255, 255, 0.15);
+  }
+
+  .announcement-countdown__close:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+    opacity: 1;
+  }
+
+  .announcement-countdown__close svg {
+    width: 1.4rem;
+    height: 1.4rem;
+    display: block;
+    pointer-events: none;
+  }
+
+  @media (max-width: 767px) {
+    .announcement-countdown__inner {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.6rem;
+      padding: 0.8rem 4rem 0.8rem 1.2rem;
+    }
+
+    .announcement-countdown__message {
+      width: 100%;
+      text-align: center;
+      font-size: 1.3rem;
+    }
+
+    .countdown-timer {
+      font-size: 1.3rem;
+    }
+
+    .countdown-timer__value {
+      font-size: 1.4rem;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .announcement-countdown__inner {
+      flex-wrap: nowrap;
+    }
+  }
+{% endstyle %}
+
+{%- liquid
+  assign is_enabled = section.settings.enabled
+  assign show_on_mobile = section.settings.show_on_mobile
+  assign has_link = false
+  if section.settings.link_url != blank
+    assign has_link = true
+  endif
+-%}
+
+{% if is_enabled %}
+  <div
+    class="announcement-countdown"
+    data-section-id="{{ section.id }}"
+    {% unless show_on_mobile %}
+      style="display: none;"
+      data-desktop-only="true"
+    {% endunless %}
+  >
+    {% if has_link %}
+      <a
+        href="{{ section.settings.link_url }}"
+        class="announcement-countdown__link"
+        aria-label="{{ section.settings.message | escape }}"
+      >
+    {% endif %}
+
+    <div class="announcement-countdown__inner">
+      <span class="announcement-countdown__message">
+        {{ section.settings.message | escape }}
+      </span>
+
+      {% render 'countdown-timer',
+        end_datetime: section.settings.end_datetime,
+        section_id: section.id
+      %}
+    </div>
+
+    {% if has_link %}
+      </a>
+    {% endif %}
+
+    <button
+      type="button"
+      class="announcement-countdown__close"
+      aria-label="{{ 'sections.announcement_countdown.close' | t }}"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14" fill="none" aria-hidden="true" focusable="false">
+        <path d="M1 1L13 13M13 1L1 13" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+      </svg>
+    </button>
+  </div>
+
+  <script src="{{ 'countdown-timer.js' | asset_url }}" defer="defer"></script>
+
+  {% if section.settings.show_on_mobile == false %}
+    <style>
+      @media (max-width: 767px) {
+        #shopify-section-{{ section.id }} {
+          display: none;
+        }
+      }
+    </style>
+  {% endif %}
+{% endif %}
+
+{% schema %}
+{
+  "name": "t:sections.announcement_countdown.name",
+  "enabled_on": {
+    "groups": ["header"]
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enabled",
+      "label": "t:sections.announcement_countdown.settings.enabled.label",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "message",
+      "label": "t:sections.announcement_countdown.settings.message.label",
+      "default": "Free shipping on orders over $50 — ends in"
+    },
+    {
+      "type": "text",
+      "id": "end_datetime",
+      "label": "t:sections.announcement_countdown.settings.end_datetime.label",
+      "info": "t:sections.announcement_countdown.settings.end_datetime.info",
+      "default": "2026-12-31T23:59:00Z"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "t:sections.announcement_countdown.settings.background_color.label",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "t:sections.announcement_countdown.settings.text_color.label",
+      "default": "#ffffff"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_on_mobile",
+      "label": "t:sections.announcement_countdown.settings.show_on_mobile.label",
+      "default": true
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "t:sections.announcement_countdown.settings.link_url.label",
+      "info": "t:sections.announcement_countdown.settings.link_url.info"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.announcement_countdown.name"
+    }
+  ]
+}
+{% endschema %}
