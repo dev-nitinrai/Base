@@ -1,0 +1,38 @@
+{% doc %}
+  Renders the countdown timer markup with day, hour, minute, and second segments.
+  JS targets the stable class names to update values every second.
+
+  @param {string} end_datetime - ISO 8601 datetime string for the countdown target
+  @param {string} section_id - The parent section ID used to scope the timer instance
+
+  @example
+  {% render 'countdown-timer', end_datetime: section.settings.end_datetime, section_id: section.id %}
+{% enddoc %}
+
+<span
+  class="countdown-timer"
+  data-end="{{ end_datetime | escape }}"
+  data-section="{{ section_id | escape }}"
+  aria-live="polite"
+  aria-atomic="true"
+>
+  <span class="countdown-timer__segment">
+    <span class="countdown-timer__value countdown-timer__days">--</span>
+    <span class="countdown-timer__label">{{ 'sections.announcement_countdown.days' | t }}</span>
+  </span>
+  <span class="countdown-timer__separator" aria-hidden="true">:</span>
+  <span class="countdown-timer__segment">
+    <span class="countdown-timer__value countdown-timer__hours">--</span>
+    <span class="countdown-timer__label">{{ 'sections.announcement_countdown.hours' | t }}</span>
+  </span>
+  <span class="countdown-timer__separator" aria-hidden="true">:</span>
+  <span class="countdown-timer__segment">
+    <span class="countdown-timer__value countdown-timer__minutes">--</span>
+    <span class="countdown-timer__label">{{ 'sections.announcement_countdown.minutes' | t }}</span>
+  </span>
+  <span class="countdown-timer__separator" aria-hidden="true">:</span>
+  <span class="countdown-timer__segment">
+    <span class="countdown-timer__value countdown-timer__seconds">--</span>
+    <span class="countdown-timer__label">{{ 'sections.announcement_countdown.seconds' | t }}</span>
+  </span>
+</span>

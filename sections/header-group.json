@@ -11,6 +11,17 @@
   "type": "header",
   "name": "t:general.header",
   "sections": {
+    "announcement-countdown": {
+      "type": "announcement-countdown",
+      "settings": {
+        "enabled": true,
+        "message": "Free shipping on orders over $50 — ends in",
+        "end_datetime": "2026-12-31T23:59:00Z",
+        "background_color": "#111111",
+        "text_color": "#ffffff",
+        "show_on_mobile": true
+      }
+    },
     "announcement-bar": {
       "type": "announcement-bar",
       "blocks": {
@@ -66,6 +77,7 @@
     }
   },
   "order": [
+    "announcement-countdown",
     "announcement-bar",
     "header"
   ]

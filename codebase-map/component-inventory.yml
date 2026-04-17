@@ -3655,6 +3655,77 @@ sections:
       - slideshow.liquid
       - product-recommendations.liquid
       - multicolumn.liquid
+  - file: sections/announcement-countdown.liquid
+    name: announcement-countdown
+    label: t:sections.announcement_countdown.name
+    visual_role: t:sections.announcement_countdown.name section
+    settings:
+      - id: enabled
+        type: checkbox
+        label: t:sections.announcement_countdown.settings.enabled.label
+      - id: message
+        type: text
+        label: t:sections.announcement_countdown.settings.message.label
+      - id: end_datetime
+        type: text
+        label: t:sections.announcement_countdown.settings.end_datetime.label
+      - id: background_color
+        type: color
+        label: t:sections.announcement_countdown.settings.background_color.label
+      - id: text_color
+        type: color
+        label: t:sections.announcement_countdown.settings.text_color.label
+      - id: show_on_mobile
+        type: checkbox
+        label: t:sections.announcement_countdown.settings.show_on_mobile.label
+      - id: link_url
+        type: url
+        label: t:sections.announcement_countdown.settings.link_url.label
+    blocks: []
+    max_blocks: null
+    templates_allowed:
+      - "*"
+    presets:
+      - t:sections.announcement_countdown.name
+    uses_image: false
+    uses_video: false
+    uses_slider: false
+    uses_grid: true
+    uses_tabs: false
+    uses_accordion: false
+    uses_form: false
+    layout_type: block
+    mockup_keywords:
+      - announcement bar
+      - countdown timer
+      - promotional banner
+      - sale countdown
+      - top bar
+      - urgency bar
+      - dismissible banner
+      - deadline timer
+      - offer expiry
+      - notification strip
+    when_to_use: Use this section when a mockup shows a top announcement bar that combines a promotional text message with a
+      live countdown timer and a dismiss/close button.
+    when_to_create_new: Create a new section if the mockup requires multiple rotating announcements, a progress bar, icon
+      support, or a countdown design with significantly different layout such as boxed digit segments or full-page
+      overlays.
+    requires_new_section_if:
+      - Mockup shows multiple announcement messages cycling/rotating
+      - Countdown uses large boxed/card-style digit segments rather than inline text
+      - Banner includes promotional icons, images, or badges alongside the message
+      - Requires sticky/fixed positioning that persists on scroll
+      - Needs a progress bar or percentage-based urgency indicator
+      - Mockup shows the countdown without any accompanying text message
+      - Requires more than one CTA button or link within the bar
+      - Design includes a gradient, pattern, or image background rather than a solid color
+    similar_sections:
+      - sections/announcement-bar.liquid
+      - sections/announcement.liquid
+      - sections/promo-banner.liquid
+      - sections/countdown-banner.liquid
+      - sections/header-announcement.liquid
 snippets:
   - file: snippets/component-article-card.liquid
     name: component-article-card
@@ -3922,6 +3993,11 @@ snippets:
       - page_title
       - canonical_url
     line_count: 113
+  - file: snippets/countdown-timer.liquid
+    name: countdown-timer
+    purpose: Reusable countdown-timer component
+    expected_params: []
+    line_count: 39
 templates:
   - file: templates/404.json
     name: "404"
@@ -4357,6 +4433,14 @@ assets:
       registers_elements: []
       listens_events: []
       minified_vendor: false
+    - file: assets/countdown-timer.js
+      name: countdown-timer.js
+      size_lines: 118
+      exports_class: []
+      registers_elements: []
+      listens_events:
+        - click
+        - DOMContentLoaded
   css:
     - file: assets/cart.css
       name: cart.css
