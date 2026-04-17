@@ -1386,81 +1386,34 @@ files:
     fix_guidance: Check sections/footer.liquid for actual rendering logic; this file only stores configuration data that
       footer.liquid consumes via section.blocks and section.settings.
   - file: sections/footer.liquid
-    responsibility: Renders the site footer with configurable blocks for text, navigation menus, social icons, and brand information
+    responsibility: Renders the site-wide footer including nav link lists, brand information, social icons, localization
+      controls, and copyright, with all layout and content driven by section blocks and global theme settings.
     owns:
-      - Footer section layout and content structure
-      - Footer blocks rendering (text, link_list, social_icons, brand_information)
-      - Newsletter signup form integration
-      - Payment icons display
-      - Localization forms for country/language selection
-      - Footer policies and copyright text display
-      - Social media icon visibility logic
+      - Footer top content block rendering (text, link_list, social_icons, brand_information block types)
+      - Footer bottom bar (copyright, localization, payment icons)
+      - Inline background/color override styles for the footer section
+      - Social icons visibility logic based on global settings.social_* links
+      - Brand image, headline, and description rendering from global brand settings
+      - Scroll-trigger animation wrapper on footer bottom
     depends_on:
-      js:
-        - assets/component-localization-form.js
-        - assets/shopify.js
+      js: []
       snippets:
-        - snippets/component-social-icons.liquid
-        - snippets/component-localization-form.liquid
-      sections: []
-      global_objects:
-        - section.blocks
-        - section.settings
-        - settings.social_facebook_link
-        - settings.social_instagram_link
-        - settings.social_youtube_link
-        - settings.social_tiktok_link
-        - settings.social_twitter_link
-        - settings.social_pinterest_link
-        - settings.social_snapchat_link
-        - settings.social_tumblr_link
-        - settings.social_vimeo_link
-        - settings.brand_image
-        - settings.brand_headline
-        - settings.brand_description
-        - settings.brand_image_width
-        - settings.animations_reveal_on_scroll
-        - settings.enable_country_selector
-        - settings.enable_language_selector
-        - settings.payment_enable
-        - shop.enabled_payment_types
-        - shop.name
-      custom_elements: []
-    depended_on_by:
-      - sections/footer-group.json
-      - layout/theme.liquid
-    key_identifiers:
-      css_classes:
-        - footer
-        - footer__content-top
-        - footer__content-bottom
-        - footer__blocks-wrapper
-        - footer-block
-        - footer-block__heading
-        - footer-block__details-content
-        - footer-block__brand-info
-        - footer__column
-        - footer__localization
-        - footer__list-social
-        - section-footer-padding
-      data_attributes:
-        - data-cascade
-      js_events_emitted: []
-      js_events_listened: []
-      custom_elements: []
-    state_ownership:
-      - Social icons visibility state (has_social_icons)
-      - Brand information empty state (brand_empty)
-      - Only empty brand block state (only_empty_brand)
+        - component-social-icons
+      sections:
+        - sections/footer-group.json
     common_mistakes:
-      - Modifying inline background color (#ff0000) without realizing it overrides color_scheme setting
-      - Not checking for empty social links before rendering social icon blocks
-      - Forgetting that newsletter form requires shop.customer_accounts_enabled
-      - Missing that localization forms depend on country/language selector settings
-      - Not accounting for brand_empty conditional logic when adding brand content
-    fix_guidance: Check section.blocks array and settings.social_*_link values for visibility issues; verify color_scheme vs
-      hardcoded background color conflict; ensure localization form snippets are available when enable_country_selector
-      or enable_language_selector is true
+      - Editing social link visibility here instead of in global theme settings where social_facebook_link etc. are
+        defined
+      - Expecting block-level color_scheme to override the hardcoded inline black background (#000000) set in the style
+        tag
+      - Adding new block types in Liquid without registering them in the footer-group.json schema, causing blocks to
+        silently render nothing
+      - Assuming brand_image, brand_headline, and brand_description are section settings when they are global settings
+        fields
+      - Confusing the block-level show_social setting (brand_information block) with the section-level show_social
+        setting used in the top content guard condition
+    fix_guidance: Check sections/footer-group.json for schema and block type definitions first, then verify global settings
+      (brand_image, social_*) in theme settings before debugging block-level rendering issues.
   - file: sections/header-group.json
     responsibility: Configures the header group combining announcement bar and header sections with their settings and display order
     owns:
@@ -5631,70 +5584,40 @@ files:
     fix_guidance: Check that window.Swiper is loaded, verify data-section-id attribute matches the selector pattern, and
       ensure navigation button selectors match DOM structure in sections/featured-products.liquid
   - file: assets/section-footer.css
-    responsibility: Styles the footer section including layout, color overrides, newsletter form, localization selectors,
-      social links, and copyright information.
+    responsibility: Provides all layout, color overrides, and structural styles for the site footer section including
+      background, text, localization, newsletter, social links, and copyright elements.
     owns:
-      - Footer layout with top and bottom content areas
-      - Footer color scheme overrides (white text for all footer elements)
-      - Footer block styling (headings, links, images, newsletter)
-      - Localization dropdown positioning and styling
-      - Social media icon list layout
-      - Copyright and policies layout
-      - Responsive footer grid and spacing
-      - Footer image alignment (left/center/right)
+      - .footer background-color black override (!important)
+      - .footer text and link color white override (!important)
+      - .footer__content-top and .footer__content-bottom layout and padding
+      - .footer__content-bottom-wrapper flex layout
+      - .footer-block__heading typography styles
+      - .footer-block--newsletter layout
+      - .footer-block__details-content list and link styles
+      - .footer__localization dropdown and positioning
+      - .footer__list-social and .list-social__link styles
+      - .footer__copyright layout
+      - .footer-block-image alignment variants (left, center, right)
+      - .footer-block__image-wrapper and img styles
+      - .footer-block__brand-info alignment
     depends_on:
       js: []
-      snippets:
-        - snippets/component-localization-form.liquid
-        - snippets/component-social-icons.liquid
+      snippets: []
       sections:
         - sections/footer.liquid
-      global_objects:
-        - --color-foreground CSS variable
-      custom_elements: []
-    depended_on_by:
-      - sections/footer.liquid
-      - sections/footer-group.json
-      - layout/theme.liquid (footer is site-wide)
-    key_identifiers:
-      css_classes:
-        - .footer
-        - .footer__content-top
-        - .footer__content-bottom
-        - .footer__content-bottom-wrapper
-        - .footer__column
-        - .footer__column--info
-        - .footer-block
-        - .footer-block__heading
-        - .footer-block__details-content
-        - .footer-block--newsletter
-        - .footer-block__image-wrapper
-        - .footer-block__brand-info
-        - .footer-block-image
-        - .footer__list-social
-        - .footer__localization
-        - .footer__copyright
-        - .copyright__content
-        - .policies
-        - .list-social__link
-        - .list-menu__item--link
-        - .list-menu__item--active
-        - .newsletter-form__field-wrapper
-        - .localization-list
-      data_attributes: []
-      js_events_emitted: []
-      js_events_listened: []
-      custom_elements: []
-    state_ownership:
-      - none
+        - sections/footer-group.json
     common_mistakes:
-      - Modifying footer text color without updating the white color overrides at the top
-      - Changing layout without considering both .footer__content-top and .footer__content-bottom
-      - Missing that localization dropdown is absolutely positioned relative to .footer__localization
-      - Not accounting for :only-child rules that center single footer blocks
-      - Overlooking that border-top is removed for non-default color schemes
-    fix_guidance: Check color override section at top for text color issues; verify .footer__content-bottom-wrapper flex
-      layout for alignment problems; inspect .footer__localization absolute positioning for dropdown placement issues
+      - Attempting to change footer background or text color in theme settings or color schemes without realizing
+        !important overrides in this file will always win
+      - Adding color-scheme classes to new footer child elements and expecting them to inherit their own background, not
+        realizing the wildcard .footer [class*='color-'] override forces black
+      - Assuming --color-foreground or --color-background CSS variables apply inside the footer the same way they do
+        elsewhere, since this file resets them
+      - Editing footer styles in theme.liquid or critical.css and not seeing changes take effect because this file
+        overrides them
+      - Forgetting that .footer select background is also overridden here, not just in critical.css
+    fix_guidance: Check !important overrides at the top of this file first before investigating color scheme variables,
+      theme settings, or critical.css for any footer background or text color issues.
   - file: assets/section-hero-v2.css
     responsibility: Styles the hero-v2 section with a split-layout design featuring a main content area with overlay text
       and two promotional blocks
