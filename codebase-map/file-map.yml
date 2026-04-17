@@ -1386,81 +1386,31 @@ files:
     fix_guidance: Check sections/footer.liquid for actual rendering logic; this file only stores configuration data that
       footer.liquid consumes via section.blocks and section.settings.
   - file: sections/footer.liquid
-    responsibility: Renders the site footer with configurable blocks for text, navigation menus, social icons, and brand information
+    responsibility: Renders the site-wide footer including configurable content blocks (text, link lists, social icons,
+      brand information) and the bottom bar with localization and copyright details.
     owns:
-      - Footer section layout and content structure
-      - Footer blocks rendering (text, link_list, social_icons, brand_information)
-      - Newsletter signup form integration
-      - Payment icons display
-      - Localization forms for country/language selection
-      - Footer policies and copyright text display
-      - Social media icon visibility logic
+      - Footer layout and background styling (hardcoded black
+      - Social icons visibility logic (has_social_icons, only_empty_brand flags)
+      - Block rendering for types: text, link_list, social_icons, brand_information
+      - Brand image responsive rendering with aspect ratio calculation
+      - Scroll animation trigger on footer bottom bar
+      - Footer content-top and content-bottom structural regions
     depends_on:
-      js:
-        - assets/component-localization-form.js
-        - assets/shopify.js
+      js: []
       snippets:
-        - snippets/component-social-icons.liquid
-        - snippets/component-localization-form.liquid
-      sections: []
-      global_objects:
-        - section.blocks
-        - section.settings
-        - settings.social_facebook_link
-        - settings.social_instagram_link
-        - settings.social_youtube_link
-        - settings.social_tiktok_link
-        - settings.social_twitter_link
-        - settings.social_pinterest_link
-        - settings.social_snapchat_link
-        - settings.social_tumblr_link
-        - settings.social_vimeo_link
-        - settings.brand_image
-        - settings.brand_headline
-        - settings.brand_description
-        - settings.brand_image_width
-        - settings.animations_reveal_on_scroll
-        - settings.enable_country_selector
-        - settings.enable_language_selector
-        - settings.payment_enable
-        - shop.enabled_payment_types
-        - shop.name
-      custom_elements: []
-    depended_on_by:
-      - sections/footer-group.json
-      - layout/theme.liquid
-    key_identifiers:
-      css_classes:
-        - footer
-        - footer__content-top
-        - footer__content-bottom
-        - footer__blocks-wrapper
-        - footer-block
-        - footer-block__heading
-        - footer-block__details-content
-        - footer-block__brand-info
-        - footer__column
-        - footer__localization
-        - footer__list-social
-        - section-footer-padding
-      data_attributes:
-        - data-cascade
-      js_events_emitted: []
-      js_events_listened: []
-      custom_elements: []
-    state_ownership:
-      - Social icons visibility state (has_social_icons)
-      - Brand information empty state (brand_empty)
-      - Only empty brand block state (only_empty_brand)
+        - component-social-icons
+      sections:
+        - sections/footer-group.json
     common_mistakes:
-      - Modifying inline background color (#ff0000) without realizing it overrides color_scheme setting
-      - Not checking for empty social links before rendering social icon blocks
-      - Forgetting that newsletter form requires shop.customer_accounts_enabled
-      - Missing that localization forms depend on country/language selector settings
-      - Not accounting for brand_empty conditional logic when adding brand content
-    fix_guidance: Check section.blocks array and settings.social_*_link values for visibility issues; verify color_scheme vs
-      hardcoded background color conflict; ensure localization form snippets are available when enable_country_selector
-      or enable_language_selector is true
+      - Assuming background color is controlled by color_scheme setting when it is hardcoded to
+      - Editing social icon links in the section settings instead of global theme settings (settings.social_*_link)
+      - Expecting brand_image, brand_headline, or brand_description to come from section blocks instead of global
+        settings
+      - Not accounting for the only_empty_brand guard which silently suppresses the entire footer-top region
+      - Assuming the truncated footer__content-bottom region is empty when it likely contains localization selectors and
+        copyright output
+    fix_guidance: Check hardcoded inline styles before color_scheme classes, verify global settings for brand and social
+      data, and inspect footer-group.json for block configuration defaults.
   - file: sections/header-group.json
     responsibility: Configures the header group combining announcement bar and header sections with their settings and display order
     owns:
@@ -5631,70 +5581,40 @@ files:
     fix_guidance: Check that window.Swiper is loaded, verify data-section-id attribute matches the selector pattern, and
       ensure navigation button selectors match DOM structure in sections/featured-products.liquid
   - file: assets/section-footer.css
-    responsibility: Styles the footer section including layout, color overrides, newsletter form, localization selectors,
-      social links, and copyright information.
+    responsibility: Defines all layout, spacing, color overrides, and responsive styles for the site footer section
+      including blocks, localization, newsletter, social links, and copyright areas.
     owns:
-      - Footer layout with top and bottom content areas
-      - Footer color scheme overrides (white text for all footer elements)
-      - Footer block styling (headings, links, images, newsletter)
-      - Localization dropdown positioning and styling
-      - Social media icon list layout
-      - Copyright and policies layout
-      - Responsive footer grid and spacing
-      - Footer image alignment (left/center/right)
+      - .footer color override rules (forced white text via !important)
+      - .footer__content-top and .footer__content-bottom layout
+      - .footer__content-bottom-wrapper flex layout
+      - .footer-block__heading typography styles
+      - .footer-block--newsletter layout
+      - .footer-block__details-content link and list styles
+      - .footer-block__image-wrapper and image display
+      - .footer-block__brand-info alignment logic
+      - .footer__localization dropdown positioning and layout
+      - .footer__copyright centering
+      - .footer__list-social and list-social__item styles
+      - .footer-block-image alignment variants (left, center, right)
+      - li.list-social__item border-radius
     depends_on:
       js: []
-      snippets:
-        - snippets/component-localization-form.liquid
-        - snippets/component-social-icons.liquid
+      snippets: []
       sections:
         - sections/footer.liquid
-      global_objects:
-        - --color-foreground CSS variable
-      custom_elements: []
-    depended_on_by:
-      - sections/footer.liquid
-      - sections/footer-group.json
-      - layout/theme.liquid (footer is site-wide)
-    key_identifiers:
-      css_classes:
-        - .footer
-        - .footer__content-top
-        - .footer__content-bottom
-        - .footer__content-bottom-wrapper
-        - .footer__column
-        - .footer__column--info
-        - .footer-block
-        - .footer-block__heading
-        - .footer-block__details-content
-        - .footer-block--newsletter
-        - .footer-block__image-wrapper
-        - .footer-block__brand-info
-        - .footer-block-image
-        - .footer__list-social
-        - .footer__localization
-        - .footer__copyright
-        - .copyright__content
-        - .policies
-        - .list-social__link
-        - .list-menu__item--link
-        - .list-menu__item--active
-        - .newsletter-form__field-wrapper
-        - .localization-list
-      data_attributes: []
-      js_events_emitted: []
-      js_events_listened: []
-      custom_elements: []
-    state_ownership:
-      - none
+        - sections/footer-group.json
     common_mistakes:
-      - Modifying footer text color without updating the white color overrides at the top
-      - Changing layout without considering both .footer__content-top and .footer__content-bottom
-      - Missing that localization dropdown is absolutely positioned relative to .footer__localization
-      - Not accounting for :only-child rules that center single footer blocks
-      - Overlooking that border-top is removed for non-default color schemes
-    fix_guidance: Check color override section at top for text color issues; verify .footer__content-bottom-wrapper flex
-      layout for alignment problems; inspect .footer__localization absolute positioning for dropdown placement issues
+      - Attempting to override footer text colors without !important, causing CSS specificity conflicts with theme color
+        scheme variables
+      - Editing color values here expecting them to respect CSS custom properties (--color-foreground) when most colors
+        are hardcoded as
+      - Assuming responsive/mobile styles are in this file when they may be truncated or in a separate media query block
+        not shown
+      - Modifying .footer__column commented-out rules and expecting layout changes without realizing they are disabled
+      - Expecting localization dropdown z-index or overflow behavior to be controlled here when it may conflict with
+        theme-level stacking contexts
+    fix_guidance: "Check hardcoded #ffffff !important declarations first for color issues, then verify footer.liquid class
+      names match selectors here, and inspect footer-group.json for block structure mismatches."
   - file: assets/section-hero-v2.css
     responsibility: Styles the hero-v2 section with a split-layout design featuring a main content area with overlay text
       and two promotional blocks
