@@ -2642,6 +2642,9 @@ sections:
       - id: enable_sticky_info
         type: checkbox
         label: t:sections.main-product.settings.enable_sticky_info.label
+      - id: enable_sticky_atc_bar
+        type: checkbox
+        label: t:sections.main-product.settings.enable_sticky_atc_bar.label
       - id: color_scheme
         type: color_scheme
         label: t:sections.all.colors.label
@@ -4269,7 +4272,7 @@ assets:
       minified_vendor: false
     - file: assets/section-product.js
       name: section-product.js
-      size_lines: 208
+      size_lines: 267
       exports_class:
         - ProductInfo
       registers_elements:
@@ -4277,7 +4280,6 @@ assets:
       listens_events:
         - change
         - click
-      minified_vendor: false
     - file: assets/section-related-products.js
       name: section-related-products.js
       size_lines: 96
@@ -4459,7 +4461,7 @@ assets:
       size_lines: 148
     - file: assets/section-product.css
       name: section-product.css
-      size_lines: 879
+      size_lines: 1040
     - file: assets/section-promo-banner.css
       name: section-promo-banner.css
       size_lines: 163

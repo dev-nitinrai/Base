@@ -1,6 +1,7 @@
 export class ProductInfo extends HTMLElement {
   abortController = undefined;
   swiper = undefined;
+  #stickyBarObserver = undefined;
 
   constructor() {
     super();
@@ -16,6 +17,63 @@ export class ProductInfo extends HTMLElement {
   connectedCallback() {
     this.setupEventListeners();
     this.initSwiper();
+    this.initStickyBar();
+  }
+
+  disconnectedCallback() {
+    this.#stickyBarObserver?.disconnect();
+  }
+
+  get stickyBar() {
+    return document.getElementById(`sticky-atc-bar-${this.dataset.section}`);
+  }
+
+  initStickyBar() {
+    const bar = this.stickyBar;
+    if (!bar) return;
+
+    const addToCartContainer = this.querySelector(`#add-to-cart-container-${this.dataset.section}`);
+    if (!addToCartContainer) return;
+
+    this.#stickyBarObserver = new IntersectionObserver(
+      ([entry]) => {
+        const isVisible = !entry.isIntersecting;
+        bar.classList.toggle('is-visible', isVisible);
+        bar.setAttribute('aria-hidden', String(!isVisible));
+      },
+      { threshold: 0, rootMargin: '0px 0px -60px 0px' }
+    );
+
+    this.#stickyBarObserver.observe(addToCartContainer);
+  }
+
+  updateStickyBar(variant) {
+    const bar = this.stickyBar;
+    if (!bar) return;
+
+    const sectionId = this.dataset.section;
+
+    const priceEl = bar.querySelector(`#sticky-atc-price-${sectionId}`);
+    const mainPriceEl = this.querySelector(`#price-${sectionId}`);
+    if (priceEl && mainPriceEl) {
+      priceEl.innerHTML = mainPriceEl.innerHTML;
+    }
+
+    const variantLabelEl = bar.querySelector(`#sticky-atc-variant-${sectionId}`);
+    if (variantLabelEl && variant) {
+      variantLabelEl.textContent = variant.title;
+    }
+
+    const stickyInput = bar.querySelector('input[name="id"]');
+    if (stickyInput && variant) {
+      stickyInput.value = variant.id ?? '';
+    }
+
+    const stickyBtn = bar.querySelector(`#sticky-atc-btn-${sectionId}`);
+    if (stickyBtn && variant !== undefined) {
+      const available = variant?.available ?? false;
+      stickyBtn.disabled = !available;
+    }
   }
 
   initSwiper() {
@@ -191,6 +249,7 @@ export class ProductInfo extends HTMLElement {
           this.updateSourceFromDestination(html, `price-${this.dataset.section}`);
           this.updateSourceFromDestination(html, `sku-${this.dataset.section}`);
           this.updateSourceFromDestination(html, `inventory-${this.dataset.section}`);
+          this.updateStickyBar(variant);
         }
       })
       .catch((error) => {
