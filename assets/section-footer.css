@@ -1,4 +1,23 @@
-/* Footer Color Overrides */
+/* Footer Background Overrides
+ * The .footer element carries a color-scheme class that sets background-color
+ * via --color-background CSS variables. We must override it directly here so
+ * the black background wins regardless of which scheme is active.
+ * Child elements that also carry color-scheme classes (e.g. localization
+ * dropdowns) get their own background-color from the same variable, so they
+ * need explicit overrides too. The select element in critical.css also pulls
+ * from --color-background and must be reset inside the footer.
+ */
+.footer {
+  background-color: #000000 !important;
+}
+
+.footer [class*="color-"],
+.footer .gradient,
+.footer select {
+  background-color: #000000 !important;
+}
+
+/* Footer Text Color Overrides */
 .footer,
 .footer *,
 .footer a,
