@@ -4435,7 +4435,7 @@ assets:
       size_lines: 424
     - file: assets/section-footer.css
       name: section-footer.css
-      size_lines: 821
+      size_lines: 842
     - file: assets/section-hero-v2.css
       name: section-hero-v2.css
       size_lines: 240
