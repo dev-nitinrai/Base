@@ -1,4 +1,8 @@
 /* Footer Color Overrides */
+.footer {
+  background-color: #000000 !important;
+}
+
 .footer,
 .footer *,
 .footer a,
@@ -12,6 +16,23 @@
 .footer .copyright__content a,
 .footer .footer__localization h2 {
   color: #ffffff !important;
+}
+
+/* Override color-scheme and gradient background on any child element that
+   carries its own scheme class (e.g. localization dropdowns). The dropdown
+   list itself must remain readable, so it gets a dark background to match. */
+.footer [class*="color-"],
+.footer .gradient {
+  background-color: #000000 !important;
+  --color-background: 0, 0, 0;
+  --gradient-background: #000000;
+}
+
+/* Localization dropdown: keep it visually distinct from the footer surface
+   with a slightly lighter dark tone so users can perceive the popup boundary. */
+.footer .localization-list {
+  background-color: #1a1a1a !important;
+  --color-background: 26, 26, 26;
 }
 
 /* Base Styles */
