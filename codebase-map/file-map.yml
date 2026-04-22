@@ -8914,14 +8914,13 @@ files:
     fix_guidance: Check gift_card object availability and enabled/expired states first, verify settings.logo fallback works,
       ensure inline styles remain for standalone rendering outside theme context
   - file: templates/index.json
-    responsibility: Defines the homepage layout and section configuration with their settings and block order
+    responsibility: Defines the homepage layout by declaring which sections render, their order, and their default
+      settings/content configuration.
     owns:
-      - Homepage section assembly and ordering
-      - Section-specific settings for hero, featured-collections, selling-points-v2, product-highlights,
-        featured-products, brand-story-v2, promo-banner, logos, and animated-features-v2
-      - Block configurations within each section (collection cards, selling points, features, product selections, story
-        content, promo content, logo images, feature cards)
-      - Visual styling parameters (color schemes, alignments, spacing, overlay settings)
+      - Homepage section composition and ordering
+      - Default content values for hero, featured collections, selling points, and custom sections
+      - Block definitions and block order within each homepage section
+      - Section-level settings such as color schemes, alignment, padding, and style variants
     depends_on:
       js: []
       snippets: []
@@ -8930,39 +8929,17 @@ files:
         - sections/featured-collections.liquid
         - sections/selling-points-v2.liquid
         - sections/product-highlights.liquid
-        - sections/featured-products.liquid
-        - sections/brand-story-v2.liquid
-        - sections/promo-banner.liquid
-        - sections/logos.liquid
-        - sections/animated-features-v2.liquid
-      global_objects:
-        - Shopify theme editor
-        - Shopify collections
-        - Shopify products
-      custom_elements: []
-    depended_on_by:
-      - Shopify theme rendering engine when displaying homepage
-      - Shopify theme editor for homepage customization
-      - layout/theme.liquid as the parent template wrapper
     common_mistakes:
-      - Manually editing this file instead of using Shopify theme editor (changes may be overwritten)
-      - Breaking JSON syntax when adding or removing sections or blocks
-      - Referencing non-existent section types that don't have corresponding liquid files
-      - Forgetting to maintain block_order array when adding/removing blocks
-      - Using incorrect handle format for Shopify resource references (collections, products)
-    fix_guidance: Check that all section types referenced exist in sections/ directory, verify JSON syntax is valid, ensure
-      block_order arrays match actual block keys, and prefer making changes through Shopify admin to avoid overwrite
-      conflicts
-    state_ownership:
-      - Homepage visual layout state
-      - Section visibility and ordering on homepage
-      - Block-level content and configuration per section
-    key_identifiers:
-      css_classes: []
-      data_attributes: []
-      js_events_emitted: []
-      js_events_listened: []
-      custom_elements: []
+      - Manually editing this file expecting changes to persist when the Shopify theme editor will overwrite them
+      - Adding a section type key that does not match an existing liquid file name in the sections directory
+      - Assuming block IDs are meaningful or stable across theme editor saves causing merge conflicts
+      - Referencing a section type like "new-section" that has no corresponding sections/new-section.liquid file causing
+        a render error
+      - Confusing this file with the theme layout; sections listed here still render inside layout/theme.liquid
+        content_for_layout
+    fix_guidance: If a section is missing or broken on the homepage, first verify the type value in each section object
+      exactly matches the filename of a liquid file in the sections directory, then check that required settings keys
+      match what the section schema expects.
   - file: templates/list-collections.json
     responsibility: Defines the page template structure for the collections list page displaying all store collections
     owns:
@@ -9390,3 +9367,71 @@ files:
     fix_guidance: When customizer text is wrong, check if schema keys in section files match translation keys here; if
       translations are missing, add them via Shopify admin language editor or ensure schema keys exist in corresponding
       section files
+  - file: sections/new-section.liquid
+    responsibility: Renders a 'What Shade' finder tool that lets users toggle between swatch and model views while filtering
+      shades by usage and skin tone, driven by Alpine.js and Shopify metaobjects.
+    owns:
+      - what-shade section layout and markup
+      - Alpine.js x-data component initialization via whatShade()
+      - view toggle (swatches / models) UI and state
+      - usage filter pills (all, bronzer, blush, highlighter, color_correct)
+      - skin tone filter pills (all, light, medium, dark)
+      - CSS custom properties for bg_color, text_color, muted_text_color, padding (mobile + desktop)
+      - inline responsive padding styles via section settings
+      - empty-state setup notice when agent_shade metaobjects are missing
+      - section heading with aria-labelledby accessibility link
+    depends_on:
+      js:
+        - Alpine.js (global) — whatShade() component must be registered before this section renders
+        - assets/section-what-shade.css (loaded via stylesheet_tag)
+      snippets: []
+      sections: []
+    common_mistakes:
+      - Assuming whatShade() Alpine component is defined inside this file — it must be registered externally (likely in
+        a JS asset bundle)
+      - Forgetting that shades data comes from shop.metaobjects['agent_shade'].values — if the metaobject definition
+        does not exist in the store, shades will be blank and only the setup notice renders
+      - Editing filter pill values (e.g. 'bronzer', 'light') without updating the matching Alpine.js component logic
+        that filters against those strings
+      - Assuming padding CSS variables use px units directly — they are computed with a 0.6 mobile multiplier before px
+        is appended
+      - Missing x-cloak CSS rule in section-what-shade.css causing Alpine-controlled elements to flash on load
+      - Using section.settings color values as hex strings — they are accessed as .red/.green/.blue integers for RGB CSS
+        variable construction
+      - Adding new filter categories in Liquid pills without adding corresponding filter logic in the Alpine component
+    fix_guidance: Start by verifying the whatShade() Alpine.js component is registered in the JS asset bundle and that the
+      agent_shade metaobject type exists in the store's custom data settings; then check section-what-shade.css for
+      x-cloak and CSS variable consumption.
+  - file: assets/section-what-shade.css
+    responsibility: Defines all visual styling for the 'What Shade' interactive shade-finder section, including layout,
+      toggle switch, filter pills, carousel track, media layers, and card components.
+    owns:
+      - .what-shade root container and CSS custom property bindings (--ws-bg, --ws-fg, --ws-muted, --ws-pad-top,
+        --ws-pad-bottom)
+      - .what-shade[x-cloak] Alpine.js hide-before-init rule
+      - .what-shade__toggle and toggle track/thumb animated pill switch
+      - .what-shade__pill filter buttons with active/hover states
+      - .what-shade__carousel, __track-wrap, __track scroll-snap carousel layout
+      - .what-shade__card flex card with 3/4 aspect-ratio media
+      - .what-shade__media-layer opacity transition for swapping model/swatch images
+      - .what-shade__nav carousel navigation buttons (partially visible, truncated)
+    depends_on:
+      js:
+        - Alpine.js (x-cloak directive dependency)
+        - assets/section-what-shade.js (presumed — drives is-active, is-models, is-visible class toggling)
+      snippets: []
+      sections:
+        - sections/product.liquid or a dedicated what-shade section liquid file (not yet listed — likely missing from
+          file tree)
+    common_mistakes:
+      - Assuming CSS custom properties (--ws-bg, --ws-fg, --ws-muted) are globally defined; they must be set inline on
+        the section element by the corresponding liquid file
+      - Editing toggle animation by changing only thumb translateX without adjusting the 52px/28px track and 22px thumb
+        dimensions consistently
+      - Expecting .what-shade__nav to be visible on mobile — the truncated file suggests it uses display:none with a
+        breakpoint override that agents may miss
+      - Treating .what-shade__media-layer visibility as CSS-only; it requires JavaScript to add/remove is-visible class
+      - Overlooking x-cloak causing a flash of unstyled content if Alpine.js loads late and this CSS is not loaded
+        before Alpine initializes
+    fix_guidance: Check the corresponding section liquid file for --ws-* custom property declarations and Alpine.js x-data
+      model first, then verify is-active/is-models/is-visible class toggling in the associated JS asset.

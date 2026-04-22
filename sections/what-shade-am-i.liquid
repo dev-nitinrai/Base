@@ -1,0 +1,434 @@
+{{ 'section-what-shade.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign shades = metaobjects['agent_shade'].values
+  if shades == blank
+    assign shades = shop.metaobjects['agent_shade'].values
+  endif
+  assign shade_count = 0
+  if shades != blank
+    assign shade_count = shades.size
+  endif
+  assign pad_top = section.settings.section_padding_top | default: 80
+  assign pad_bottom = section.settings.section_padding_bottom | default: 80
+
+  assign bg_color = section.settings.bg_color
+  assign fg_color = section.settings.text_color
+  assign muted_color = section.settings.muted_text_color
+-%}
+
+{%- style -%}
+  #shopify-section-{{ section.id }} .what-shade {
+    --ws-bg: {% if bg_color != blank %}{{ bg_color.red }},{{ bg_color.green }},{{ bg_color.blue }}{% else %}255,255,255{% endif %};
+    --ws-fg: {% if fg_color != blank %}{{ fg_color.red }},{{ fg_color.green }},{{ fg_color.blue }}{% else %}0,0,0{% endif %};
+    --ws-muted: {% if muted_color != blank %}{{ muted_color.red }},{{ muted_color.green }},{{ muted_color.blue }}{% else %}102,102,102{% endif %};
+    --ws-pad-top: {{ pad_top | times: 0.6 | round: 0 }}px;
+    --ws-pad-bottom: {{ pad_bottom | times: 0.6 | round: 0 }}px;
+  }
+  @media screen and (min-width: 768px) {
+    #shopify-section-{{ section.id }} .what-shade {
+      --ws-pad-top: {{ pad_top }}px;
+      --ws-pad-bottom: {{ pad_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<section
+  class="what-shade"
+  x-data="whatShade()"
+  aria-labelledby="what-shade-heading-{{ section.id }}"
+>
+  <div class="page-width what-shade__inner">
+    {%- if section.settings.heading != blank -%}
+      <h2 id="what-shade-heading-{{ section.id }}" class="what-shade__heading">
+        {{ section.settings.heading | escape }}
+      </h2>
+    {%- endif -%}
+
+    <div class="what-shade__controls">
+      <div class="what-shade__toggle-wrap">
+        <span
+          class="what-shade__toggle-label"
+          :class="{ 'is-active': view === 'swatches' }"
+          aria-hidden="true"
+        >
+          {{ section.settings.toggle_label_swatches | escape }}
+        </span>
+        <button
+          type="button"
+          class="what-shade__toggle"
+          role="switch"
+          :aria-checked="view === 'models' ? 'true' : 'false'"
+          @click="toggleView()"
+          aria-label="{{ section.settings.toggle_label_swatches | escape }} / {{ section.settings.toggle_label_models | escape }}"
+        >
+          <span class="what-shade__toggle-track" :class="{ 'is-models': view === 'models' }">
+            <span class="what-shade__toggle-thumb"></span>
+          </span>
+        </button>
+        <span
+          class="what-shade__toggle-label"
+          :class="{ 'is-active': view === 'models' }"
+          aria-hidden="true"
+        >
+          {{ section.settings.toggle_label_models | escape }}
+        </span>
+      </div>
+
+      <div class="what-shade__filters">
+        <fieldset class="what-shade__filter-group what-shade__filter-group--usage">
+          <legend class="what-shade__filter-legend">USAGE</legend>
+          <div class="what-shade__pill-row" role="group" aria-label="Filter by usage">
+            <button type="button" class="what-shade__pill" :class="{ 'is-active': usage === 'all' }" :aria-pressed="usage === 'all' ? 'true' : 'false'" @click="usage = 'all'">ALL</button>
+            <button type="button" class="what-shade__pill" :class="{ 'is-active': usage === 'bronzer' }" :aria-pressed="usage === 'bronzer' ? 'true' : 'false'" @click="usage = 'bronzer'">BRONZER</button>
+            <button type="button" class="what-shade__pill" :class="{ 'is-active': usage === 'blush' }" :aria-pressed="usage === 'blush' ? 'true' : 'false'" @click="usage = 'blush'">BLUSH</button>
+            <button type="button" class="what-shade__pill" :class="{ 'is-active': usage === 'highlighter' }" :aria-pressed="usage === 'highlighter' ? 'true' : 'false'" @click="usage = 'highlighter'">HIGHLIGHTER</button>
+            <button type="button" class="what-shade__pill" :class="{ 'is-active': usage === 'color_correct' }" :aria-pressed="usage === 'color_correct' ? 'true' : 'false'" @click="usage = 'color_correct'">COLOR CORRECT</button>
+          </div>
+        </fieldset>
+
+        <fieldset class="what-shade__filter-group what-shade__filter-group--tone">
+          <legend class="what-shade__filter-legend">SKIN TONE</legend>
+          <div class="what-shade__pill-row" role="group" aria-label="Filter by skin tone">
+            <button type="button" class="what-shade__pill" :class="{ 'is-active': tone === 'all' }" :aria-pressed="tone === 'all' ? 'true' : 'false'" @click="tone = 'all'">ALL</button>
+            <button type="button" class="what-shade__pill" :class="{ 'is-active': tone === 'light' }" :aria-pressed="tone === 'light' ? 'true' : 'false'" @click="tone = 'light'">LIGHT</button>
+            <button type="button" class="what-shade__pill" :class="{ 'is-active': tone === 'medium' }" :aria-pressed="tone === 'medium' ? 'true' : 'false'" @click="tone = 'medium'">MEDIUM</button>
+            <button type="button" class="what-shade__pill" :class="{ 'is-active': tone === 'dark' }" :aria-pressed="tone === 'dark' ? 'true' : 'false'" @click="tone = 'dark'">DARK</button>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+
+    {%- if shade_count == 0 -%}
+      <div class="what-shade__setup-notice">
+        <p><strong>No shades published yet.</strong> Create entries of type <code>agent_shade</code> in Settings &rarr; Custom data &rarr; Metaobjects, then publish them so they appear here.</p>
+      </div>
+    {%- else -%}
+      <div
+        class="what-shade__carousel"
+        :class="{ 'has-nav': visibleCount >= 4, 'center-few': visibleCount > 0 && visibleCount < 4, 'is-empty': visibleCount === 0 }"
+      >
+        <button
+          type="button"
+          class="what-shade__nav what-shade__nav--prev"
+          aria-label="Previous shades"
+          @click="scrollPrev()"
+          x-show="visibleCount >= 4"
+          :disabled="atStart"
+        >
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+            <path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <div class="what-shade__track-wrap">
+          <ul class="what-shade__track" x-ref="track" role="list">
+            {%- for shade in shades -%}
+              {%- liquid
+                assign shade_name = shade.name.value | default: shade.handle | default: ''
+                assign shade_desc = shade.description.value | default: ''
+                assign shade_tone = shade.skin_tone.value | default: '' | downcase | strip
+                assign usage_raw = shade.usage_tags.value
+                assign usage_joined = ''
+                if usage_raw != blank
+                  assign usage_joined = usage_raw | join: ',' | downcase
+                endif
+                assign model_img = shade.model_image.value
+                assign swatch_img = shade.swatch_image.value
+              -%}
+              {%- assign card_tone = shade_tone | escape -%}
+              {%- assign card_usage = usage_joined | escape -%}
+              <li
+                class="what-shade__card"
+                role="listitem"
+                data-tone="{{ card_tone }}"
+                data-usage="{{ card_usage }}"
+                x-show="(tone === 'all' || tone === '{{ card_tone }}') && (usage === 'all' || '{{ card_usage }}'.split(',').indexOf(usage) !== -1)"
+                x-transition.opacity.duration.200ms
+              >
+                <div class="what-shade__media">
+                  <div
+                    class="what-shade__media-layer what-shade__media-layer--swatches is-visible"
+                    :class="{ 'is-visible': view === 'swatches' }"
+                  >
+                    {%- if swatch_img != blank -%}
+                      {{ swatch_img | image_url: width: 600 | image_tag: widths: '300,400,600,800', sizes: '(min-width: 768px) 22vw, 80vw', loading: 'lazy', alt: shade_name, class: 'what-shade__img' }}
+                    {%- else -%}
+                      <div class="what-shade__img what-shade__img--placeholder" aria-hidden="true">
+                        {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+                      </div>
+                    {%- endif -%}
+                  </div>
+                  <div
+                    class="what-shade__media-layer what-shade__media-layer--models"
+                    :class="{ 'is-visible': view === 'models' }"
+                  >
+                    {%- if model_img != blank -%}
+                      {{ model_img | image_url: width: 600 | image_tag: widths: '300,400,600,800', sizes: '(min-width: 768px) 22vw, 80vw', loading: 'lazy', alt: shade_name, class: 'what-shade__img' }}
+                    {%- else -%}
+                      <div class="what-shade__img what-shade__img--placeholder" aria-hidden="true">
+                        {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+                      </div>
+                    {%- endif -%}
+                  </div>
+                </div>
+                <h3 class="what-shade__name">{{ shade_name | escape | upcase }}</h3>
+                {%- if shade_desc != blank -%}
+                  <p class="what-shade__desc">{{ shade_desc | newline_to_br }}</p>
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+
+        <button
+          type="button"
+          class="what-shade__nav what-shade__nav--next"
+          aria-label="Next shades"
+          @click="scrollNext()"
+          x-show="visibleCount >= 4"
+          :disabled="atEnd"
+        >
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+            <path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <div class="what-shade__empty" x-show="visibleCount === 0" x-transition>
+          <p>{{ section.settings.empty_state_text | escape }}</p>
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.show_find_my_shade_cta -%}
+      <div class="what-shade__cta">
+        {%- if section.settings.cta_label != blank -%}
+          <span class="what-shade__cta-label">{{ section.settings.cta_label | escape }}</span>
+        {%- endif -%}
+        <a class="what-shade__cta-btn" href="{{ section.settings.find_my_shade_url | default: '#' }}">
+          <span>{{ section.settings.cta_button_text | escape }}</span>
+          <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false">
+            <path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+<script>
+  window.whatShade = function () {
+    return {
+      view: 'swatches',
+      usage: 'all',
+      tone: 'all',
+      visibleCount: 0,
+      atStart: true,
+      atEnd: false,
+      _scrollHandler: null,
+      _resizeHandler: null,
+      init() {
+        this.$nextTick(() => {
+          this.recount();
+          const track = this.$refs.track;
+          if (track) {
+            this._scrollHandler = () => this.updateEdges();
+            this._resizeHandler = () => {
+              this.recount();
+              this.updateEdges();
+            };
+            track.addEventListener('scroll', this._scrollHandler, { passive: true });
+            window.addEventListener('resize', this._resizeHandler);
+            this.updateEdges();
+          }
+        });
+        this.$watch('usage', () => this.afterFilterChange());
+        this.$watch('tone', () => this.afterFilterChange());
+      },
+      destroy() {
+        const track = this.$refs.track;
+        if (track && this._scrollHandler) {
+          track.removeEventListener('scroll', this._scrollHandler);
+        }
+        if (this._resizeHandler) {
+          window.removeEventListener('resize', this._resizeHandler);
+        }
+      },
+      toggleView() {
+        this.view = this.view === 'swatches' ? 'models' : 'swatches';
+      },
+      matches(cardTone, cardUsage) {
+        const toneOk = this.tone === 'all' || cardTone === this.tone;
+        if (!toneOk) return false;
+        if (this.usage === 'all') return true;
+        if (!cardUsage) return false;
+        const tags = cardUsage.split(',').map(t => t.trim()).filter(Boolean);
+        return tags.includes(this.usage);
+      },
+      recount() {
+        const track = this.$refs.track;
+        if (!track) { this.visibleCount = 0; return; }
+        const cards = track.querySelectorAll('.what-shade__card');
+        let n = 0;
+        cards.forEach(card => {
+          const tone = card.getAttribute('data-tone') || '';
+          const usage = card.getAttribute('data-usage') || '';
+          if (this.matches(tone, usage)) n++;
+        });
+        this.visibleCount = n;
+      },
+      afterFilterChange() {
+        this.$nextTick(() => {
+          this.recount();
+          const track = this.$refs.track;
+          if (track) track.scrollTo({ left: 0, behavior: 'auto' });
+          this.updateEdges();
+        });
+      },
+      updateEdges() {
+        const track = this.$refs.track;
+        if (!track) return;
+        this.atStart = track.scrollLeft <= 2;
+        this.atEnd = Math.ceil(track.scrollLeft + track.clientWidth) >= track.scrollWidth - 2;
+      },
+      stepSize() {
+        const track = this.$refs.track;
+        if (!track) return 0;
+        const card = track.querySelector('.what-shade__card');
+        if (!card) return track.clientWidth;
+        const style = window.getComputedStyle(track);
+        const gap = parseFloat(style.columnGap || style.gap || '0') || 0;
+        return card.getBoundingClientRect().width + gap;
+      },
+      scrollPrev() {
+        const track = this.$refs.track;
+        if (!track) return;
+        track.scrollBy({ left: -this.stepSize(), behavior: 'smooth' });
+      },
+      scrollNext() {
+        const track = this.$refs.track;
+        if (!track) return;
+        track.scrollBy({ left: this.stepSize(), behavior: 'smooth' });
+      }
+    };
+  };
+</script>
+
+{% schema %}
+{
+  "name": "What Shade Am I",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What Shade Am I?"
+    },
+    {
+      "type": "header",
+      "content": "Find My Shade CTA"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_find_my_shade_cta",
+      "label": "Show Find My Shade CTA",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "CTA Label",
+      "default": "Still Not Sure?"
+    },
+    {
+      "type": "text",
+      "id": "cta_button_text",
+      "label": "CTA Button Text",
+      "default": "FIND MY SHADE"
+    },
+    {
+      "type": "url",
+      "id": "find_my_shade_url",
+      "label": "Find My Shade URL"
+    },
+    {
+      "type": "header",
+      "content": "Toggle Labels"
+    },
+    {
+      "type": "text",
+      "id": "toggle_label_swatches",
+      "label": "Swatches Label",
+      "default": "Swatches"
+    },
+    {
+      "type": "text",
+      "id": "toggle_label_models",
+      "label": "Models Label",
+      "default": "Models"
+    },
+    {
+      "type": "header",
+      "content": "Empty State"
+    },
+    {
+      "type": "text",
+      "id": "empty_state_text",
+      "label": "Empty State Text",
+      "default": "No shades match. Try 'All'."
+    },
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "muted_text_color",
+      "label": "Description Color",
+      "default": "#666666"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "label": "Top Padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "label": "Bottom Padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    }
+  ],
+  "blocks": [],
+  "presets": [
+    {
+      "name": "What Shade Am I"
+    }
+  ]
+}
+{% endschema %}
