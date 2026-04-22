@@ -1,0 +1,28 @@
+{
+  "sections": {
+    "new-section_moaaolkd": {
+      "type": "new-section",
+      "settings": {
+        "heading": "What Shade Am I?",
+        "swatches_label": "Swatches",
+        "models_label": "Models",
+        "usage_label": "USAGE",
+        "skin_tone_label": "SKIN TONE",
+        "empty_state_text": "No shades match. Try 'All'.",
+        "show_find_my_shade_cta": true,
+        "cta_prompt": "Still Not Sure?",
+        "cta_text": "FIND MY SHADE",
+        "find_my_shade_url": "/pages/find-my-shade",
+        "bg_color": "#EFEFEF",
+        "text_color": "#000000",
+        "accent_color": "#000000",
+        "accent_text_color": "#FFFFFF",
+        "section_padding_top": 80,
+        "section_padding_bottom": 80
+      }
+    }
+  },
+  "order": [
+    "new-section_moaaolkd"
+  ]
+}
