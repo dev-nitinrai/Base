@@ -1,0 +1,379 @@
+{{ 'section-what-shade-am-i.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .shade-finder--{{ section.id }} {
+    padding-top: {{ section.settings.section_padding_top | times: 0.6 | round: 0 }}px;
+    padding-bottom: {{ section.settings.section_padding_bottom | times: 0.6 | round: 0 }}px;
+    --shade-bg: {{ section.settings.bg_color.red }}, {{ section.settings.bg_color.green }}, {{ section.settings.bg_color.blue }};
+    --shade-fg: {{ section.settings.text_color.red }}, {{ section.settings.text_color.green }}, {{ section.settings.text_color.blue }};
+    --shade-muted: {{ section.settings.muted_text_color.red }}, {{ section.settings.muted_text_color.green }}, {{ section.settings.muted_text_color.blue }};
+    --shade-button: {{ section.settings.button_color.red }}, {{ section.settings.button_color.green }}, {{ section.settings.button_color.blue }};
+    --shade-button-text: {{ section.settings.button_text_color.red }}, {{ section.settings.button_text_color.green }}, {{ section.settings.button_text_color.blue }};
+  }
+
+  @media screen and (min-width: 768px) {
+    .shade-finder--{{ section.id }} {
+      padding-top: {{ section.settings.section_padding_top }}px;
+      padding-bottom: {{ section.settings.section_padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+{%- liquid
+  assign shades = shop.metaobjects['agent_shade_v4'].values
+-%}
+
+<section
+  class="shade-finder shade-finder--{{ section.id }}"
+  x-data="{
+    view: 'swatches',
+    usage: 'all',
+    skin: 'all',
+    index: 0,
+    perView: 4,
+    reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+    init() {
+      const mq = window.matchMedia('(max-width: 767px)');
+      const apply = () => { this.perView = mq.matches ? 1 : 4; this.index = 0; };
+      apply();
+      mq.addEventListener('change', apply);
+      window.addEventListener('resize', () => { this.clampIndex(); });
+    },
+    cardMatches(card) {
+      const cardUsage = (card.dataset.usage || '').split('|').filter(Boolean);
+      const cardSkin = card.dataset.skin || '';
+      const usageOk = this.usage === 'all' || cardUsage.includes(this.usage);
+      const skinOk = this.skin === 'all' || cardSkin === this.skin;
+      return usageOk && skinOk;
+    },
+    visibleCards() {
+      return Array.from(this.$refs.track ? this.$refs.track.querySelectorAll('.shade-card') : []).filter(c => this.cardMatches(c));
+    },
+    visibleCount() { return this.visibleCards().length; },
+    showChevrons() { return this.visibleCount() > this.perView; },
+    clampIndex() {
+      const max = Math.max(0, this.visibleCount() - this.perView);
+      if (this.index > max) this.index = max;
+      if (this.index < 0) this.index = 0;
+    },
+    prev() { this.index = Math.max(0, this.index - 1); },
+    next() {
+      const max = Math.max(0, this.visibleCount() - this.perView);
+      this.index = Math.min(max, this.index + 1);
+    },
+    setUsage(v) { this.usage = v; this.index = 0; },
+    setSkin(v) { this.skin = v; this.index = 0; },
+    setView(v) { this.view = v; }
+  }"
+>
+  <div class="shade-finder__inner">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="shade-finder__title">{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+
+    <div class="shade-finder__controls">
+      <div class="shade-finder__toggle-wrap">
+        <span
+          class="shade-finder__toggle-label"
+          :class="{ 'is-active': view === 'swatches' }"
+        >{{ section.settings.toggle_label_swatches | default: 'Swatches' | escape }}</span>
+        <button
+          type="button"
+          class="shade-finder__toggle"
+          role="switch"
+          :aria-checked="view === 'models' ? 'true' : 'false'"
+          aria-label="Toggle between swatches and models view"
+          @click="setView(view === 'swatches' ? 'models' : 'swatches')"
+        >
+          <span class="shade-finder__toggle-track" :class="{ 'is-right': view === 'models' }">
+            <span class="shade-finder__toggle-thumb"></span>
+          </span>
+        </button>
+        <span
+          class="shade-finder__toggle-label"
+          :class="{ 'is-active': view === 'models' }"
+        >{{ section.settings.toggle_label_models | default: 'Models' | escape }}</span>
+      </div>
+
+      <div class="shade-finder__filters">
+        <div class="shade-finder__filter-group" role="group" aria-label="Filter by usage">
+          <span class="shade-finder__filter-label">Usage</span>
+          <div class="shade-finder__pills">
+            {%- assign usage_options = 'all,bronzer,blush,highlighter,color_correct' | split: ',' -%}
+            {%- for opt in usage_options -%}
+              {%- assign label = opt | replace: '_', ' ' | upcase -%}
+              <button
+                type="button"
+                class="shade-finder__pill"
+                :class="{ 'is-active': usage === '{{ opt }}' }"
+                :aria-pressed="usage === '{{ opt }}' ? 'true' : 'false'"
+                @click="setUsage('{{ opt }}')"
+              >{{ label }}</button>
+            {%- endfor -%}
+          </div>
+        </div>
+
+        <div class="shade-finder__filter-group" role="group" aria-label="Filter by skin tone">
+          <span class="shade-finder__filter-label">Skin tone</span>
+          <div class="shade-finder__pills">
+            {%- assign skin_options = 'all,light,medium,dark' | split: ',' -%}
+            {%- for opt in skin_options -%}
+              <button
+                type="button"
+                class="shade-finder__pill"
+                :class="{ 'is-active': skin === '{{ opt }}' }"
+                :aria-pressed="skin === '{{ opt }}' ? 'true' : 'false'"
+                @click="setSkin('{{ opt }}')"
+              >{{ opt | upcase }}</button>
+            {%- endfor -%}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="shade-finder__carousel">
+      <button
+        type="button"
+        class="shade-finder__chevron shade-finder__chevron--prev"
+        aria-label="Previous shades"
+        x-show="showChevrons()"
+        :disabled="index === 0"
+        @click="prev()"
+      >
+        <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
+          <path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <div class="shade-finder__viewport" :class="{ 'is-centered': !showChevrons() }">
+        <div
+          class="shade-finder__track"
+          x-ref="track"
+          :style="`transform: translateX(calc(var(--shade-step) * -${index}));`"
+        >
+          {%- if shades.size > 0 -%}
+            {%- for shade in shades -%}
+              {%- liquid
+                assign usage_values = ''
+                for tag in shade.usage_tags.value
+                  assign usage_values = usage_values | append: tag | append: '|'
+                endfor
+                assign usage_values = usage_values | remove_last: '|'
+                assign skin_value = shade.skin_tone.value | default: ''
+              -%}
+              <article
+                class="shade-card"
+                data-usage="{{ usage_values }}"
+                data-skin="{{ skin_value }}"
+                x-show="cardMatches($el)"
+                x-transition.opacity
+              >
+                <div class="shade-card__media" :class="{ 'is-reduced': reducedMotion }">
+                  <div
+                    class="shade-card__image shade-card__image--swatch"
+                    :class="{ 'is-visible': view === 'swatches' }"
+                    :aria-hidden="view === 'swatches' ? 'false' : 'true'"
+                  >
+                    {%- if shade.swatch_image.value != blank -%}
+                      {{ shade.swatch_image.value | image_url: width: 600 | image_tag:
+                        loading: 'lazy',
+                        width: 600,
+                        height: 600,
+                        sizes: '(min-width: 768px) 25vw, 80vw',
+                        widths: '300, 600, 900',
+                        alt: shade.name.value
+                      }}
+                    {%- else -%}
+                      <div class="shade-card__placeholder">{{ 'image' | placeholder_svg_tag }}</div>
+                    {%- endif -%}
+                  </div>
+                  <div
+                    class="shade-card__image shade-card__image--model"
+                    :class="{ 'is-visible': view === 'models' }"
+                    :aria-hidden="view === 'models' ? 'false' : 'true'"
+                  >
+                    {%- if shade.model_image.value != blank -%}
+                      {{ shade.model_image.value | image_url: width: 600 | image_tag:
+                        loading: 'lazy',
+                        width: 600,
+                        height: 600,
+                        sizes: '(min-width: 768px) 25vw, 80vw',
+                        widths: '300, 600, 900',
+                        alt: shade.name.value
+                      }}
+                    {%- else -%}
+                      <div class="shade-card__placeholder">{{ 'image' | placeholder_svg_tag }}</div>
+                    {%- endif -%}
+                  </div>
+                </div>
+                <h3 class="shade-card__name">{{ shade.name.value | escape }}</h3>
+                {%- if shade.description.value != blank -%}
+                  <p class="shade-card__description">{{ shade.description.value | escape | newline_to_br }}</p>
+                {%- endif -%}
+              </article>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+
+        <p
+          class="shade-finder__empty"
+          x-show="visibleCount() === 0"
+          x-cloak
+        >{{ section.settings.empty_state_text | default: "No shades match. Try 'All'." | escape }}</p>
+      </div>
+
+      <button
+        type="button"
+        class="shade-finder__chevron shade-finder__chevron--next"
+        aria-label="Next shades"
+        x-show="showChevrons()"
+        :disabled="index >= visibleCount() - perView"
+        @click="next()"
+      >
+        <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
+          <path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+
+    {%- if section.settings.show_find_my_shade_cta -%}
+      <div class="shade-finder__cta">
+        {%- if section.settings.cta_label != blank -%}
+          <span class="shade-finder__cta-label">{{ section.settings.cta_label | escape }}</span>
+        {%- endif -%}
+        <a
+          href="{{ section.settings.find_my_shade_url | default: '/pages/find-my-shade' }}"
+          class="shade-finder__cta-button"
+        >
+          {{ section.settings.cta_button_text | default: 'FIND MY SHADE' | escape }}
+          <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false">
+            <path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "What Shade Am I",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Call to Action"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_find_my_shade_cta",
+      "label": "Show Find My Shade CTA",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "CTA label",
+      "default": "Still Not Sure?"
+    },
+    {
+      "type": "text",
+      "id": "cta_button_text",
+      "label": "CTA button text",
+      "default": "FIND MY SHADE"
+    },
+    {
+      "type": "url",
+      "id": "find_my_shade_url",
+      "label": "Find My Shade URL"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What Shade Am I?"
+    },
+    {
+      "type": "text",
+      "id": "toggle_label_swatches",
+      "label": "Toggle label (swatches)",
+      "default": "Swatches"
+    },
+    {
+      "type": "text",
+      "id": "toggle_label_models",
+      "label": "Toggle label (models)",
+      "default": "Models"
+    },
+    {
+      "type": "text",
+      "id": "empty_state_text",
+      "label": "Empty state text",
+      "default": "No shades match. Try 'All'."
+    },
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "muted_text_color",
+      "label": "Muted text color",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Active button color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Active button text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    }
+  ],
+  "blocks": [],
+  "presets": [
+    {
+      "name": "What Shade Am I"
+    }
+  ]
+}
+{% endschema %}

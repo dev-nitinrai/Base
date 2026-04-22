@@ -8914,14 +8914,13 @@ files:
     fix_guidance: Check gift_card object availability and enabled/expired states first, verify settings.logo fallback works,
       ensure inline styles remain for standalone rendering outside theme context
   - file: templates/index.json
-    responsibility: Defines the homepage layout and section configuration with their settings and block order
+    responsibility: Defines the homepage layout by declaring which sections are rendered, their order, and their default
+      settings/block configurations.
     owns:
-      - Homepage section assembly and ordering
-      - Section-specific settings for hero, featured-collections, selling-points-v2, product-highlights,
-        featured-products, brand-story-v2, promo-banner, logos, and animated-features-v2
-      - Block configurations within each section (collection cards, selling points, features, product selections, story
-        content, promo content, logo images, feature cards)
-      - Visual styling parameters (color schemes, alignments, spacing, overlay settings)
+      - Homepage section composition and render order
+      - Default settings for hero, featured collections, selling points, and product highlights sections
+      - Block definitions and ordering within each homepage section
+      - Section instance IDs and named references (e.g., hero_1, what_shade_am_i)
     depends_on:
       js: []
       snippets: []
@@ -8930,39 +8929,18 @@ files:
         - sections/featured-collections.liquid
         - sections/selling-points-v2.liquid
         - sections/product-highlights.liquid
-        - sections/featured-products.liquid
-        - sections/brand-story-v2.liquid
-        - sections/promo-banner.liquid
-        - sections/logos.liquid
-        - sections/animated-features-v2.liquid
-      global_objects:
-        - Shopify theme editor
-        - Shopify collections
-        - Shopify products
-      custom_elements: []
-    depended_on_by:
-      - Shopify theme rendering engine when displaying homepage
-      - Shopify theme editor for homepage customization
-      - layout/theme.liquid as the parent template wrapper
     common_mistakes:
-      - Manually editing this file instead of using Shopify theme editor (changes may be overwritten)
-      - Breaking JSON syntax when adding or removing sections or blocks
-      - Referencing non-existent section types that don't have corresponding liquid files
-      - Forgetting to maintain block_order array when adding/removing blocks
-      - Using incorrect handle format for Shopify resource references (collections, products)
-    fix_guidance: Check that all section types referenced exist in sections/ directory, verify JSON syntax is valid, ensure
-      block_order arrays match actual block keys, and prefer making changes through Shopify admin to avoid overwrite
-      conflicts
-    state_ownership:
-      - Homepage visual layout state
-      - Section visibility and ordering on homepage
-      - Block-level content and configuration per section
-    key_identifiers:
-      css_classes: []
-      data_attributes: []
-      js_events_emitted: []
-      js_events_listened: []
-      custom_elements: []
+      - Manually editing this file when it will be silently overwritten by the Shopify theme editor or CI/CD syncs
+      - Adding a section type (e.g., "new-section") that does not have a corresponding sections/*.liquid file, causing
+        render errors
+      - Assuming section order here controls global header/footer rendering, which is managed by
+        sections/header-group.json and sections/footer-group.json
+      - Leaving collection fields as empty strings and expecting Shopify to resolve them at runtime without explicit
+        collection handles
+      - Confusing section instance IDs (e.g., featured_collections_hhETJ9) with section type names, leading to incorrect
+        file lookups
+    fix_guidance: Cross-reference each type value against the available sections/*.liquid files first; then check
+      sections/header-group.json and sections/footer-group.json for anything outside the main content area.
   - file: templates/list-collections.json
     responsibility: Defines the page template structure for the collections list page displaying all store collections
     owns:
@@ -9390,3 +9368,98 @@ files:
     fix_guidance: When customizer text is wrong, check if schema keys in section files match translation keys here; if
       translations are missing, add them via Shopify admin language editor or ensure schema keys exist in corresponding
       section files
+  - file: sections/new-section.liquid
+    responsibility: Renders an interactive 'What Shade Am I' finder tool that filters and carousels shade swatches or model
+      views using metaobject data, with customizable colors, padding, and filter pills for usage and skin type.
+    owns:
+      - Shade finder section layout and styling via .shade-finder and .shade-finder--{{ section.id }}
+      - Alpine.js x-data controller managing view toggle (swatches/models), usage filter, skin filter, carousel index,
+        and perView responsive logic
+      - CSS custom properties for bg, foreground, muted, button, and button-text colors derived from section settings
+      - Responsive padding scaling (60% on mobile, full on desktop via media query)
+      - Swatch/model toggle switch UI with aria-checked and aria-label accessibility attributes
+      - Usage filter pills (all, bronzer, blush, highlighter, color_correct) with aria-pressed states
+      - Skin filter pills group (implied by setSkin logic)
+      - Carousel navigation (prev/next chevrons, clampIndex, visibleCards computed from DOM)
+      - Metaobject query for shop.metaobjects['agent_shade_v4'].values assigned to shades variable
+      - Stylesheet link for section-what-shade-am-i.css
+    depends_on:
+      js:
+        - Alpine.js (x-data, x-ref, @click, :class, :aria-checked directives)
+        - window.matchMedia for prefers-reduced-motion and max-width 767px breakpoint
+      snippets: []
+      sections: []
+      css:
+        - assets/section-what-shade-am-i.css
+      metaobjects:
+        - agent_shade_v4 (shop.metaobjects['agent_shade_v4'].values)
+      settings:
+        - section.settings.section_padding_top
+        - section.settings.section_padding_bottom
+        - section.settings.bg_color
+        - section.settings.text_color
+        - section.settings.muted_text_color
+        - section.settings.button_color
+        - section.settings.button_text_color
+        - section.settings.heading
+        - section.settings.toggle_label_swatches
+        - section.settings.toggle_label_models
+    common_mistakes:
+      - Assuming shade card filtering is server-side; it is entirely client-side Alpine.js DOM traversal via
+        this.$refs.track.querySelectorAll('.shade-card') and data-usage/data-skin attributes
+      - Editing the CSS class name prefix shade-finder without updating both the Liquid class attribute and the inline
+        style block selector simultaneously
+      - Forgetting that perView resets index to 0 on breakpoint change; adding carousel logic elsewhere without calling
+        clampIndex may cause out-of-bounds index
+      - Assuming shades variable is paginated or filtered server-side; all values from agent_shade_v4 are fetched at
+        once and filtering is Alpine-driven
+      - Using section.settings color values as hex strings; they are RGB component objects requiring .red/.green/.blue
+        accessors for CSS variable construction
+      - Modifying usage_options string without updating any Alpine setUsage references or cardMatches logic that
+        compares card.dataset.usage pipe-delimited values
+      - Overlooking the truncated pill button closing tag (butt) indicating the file is incomplete and downstream card
+  - file: assets/section-what-shade-am-i.css
+    responsibility: Provides all layout, typography, and interactive-state styles for the Shade Finder / What-Shade-Am-I
+      section, including the carousel, filter pills, toggle switch, and shade cards.
+    owns:
+      - .shade-finder root container and inner layout
+      - .shade-finder__title typography
+      - .shade-finder__controls grid layout
+      - .shade-finder__toggle-wrap, .shade-finder__toggle-track, .shade-finder__toggle-thumb toggle switch styles and
+        states
+      - .shade-finder__toggle-label active/inactive states
+      - .shade-finder__filters, .shade-finder__filter-group, .shade-finder__filter-label layout
+      - .shade-finder__pills and .shade-finder__pill button styles including is-active and hover states
+      - .shade-finder__carousel CSS custom property calculations (--shade-gap, --shade-per-view, --shade-card-width,
+        --shade-step)
+      - .shade-finder__viewport overflow and centering (is-centered modifier)
+      - .shade-finder__track flex layout and transition animation
+      - .shade-card flex card layout and opacity transitions
+      - .shade-card__media aspect-ratio container and reduced-motion modifier
+      - .shade-card__image visibility toggling via is-visible class
+      - .shade-card__placeholder empty-state color treatment
+      - CSS custom property tokens (--shade-bg, --shade-fg, --shade-button, --shade-button-text)
+    depends_on:
+      js:
+        - assets/section-what-shade-am-i.js (presumed — drives is-active, is-visible, is-centered, is-right, is-reduced
+          class toggling and carousel transform)
+      snippets: []
+      sections:
+        - sections/product.liquid or a dedicated what-shade-am-i section liquid file that sets --shade-bg, --shade-fg,
+          --shade-button, --shade-button-text CSS custom properties and renders the .shade-finder markup
+    common_mistakes:
+      - Editing carousel card width here without updating --shade-per-view or --shade-gap, breaking the step calculation
+        for JS-driven transforms
+      - Adding new color values as hard-coded hex/rgb instead of using the --shade-* CSS custom property tokens, causing
+        theme-setting overrides to have no effect
+      - Assuming .is-active on pills is handled by CSS alone; it is toggled by JavaScript and removing it in JS breaks
+        filter visual feedback
+      - Overriding transform on .shade-finder__track without accounting for the .is-centered guard that sets transform
+        to none, causing centered states to animate incorrectly
+      - Forgetting that .shade-card__image opacity is driven by the is-visible class added by JS; removing the opacity:0
+        default breaks lazy-reveal behaviour
+      - Modifying --shade-per-view in the carousel rule without updating any breakpoint-level overrides (file is
+        truncated so breakpoints may exist lower in the file)
+    fix_guidance: Start with the CSS custom properties (--shade-bg, --shade-fg, --shade-button, --shade-button-text) set by
+      the section liquid file, then trace JS class mutations (is-active, is-visible, is-right, is-centered) in the
+      companion JS asset to understand which CSS rules are actually reachable at runtime.

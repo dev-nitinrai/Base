@@ -137,6 +137,10 @@
         "enable_mobile_slider": true
       }
     },
+    "what_shade_am_i": {
+      "type": "new-section",
+      "settings": {}
+    },
     "product_highlights_gUaG6E": {
       "type": "product-highlights",
       "blocks": {
@@ -185,6 +189,7 @@
     "hero_1",
     "featured_collections_hhETJ9",
     "selling_points_v2_6NgzaK",
+    "what_shade_am_i",
     "product_highlights_gUaG6E"
   ]
 }
