@@ -137,6 +137,16 @@
         "enable_mobile_slider": true
       }
     },
+    "what_shade_am_i": {
+      "type": "what-shade-am-i",
+      "settings": {
+        "heading": "What Shade Am I?",
+        "show_find_my_shade_cta": true,
+        "find_my_shade_url": "/pages/find-my-shade",
+        "section_padding_top": 60,
+        "section_padding_bottom": 60
+      }
+    },
     "product_highlights_gUaG6E": {
       "type": "product-highlights",
       "blocks": {
@@ -185,6 +195,7 @@
     "hero_1",
     "featured_collections_hhETJ9",
     "selling_points_v2_6NgzaK",
+    "what_shade_am_i",
     "product_highlights_gUaG6E"
   ]
 }

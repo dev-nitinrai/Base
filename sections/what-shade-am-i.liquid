@@ -1,0 +1,293 @@
+{% comment %} /sections/what-shade-am-i.liquid {% endcomment %}
+
+{{ 'section-what-shade-am-i.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'section-what-shade-am-i.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign shade_type = 'agent_shade_v2'
+  assign shades = shop.metaobjects[shade_type].values
+  assign shade_count = shades | size
+  assign show_cta = section.settings.show_find_my_shade_cta
+  assign cta_url = section.settings.find_my_shade_url
+  assign pad_top = section.settings.section_padding_top
+  assign pad_bottom = section.settings.section_padding_bottom
+-%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ pad_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ pad_bottom | times: 0.75 | round: 0 }}px;
+  }
+  @media screen and (min-width: 768px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ pad_top }}px;
+      padding-bottom: {{ pad_bottom }}px;
+    }
+  }
+  #WhatShadeAmI-{{ section.id }} {
+    --wsai-fg: 17, 17, 17;
+    --wsai-accent: 0, 0, 0;
+    --wsai-accent-fg: 255, 255, 255;
+  }
+{%- endstyle -%}
+
+<section
+  id="WhatShadeAmI-{{ section.id }}"
+  class="what-shade-am-i section-{{ section.id }}-padding"
+  aria-labelledby="WhatShadeAmI-{{ section.id }}-heading"
+>
+  <div class="what-shade-am-i__container">
+    <h2
+      id="WhatShadeAmI-{{ section.id }}-heading"
+      class="what-shade-am-i__heading"
+    >
+      {{ section.settings.heading | default: 'What Shade Am I?' | escape }}
+    </h2>
+
+    <div class="what-shade-am-i__controls">
+      <div class="what-shade-am-i__toggle-wrapper">
+        <span
+          class="what-shade-am-i__toggle-label is-active"
+          data-toggle-label="swatches"
+        >Swatches</span>
+
+        <button
+          type="button"
+          class="what-shade-am-i__toggle"
+          role="switch"
+          aria-checked="false"
+          aria-label="Toggle between swatches and models"
+          data-view-toggle
+        >
+          <span class="what-shade-am-i__toggle-track" aria-hidden="true">
+            <span class="what-shade-am-i__toggle-thumb"></span>
+          </span>
+        </button>
+
+        <span
+          class="what-shade-am-i__toggle-label"
+          data-toggle-label="models"
+        >Models</span>
+      </div>
+
+      <div class="what-shade-am-i__filters">
+        <div class="what-shade-am-i__filter-group what-shade-am-i__filter-group--left" role="group" aria-label="Usage">
+          <span class="what-shade-am-i__filter-label">USAGE</span>
+          {%- assign usage_values = 'all|ALL,bronzer|BRONZER,blush|BLUSH,highlighter|HIGHLIGHTER,color_correct|COLOR CORRECT' | split: ',' -%}
+          <div class="what-shade-am-i__pills">
+            {%- for item in usage_values -%}
+              {%- assign parts = item | split: '|' -%}
+              {%- assign val = parts[0] -%}
+              {%- assign label = parts[1] -%}
+              <button
+                type="button"
+                class="what-shade-am-i__pill{% if val == 'all' %} is-active{% endif %}"
+                data-filter="usage"
+                data-value="{{ val }}"
+                aria-pressed="{% if val == 'all' %}true{% else %}false{% endif %}"
+              >{{ label }}</button>
+            {%- endfor -%}
+          </div>
+        </div>
+
+        <div class="what-shade-am-i__filter-group what-shade-am-i__filter-group--right" role="group" aria-label="Skin tone">
+          <span class="what-shade-am-i__filter-label">SKIN TONE</span>
+          {%- assign skin_values = 'all|ALL,light|LIGHT,medium|MEDIUM,dark|DARK' | split: ',' -%}
+          <div class="what-shade-am-i__pills">
+            {%- for item in skin_values -%}
+              {%- assign parts = item | split: '|' -%}
+              {%- assign val = parts[0] -%}
+              {%- assign label = parts[1] -%}
+              <button
+                type="button"
+                class="what-shade-am-i__pill{% if val == 'all' %} is-active{% endif %}"
+                data-filter="skin_tone"
+                data-value="{{ val }}"
+                aria-pressed="{% if val == 'all' %}true{% else %}false{% endif %}"
+              >{{ label }}</button>
+            {%- endfor -%}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="what-shade-am-i__carousel-wrap">
+      <button
+        type="button"
+        class="what-shade-am-i__nav what-shade-am-i__nav--prev"
+        aria-label="Previous shades"
+        data-nav="prev"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <div class="what-shade-am-i__viewport" data-viewport>
+        {%- if shade_count > 0 -%}
+          <ul class="what-shade-am-i__track" data-track role="list">
+            {%- for shade in shades -%}
+              {%- liquid
+                assign shade_name = shade.name.value
+                assign shade_description = shade.description.value
+                assign swatch_img = shade.swatch_image.value
+                assign model_img = shade.model_image.value
+                assign usage_list = shade.usage_tags.value
+                assign usage_tags_str = ''
+                if usage_list
+                  assign usage_tags_str = usage_list | join: ','
+                endif
+                assign skin_tone_val = shade.skin_tone.value | downcase
+              -%}
+
+              <li
+                class="what-shade-am-i__card"
+                data-shade-card
+                data-usage-tags="{{ usage_tags_str | downcase | escape }}"
+                data-skin-tone="{{ skin_tone_val | escape }}"
+              >
+                <div class="what-shade-am-i__media">
+                  <div class="what-shade-am-i__media-layer what-shade-am-i__media-layer--swatch is-visible">
+                    {%- if swatch_img != blank -%}
+                      {{
+                        swatch_img
+                        | image_url: width: 800
+                        | image_tag:
+                          widths: '200,400,600,800',
+                          sizes: '(min-width: 768px) 25vw, 80vw',
+                          loading: 'lazy',
+                          alt: shade_name,
+                          class: 'what-shade-am-i__image'
+                      }}
+                    {%- else -%}
+                      <div class="what-shade-am-i__image-placeholder">
+                        {{ 'product-1' | placeholder_svg_tag }}
+                      </div>
+                    {%- endif -%}
+                  </div>
+                  <div class="what-shade-am-i__media-layer what-shade-am-i__media-layer--model">
+                    {%- if model_img != blank -%}
+                      {{
+                        model_img
+                        | image_url: width: 800
+                        | image_tag:
+                          widths: '200,400,600,800',
+                          sizes: '(min-width: 768px) 25vw, 80vw',
+                          loading: 'lazy',
+                          alt: shade_name,
+                          class: 'what-shade-am-i__image'
+                      }}
+                    {%- else -%}
+                      <div class="what-shade-am-i__image-placeholder">
+                        {{ 'product-2' | placeholder_svg_tag }}
+                      </div>
+                    {%- endif -%}
+                  </div>
+                </div>
+                <h3 class="what-shade-am-i__card-title">{{ shade_name | escape }}</h3>
+                {%- if shade_description != blank -%}
+                  <p class="what-shade-am-i__card-description">{{ shade_description | escape | newline_to_br }}</p>
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- else -%}
+          <div class="what-shade-am-i__empty">
+            <p>No shades found. Add entries to the "{{ shade_type }}" metaobject in the Shopify admin.</p>
+          </div>
+        {%- endif -%}
+
+        <div class="what-shade-am-i__empty" data-empty hidden>
+          <p>No shades match. Try "All".</p>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="what-shade-am-i__nav what-shade-am-i__nav--next"
+        aria-label="Next shades"
+        data-nav="next"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+
+    {%- if show_cta -%}
+      <div class="what-shade-am-i__cta">
+        <span class="what-shade-am-i__cta-label">Still Not Sure?</span>
+        <a
+          href="{{ cta_url | default: '/pages/find-my-shade' }}"
+          class="what-shade-am-i__cta-button"
+        >
+          <span>FIND MY SHADE</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "What Shade Am I?",
+  "tag": "section",
+  "class": "section-what-shade-am-i",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Shade cards are managed via the \"agent_shade_v2\" metaobject definition in Content → Metaobjects."
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What Shade Am I?"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_find_my_shade_cta",
+      "label": "Show \"Find My Shade\" CTA",
+      "default": true
+    },
+    {
+      "type": "url",
+      "id": "find_my_shade_url",
+      "label": "\"Find My Shade\" link",
+      "info": "Destination for the CTA button."
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    }
+  ],
+  "presets": [
+    {
+      "name": "What Shade Am I?"
+    }
+  ]
+}
+{% endschema %}
