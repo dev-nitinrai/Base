@@ -1,7 +1,7 @@
 {{ 'section-what-shade.css' | asset_url | stylesheet_tag }}
 
 {%- liquid
-  assign shades = metaobjects['agent_shade'].values
+  assign shades = shop.metaobjects['agent_shade'].values
   assign shade_count = 0
   if shades != blank
     assign shade_count = shades.size
