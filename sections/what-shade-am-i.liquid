@@ -6,6 +6,11 @@
   assign default_view = section.settings.default_view | default: 'swatches'
   assign show_cta = section.settings.show_find_my_shade_cta
   assign cta_url = section.settings.find_my_shade_url
+
+  assign use_placeholders = false
+  if shade_count == 0
+    assign use_placeholders = true
+  endif
 -%}
 
 <section
@@ -76,7 +81,38 @@
 
       <div class="what-shade-am-i__viewport" data-viewport>
         <ul class="what-shade-am-i__track" data-track>
-          {%- if shade_count > 0 -%}
+          {%- if use_placeholders -%}
+            {%- comment -%}
+              Fallback demo cards shown when the agent_shade metaobject has no active entries yet.
+              Ensures the section still renders a visible carousel during design/preview so
+              merchants can see the layout before seeding their own shade entries.
+            {%- endcomment -%}
+            {%- assign placeholder_names = 'Au Naturel,Happy Hour,Magic Hour,Golden Hour,Starlight,Sunset' | split: ',' -%}
+            {%- assign placeholder_descs = 'is a clear balm with subtle opal pearl for all skin tones,a cool sheer pink with silver shimmer for fair to medium tan skin tones,is a cool sheer bronze with silver shimmer for light to medium-dark skin,is a warm sheer gold with multidimensional shimmer for all skin tones,a soft champagne highlighter for medium to dark skin tones,a warm terracotta bronzer for all skin tones' | split: ',' -%}
+            {%- assign placeholder_usage = 'blush,blush highlighter,bronzer,highlighter,highlighter,bronzer' | split: ',' -%}
+            {%- assign placeholder_tones = 'light,medium,medium,dark,dark,light' | split: ',' -%}
+            {%- for name in placeholder_names -%}
+              {%- assign idx = forloop.index0 -%}
+              <li
+                class="what-shade-am-i__card"
+                data-card
+                data-usage="{{ placeholder_usage[idx] }}"
+                data-skin-tone="{{ placeholder_tones[idx] }}"
+                data-index="{{ idx }}"
+              >
+                <div class="what-shade-am-i__media">
+                  <div class="what-shade-am-i__media-layer what-shade-am-i__media-layer--swatches" data-media-layer="swatches">
+                    <div class="what-shade-am-i__placeholder what-shade-am-i__placeholder--{{ idx | modulo: 4 }}" aria-hidden="true"></div>
+                  </div>
+                  <div class="what-shade-am-i__media-layer what-shade-am-i__media-layer--models" data-media-layer="models" aria-hidden="true">
+                    <div class="what-shade-am-i__placeholder what-shade-am-i__placeholder--{{ idx | modulo: 4 }}" aria-hidden="true"></div>
+                  </div>
+                </div>
+                <h3 class="what-shade-am-i__card-title">{{ name | strip | upcase }}</h3>
+                <p class="what-shade-am-i__card-desc">{{ placeholder_descs[idx] | strip }}</p>
+              </li>
+            {%- endfor -%}
+          {%- else -%}
             {%- for shade in shades -%}
               {%- liquid
                 assign shade_name = shade.name.value | default: ''
@@ -107,14 +143,14 @@
                     {%- if swatch_img != blank -%}
                       {{ swatch_img | image_url: width: 800 | image_tag: loading: 'lazy', widths: '300,500,700,900', sizes: '(min-width: 768px) 22vw, 80vw', alt: shade_name }}
                     {%- else -%}
-                      <div class="what-shade-am-i__placeholder" aria-hidden="true"></div>
+                      <div class="what-shade-am-i__placeholder what-shade-am-i__placeholder--{{ forloop.index0 | modulo: 4 }}" aria-hidden="true"></div>
                     {%- endif -%}
                   </div>
                   <div class="what-shade-am-i__media-layer what-shade-am-i__media-layer--models" data-media-layer="models" aria-hidden="true">
                     {%- if model_img != blank -%}
                       {{ model_img | image_url: width: 800 | image_tag: loading: 'lazy', widths: '300,500,700,900', sizes: '(min-width: 768px) 22vw, 80vw', alt: shade_name }}
                     {%- else -%}
-                      <div class="what-shade-am-i__placeholder" aria-hidden="true"></div>
+                      <div class="what-shade-am-i__placeholder what-shade-am-i__placeholder--{{ forloop.index0 | modulo: 4 }}" aria-hidden="true"></div>
                     {%- endif -%}
                   </div>
                 </div>
@@ -379,6 +415,12 @@
     }
   }
 
+  @media (max-width: 767px) {
+    .what-shade-am-i__carousel {
+      gap: 0;
+    }
+  }
+
   .what-shade-am-i__arrow {
     flex-shrink: 0;
     width: 40px;
@@ -417,11 +459,12 @@
   @media (max-width: 767px) {
     .what-shade-am-i__arrow {
       position: absolute;
-      top: 35%;
+      top: 38%;
       transform: translateY(-50%);
-      background: rgba(255, 255, 255, 0.8);
+      background: rgba(255, 255, 255, 0.85);
       width: 36px;
       height: 36px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
     }
     .what-shade-am-i__arrow--prev { left: 4px; }
     .what-shade-am-i__arrow--next { right: calc(16.66% + 4px); }
@@ -498,6 +541,22 @@
     width: 100%;
     height: 100%;
     background: linear-gradient(135deg, #d8d8d8 0%, #ededed 100%);
+  }
+
+  .what-shade-am-i__placeholder--0 {
+    background: linear-gradient(135deg, #f2e2d8 0%, #e8cdbd 100%);
+  }
+
+  .what-shade-am-i__placeholder--1 {
+    background: linear-gradient(135deg, #f0d5cf 0%, #d9b3a8 100%);
+  }
+
+  .what-shade-am-i__placeholder--2 {
+    background: linear-gradient(135deg, #d4a98f 0%, #a87a60 100%);
+  }
+
+  .what-shade-am-i__placeholder--3 {
+    background: linear-gradient(135deg, #e6c88a 0%, #c9a04d 100%);
   }
 
   .what-shade-am-i__card-title {
