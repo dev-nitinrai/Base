@@ -9390,3 +9390,36 @@ files:
     fix_guidance: When customizer text is wrong, check if schema keys in section files match translation keys here; if
       translations are missing, add them via Shopify admin language editor or ensure schema keys exist in corresponding
       section files
+  - file: assets/section-what-shade-am-i.css
+    error: parse_failed
+  - file: assets/section-what-shade-am-i.js
+    responsibility: Initializes and manages the 'What Shade Am I' interactive section, handling filter pills, carousel
+      pagination, and swatch/model view toggling for shade-matching UI.
+    owns:
+      - Filter state management (usage and skin_tone dimensions)
+      - Carousel pagination logic (prev/next navigation, pageIndex, translateX offset)
+      - Card visibility toggling via hidden attribute based on active filters
+      - Empty state display when no cards pass filters
+      - Centered layout logic for fewer than 4 visible cards on desktop
+      - View toggle between 'swatches' and 'models' modes
+      - aria-pressed and aria-checked accessibility attribute updates
+      - Responsive per-view count (4 desktop, 1 mobile via matchMedia 768px breakpoint)
+      - Guard against double-initialization via data-wsaiInit dataset flag
+    depends_on:
+      js: []
+      snippets: []
+      sections:
+        - sections/product-highlights.liquid
+    common_mistakes:
+      - Assuming initSection is called automatically; it must be called with the correct root element matching
+        [data-viewport] and [data-track] selectors
+      - Editing carousel offset logic without accounting for CSS columnGap being read at runtime from computed styles
+      - Adding new filter dimensions without updating both the state object and the cardPasses function
+      - Expecting re-initialization on section reload in the theme editor without hooking into Shopify's
+        shopify:section:load event
+      - Modifying card DOM order without noting that getVisibleCards relies on DOM order for offset calculation
+      - Missing that setView is truncated in the provided source; the models/swatches image-swap logic may be incomplete
+        or in a continuation
+    fix_guidance: Check that the root element passed to initSection contains both [data-viewport] and [data-track] children,
+      verify the data-wsaiInit guard is not blocking re-init after section reloads, and confirm cardPasses filter
+      attributes match exactly what Liquid renders into data-usage-tags and data-skin-tone.

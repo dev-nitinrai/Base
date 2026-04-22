@@ -4357,6 +4357,16 @@ assets:
       registers_elements: []
       listens_events: []
       minified_vendor: false
+    - file: assets/section-what-shade-am-i.js
+      name: section-what-shade-am-i.js
+      size_lines: 231
+      exports_class: []
+      registers_elements: []
+      listens_events:
+        - click
+        - resize
+        - DOMContentLoaded
+        - shopify:section:load
   css:
     - file: assets/cart.css
       name: cart.css
@@ -4487,3 +4497,6 @@ assets:
     - file: assets/swiper7.4.1.min.css
       name: swiper7.4.1.min.css
       size_lines: 13
+    - file: assets/section-what-shade-am-i.css
+      name: section-what-shade-am-i.css
+      size_lines: 448
