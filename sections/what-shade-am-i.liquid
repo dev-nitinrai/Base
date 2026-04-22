@@ -10,6 +10,17 @@
   assign use_placeholders = false
   if shade_count == 0
     assign use_placeholders = true
+  else
+    assign named_count = 0
+    for shade in shades
+      assign nm = shade.name.value | default: '' | strip
+      if nm != ''
+        assign named_count = named_count | plus: 1
+      endif
+    endfor
+    if named_count == 0
+      assign use_placeholders = true
+    endif
   endif
 -%}
 
@@ -191,12 +202,21 @@
 
 {% stylesheet %}
   .what-shade-am-i {
+    display: block;
+    width: 100%;
     padding-top: var(--ws-pad-top, 60px);
     padding-bottom: var(--ws-pad-bottom, 60px);
     background-color: var(--ws-bg, #eeeeee);
     color: var(--ws-text, #000000);
     font-family: var(--font-body-family, inherit);
     -webkit-font-smoothing: antialiased;
+    box-sizing: border-box;
+  }
+
+  .what-shade-am-i *,
+  .what-shade-am-i *::before,
+  .what-shade-am-i *::after {
+    box-sizing: border-box;
   }
 
   .what-shade-am-i__inner {
@@ -205,15 +225,28 @@
     padding-inline: clamp(16px, 4vw, 48px);
   }
 
-  .what-shade-am-i__title {
+  .what-shade-am-i .what-shade-am-i__title {
     display: block;
     width: 100%;
     font-family: var(--font-heading-family, 'Times New Roman', serif);
     font-weight: 400;
-    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-size: 2.5rem;
+    line-height: 1.15;
     text-align: center;
     margin: 0 0 2rem 0;
     letter-spacing: -0.01em;
+  }
+
+  @media (min-width: 768px) {
+    .what-shade-am-i .what-shade-am-i__title {
+      font-size: 2.75rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .what-shade-am-i .what-shade-am-i__title {
+      font-size: 2rem;
+    }
   }
 
   .what-shade-am-i__toolbar {
@@ -371,12 +404,13 @@
     justify-content: center;
   }
 
-  .what-shade-am-i__pill {
+  .what-shade-am-i .what-shade-am-i__pill {
     font-family: inherit;
-    font-size: 0.75rem;
+    font-size: 0.875rem;
+    line-height: 1;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    padding: 0.5rem 1rem;
+    padding: 0.65rem 1.25rem;
     border-radius: 4px;
     border: 1px solid #000;
     background: #fff;
@@ -384,7 +418,7 @@
     cursor: pointer;
     transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;
     white-space: nowrap;
-    min-height: 34px;
+    min-height: 40px;
   }
 
   .what-shade-am-i__pill:hover {
@@ -472,6 +506,7 @@
 
   .what-shade-am-i__viewport {
     flex: 1 1 auto;
+    width: 100%;
     min-width: 0;
     overflow: hidden;
     position: relative;
@@ -532,6 +567,8 @@
     display: block;
   }
 
+  /* Default to swatches visible before JS initialises */
+  .what-shade-am-i:not([data-active-view]) .what-shade-am-i__media-layer--swatches,
   .what-shade-am-i[data-active-view="swatches"] .what-shade-am-i__media-layer--swatches,
   .what-shade-am-i[data-active-view="models"] .what-shade-am-i__media-layer--models {
     opacity: 1;
@@ -559,18 +596,19 @@
     background: linear-gradient(135deg, #e6c88a 0%, #c9a04d 100%);
   }
 
-  .what-shade-am-i__card-title {
+  .what-shade-am-i .what-shade-am-i__card-title {
     font-size: 1rem;
     font-weight: 700;
     letter-spacing: 0.04em;
     text-transform: uppercase;
     margin: 1rem 0 0.5rem 0;
+    line-height: 1.2;
   }
 
-  .what-shade-am-i__card-desc {
+  .what-shade-am-i .what-shade-am-i__card-desc {
     font-size: 0.9rem;
     font-weight: 400;
-    line-height: 1.4;
+    line-height: 1.45;
     color: rgba(0, 0, 0, 0.7);
     max-width: 90%;
     margin: 0;
