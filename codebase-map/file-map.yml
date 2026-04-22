@@ -8914,14 +8914,13 @@ files:
     fix_guidance: Check gift_card object availability and enabled/expired states first, verify settings.logo fallback works,
       ensure inline styles remain for standalone rendering outside theme context
   - file: templates/index.json
-    responsibility: Defines the homepage layout and section configuration with their settings and block order
+    responsibility: Defines the homepage layout by declaring and configuring the ordered set of sections rendered on the
+      Shopify store's index (home) page.
     owns:
-      - Homepage section assembly and ordering
-      - Section-specific settings for hero, featured-collections, selling-points-v2, product-highlights,
-        featured-products, brand-story-v2, promo-banner, logos, and animated-features-v2
-      - Block configurations within each section (collection cards, selling points, features, product selections, story
-        content, promo content, logo images, feature cards)
-      - Visual styling parameters (color schemes, alignments, spacing, overlay settings)
+      - Homepage section composition and ordering
+      - Per-section settings and block configurations for the home page
+      - Block order and block-level settings for each homepage section instance
+      - Section instance IDs (e.g. hero_1, featured_collections_hhETJ9)
     depends_on:
       js: []
       snippets: []
@@ -8930,39 +8929,16 @@ files:
         - sections/featured-collections.liquid
         - sections/selling-points-v2.liquid
         - sections/product-highlights.liquid
-        - sections/featured-products.liquid
-        - sections/brand-story-v2.liquid
-        - sections/promo-banner.liquid
-        - sections/logos.liquid
-        - sections/animated-features-v2.liquid
-      global_objects:
-        - Shopify theme editor
-        - Shopify collections
-        - Shopify products
-      custom_elements: []
-    depended_on_by:
-      - Shopify theme rendering engine when displaying homepage
-      - Shopify theme editor for homepage customization
-      - layout/theme.liquid as the parent template wrapper
     common_mistakes:
-      - Manually editing this file instead of using Shopify theme editor (changes may be overwritten)
-      - Breaking JSON syntax when adding or removing sections or blocks
-      - Referencing non-existent section types that don't have corresponding liquid files
-      - Forgetting to maintain block_order array when adding/removing blocks
-      - Using incorrect handle format for Shopify resource references (collections, products)
-    fix_guidance: Check that all section types referenced exist in sections/ directory, verify JSON syntax is valid, ensure
-      block_order arrays match actual block keys, and prefer making changes through Shopify admin to avoid overwrite
-      conflicts
-    state_ownership:
-      - Homepage visual layout state
-      - Section visibility and ordering on homepage
-      - Block-level content and configuration per section
-    key_identifiers:
-      css_classes: []
-      data_attributes: []
-      js_events_emitted: []
-      js_events_listened: []
-      custom_elements: []
+      - Editing this file manually expecting changes to persist, since Shopify admin or theme editor will overwrite it
+      - Referencing section types (e.g. "new-section") that do not have a corresponding .liquid file in the sections
+        directory, causing render errors
+      - Assuming block or section settings here override schema defaults rather than supplement them
+      - Confusing section instance IDs with section type names when tracing rendering issues
+      - Adding a section type not listed in the known theme files (e.g. "new-section" for what_shade_am_i) without
+        creating the matching liquid file
+    fix_guidance: Cross-reference the type value of each section entry against available files in the sections/ directory
+      first, then check block types match the schema defined in the corresponding section's liquid file.
   - file: templates/list-collections.json
     responsibility: Defines the page template structure for the collections list page displaying all store collections
     owns:
@@ -9390,3 +9366,99 @@ files:
     fix_guidance: When customizer text is wrong, check if schema keys in section files match translation keys here; if
       translations are missing, add them via Shopify admin language editor or ensure schema keys exist in corresponding
       section files
+  - file: sections/new-section.liquid
+    responsibility: Renders the 'What Shade Am I' interactive shade finder tool with metaobject-driven shade data,
+      swatch/model view toggling, usage and skin tone pill filters, and a carousel layout.
+    owns:
+      - shade-finder custom element markup and scoped CSS custom properties
+      - section-level padding and color theming via inline styles
+      - swatch/model view toggle button and aria state
+      - usage filter pills (all, bronzer, blush, highlighter, color_correct)
+      - skin tone filter pills (all, light, medium, dark)
+      - carousel prev/next chevron buttons
+      - metaobject query for agent_shade_v5 and shade_count assignment
+    depends_on:
+      js:
+        - assets/section-what-shade-am-i.js
+      css:
+        - assets/section-what-shade-am-i.css
+      snippets: []
+      sections: []
+      metaobjects:
+        - agent_shade_v5
+    common_mistakes:
+      - Assuming shop.metaobjects['agent_shade_v5'].values always exists without the default fallback causing silent nil
+        errors
+      - Editing filter pill values (bronzer, blush, etc.) in Liquid without matching the exact data-value strings
+        expected by section-what-shade-am-i.js
+      - Adding new color settings without providing all three RGB sub-properties (red, green, blue) which breaks the CSS
+        custom property rgb() declarations
+      - Expecting section settings like heading or labels to render without escaping, risking XSS or broken output in
+        edge cases
+      - Forgetting that shade-finder is a custom element and requires section-what-shade-am-i.js to define it before any
+        DOM interaction works
+      - Modifying section.id-scoped class names in CSS without updating both the style block and the element class
+        attribute simultaneously
+    fix_guidance: Check metaobject definition and field keys in Shopify admin first, then verify section-what-shade-am-i.js
+      defines the shade-finder custom element and matches all data-* attribute names used in the Liquid markup.
+  - file: assets/section-what-shade-am-i.css
+    responsibility: Defines all styles for the shade finder/quiz section, including layout, toggle switch, filter pills,
+      carousel track/slides, and product cards.
+    owns:
+      - .shade-finder and all child component styles
+      - .shade-card product card layout and image visibility states
+      - Carousel track, viewport, and slide sizing (mobile 83.333% / desktop 4-column grid)
+      - Toggle switch knob animation via aria-checked state
+      - Filter pill active/hover/focus states using CSS custom property color tokens
+      - Responsive breakpoints at 768px for controls, filters, and slide widths
+    depends_on:
+      js:
+        - section JS file likely controlling .is-active on pills, .is-centered on track, aria-checked on toggle, and
+          .is-visible on .shade-card__image
+      snippets: []
+      sections:
+        - sections/product.liquid or a dedicated what-shade-am-i section liquid file (not yet listed in theme files)
+    common_mistakes:
+      - Assuming color tokens like --shade-text, --shade-accent, --shade-accent-text are globally defined — they must be
+        set as inline CSS variables on the section root or in theme.liquid
+      - Editing slide flex-basis percentages without accounting for the gap value in the calc() formula, breaking the
+        4-column layout
+      - Expecting toggle checked state to work via :checked pseudo-class — it uses aria-checked='true' attribute
+        selector instead
+      - Overlooking that .shade-card__image visibility is controlled by adding .is-visible via JS, not CSS :hover or
+        display toggling
+      - Truncated file — the .shade-card__img object-fit property is cut off and may be incomplete in the actual asset
+    fix_guidance: Start by verifying --shade-text, --shade-accent, and --shade-accent-text custom properties are declared on
+      the section wrapper in the corresponding liquid file; then trace JS interactions through aria-checked and
+      .is-active class toggling.
+  - file: assets/section-what-shade-am-i.js
+    responsibility: Defines the ShadeFinder custom element that manages a filterable, carousel-based shade product display
+      with swatch/model view toggling and usage/skin-tone pill filters.
+    owns:
+      - ShadeFinder custom HTML element class
+      - Carousel navigation state and transform logic
+      - View toggle (swatches vs models) state and DOM updates
+      - Filter pill active state and aria-pressed attributes
+      - Slide visibility filtering by usage and skin data attributes
+      - Responsive slides-per-view breakpoint logic (768px)
+      - Empty state visibility
+      - Carousel chevron/prev/next button visibility
+      - Centered track layout when visible slides fit within view
+      - Resize debounce handler
+    depends_on:
+      js: []
+      snippets: []
+      sections:
+        - sections/product.liquid
+    common_mistakes:
+      - Assuming applyTransform uses percentage-based offsets rather than offsetLeft pixel values, leading to incorrect
+        transform calculations
+      - Forgetting that visibleSlides is rebuilt on every applyFilters call and is not a live NodeList, causing stale
+        references if slides are dynamically added
+      - Miscalculating maxIndex when count equals perView, resulting in off-by-one errors in navigate wrapping
+      - Overlooking that slide.dataset.usage is comma-separated and must be split before matching, treating it as a
+        single string
+      - Not accounting for the truncated applyTransform method body when editing, risking incomplete overwrites
+      - Assuming toggleView re-renders slides rather than only toggling CSS classes on existing image elements
+    fix_guidance: Check applyFilters to verify visibleSlides population and slide data attributes (data-usage, data-skin) in
+      the corresponding section liquid file first, then inspect applyTransform for correct offsetLeft-based translation.

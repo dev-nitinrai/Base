@@ -1,0 +1,324 @@
+{% comment %} /sections/new-section.liquid — What Shade Am I {% endcomment %}
+{{ 'section-what-shade-am-i.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'section-what-shade-am-i.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign shades = shop.metaobjects['agent_shade_v5'].values | default: metaobjects['agent_shade_v5'].values
+  assign shade_count = shades | size
+-%}
+
+{%- style -%}
+  .shade-finder-{{ section.id }} {
+    --shade-bg: {{ section.settings.bg_color.red }},{{ section.settings.bg_color.green }},{{ section.settings.bg_color.blue }};
+    --shade-text: {{ section.settings.text_color.red }},{{ section.settings.text_color.green }},{{ section.settings.text_color.blue }};
+    --shade-accent: {{ section.settings.accent_color.red }},{{ section.settings.accent_color.green }},{{ section.settings.accent_color.blue }};
+    --shade-accent-text: {{ section.settings.accent_text_color.red }},{{ section.settings.accent_text_color.green }},{{ section.settings.accent_text_color.blue }};
+    background-color: rgb(var(--shade-bg));
+    color: rgb(var(--shade-text));
+    padding-top: {{ section.settings.section_padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.section_padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 768px) {
+    .shade-finder-{{ section.id }} {
+      padding-top: {{ section.settings.section_padding_top }}px;
+      padding-bottom: {{ section.settings.section_padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<shade-finder
+  class="shade-finder shade-finder-{{ section.id }}"
+  data-section-id="{{ section.id }}"
+>
+  <div class="shade-finder__inner">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="shade-finder__heading">{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+
+    <div class="shade-finder__controls">
+      <div class="shade-finder__toggle-wrap">
+        <span class="shade-finder__toggle-label" data-view-label="swatches" aria-hidden="true">{{ section.settings.swatches_label | escape }}</span>
+        <button
+          type="button"
+          class="shade-finder__toggle"
+          role="switch"
+          aria-checked="false"
+          data-view-toggle
+          aria-label="{{ section.settings.swatches_label | escape }} / {{ section.settings.models_label | escape }}"
+        >
+          <span class="shade-finder__toggle-knob" aria-hidden="true"></span>
+        </button>
+        <span class="shade-finder__toggle-label" data-view-label="models" aria-hidden="true">{{ section.settings.models_label | escape }}</span>
+      </div>
+
+      <div class="shade-finder__filters">
+        <div class="shade-finder__filter-group" role="group" aria-label="{{ section.settings.usage_label | escape }}">
+          <span class="shade-finder__filter-legend">{{ section.settings.usage_label | escape }}</span>
+          <div class="shade-finder__pill-row">
+            <button type="button" class="shade-finder__pill is-active" data-filter="usage" data-value="all" aria-pressed="true">ALL</button>
+            <button type="button" class="shade-finder__pill" data-filter="usage" data-value="bronzer" aria-pressed="false">BRONZER</button>
+            <button type="button" class="shade-finder__pill" data-filter="usage" data-value="blush" aria-pressed="false">BLUSH</button>
+            <button type="button" class="shade-finder__pill" data-filter="usage" data-value="highlighter" aria-pressed="false">HIGHLIGHTER</button>
+            <button type="button" class="shade-finder__pill" data-filter="usage" data-value="color_correct" aria-pressed="false">COLOR CORRECT</button>
+          </div>
+        </div>
+
+        <div class="shade-finder__filter-group" role="group" aria-label="{{ section.settings.skin_tone_label | escape }}">
+          <span class="shade-finder__filter-legend">{{ section.settings.skin_tone_label | escape }}</span>
+          <div class="shade-finder__pill-row">
+            <button type="button" class="shade-finder__pill is-active" data-filter="skin" data-value="all" aria-pressed="true">ALL</button>
+            <button type="button" class="shade-finder__pill" data-filter="skin" data-value="light" aria-pressed="false">LIGHT</button>
+            <button type="button" class="shade-finder__pill" data-filter="skin" data-value="medium" aria-pressed="false">MEDIUM</button>
+            <button type="button" class="shade-finder__pill" data-filter="skin" data-value="dark" aria-pressed="false">DARK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="shade-finder__carousel" data-carousel>
+      <button
+        type="button"
+        class="shade-finder__chevron shade-finder__chevron--prev"
+        data-carousel-prev
+        aria-label="Previous shades"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <div class="shade-finder__viewport" data-carousel-viewport>
+        <ul class="shade-finder__track" data-carousel-track>
+          {%- if shade_count > 0 -%}
+            {%- for shade in shades -%}
+              {%- liquid
+                assign usage_values = shade.usage_tags.value
+                assign usage_string = ''
+                if usage_values
+                  for tag in usage_values
+                    assign usage_string = usage_string | append: tag | append: ','
+                  endfor
+                endif
+                assign skin_value = shade.skin_tone.value | downcase
+                assign shade_name = shade.name.value
+                assign shade_desc = shade.description.value
+                assign model_img = shade.model_image.value
+                assign swatch_img = shade.swatch_image.value
+              -%}
+              <li
+                class="shade-finder__slide"
+                data-slide
+                data-usage="{{ usage_string | downcase }}"
+                data-skin="{{ skin_value | downcase }}"
+              >
+                <article class="shade-card">
+                  <div class="shade-card__media">
+                    <div class="shade-card__image shade-card__image--swatch is-visible" data-image="swatches">
+                      {%- if swatch_img != blank -%}
+                        {{ swatch_img | image_url: width: 800 | image_tag:
+                          loading: 'lazy',
+                          widths: '300,500,700,900',
+                          sizes: '(min-width: 768px) 22vw, 80vw',
+                          alt: shade_name,
+                          class: 'shade-card__img'
+                        }}
+                      {%- else -%}
+                        <div class="shade-card__placeholder" aria-hidden="true">
+                          {{ 'product-1' | placeholder_svg_tag: 'shade-card__placeholder-svg' }}
+                        </div>
+                      {%- endif -%}
+                    </div>
+                    <div class="shade-card__image shade-card__image--model" data-image="models">
+                      {%- if model_img != blank -%}
+                        {{ model_img | image_url: width: 800 | image_tag:
+                          loading: 'lazy',
+                          widths: '300,500,700,900',
+                          sizes: '(min-width: 768px) 22vw, 80vw',
+                          alt: shade_name,
+                          class: 'shade-card__img'
+                        }}
+                      {%- else -%}
+                        <div class="shade-card__placeholder" aria-hidden="true">
+                          {{ 'lifestyle-1' | placeholder_svg_tag: 'shade-card__placeholder-svg' }}
+                        </div>
+                      {%- endif -%}
+                    </div>
+                  </div>
+                  <h3 class="shade-card__name">{{ shade_name | escape | upcase }}</h3>
+                  {%- if shade_desc != blank -%}
+                    <p class="shade-card__description">{{ shade_desc | escape }}</p>
+                  {%- endif -%}
+                </article>
+              </li>
+            {%- endfor -%}
+          {%- endif -%}
+        </ul>
+
+        <p class="shade-finder__empty" data-empty hidden>{{ section.settings.empty_state_text | escape }}</p>
+
+        {%- if shade_count == 0 -%}
+          <p class="shade-finder__setup">
+            Create shade entries in the <strong>agent_shade_v5</strong> metaobject definition to populate this section.
+          </p>
+        {%- endif -%}
+      </div>
+
+      <button
+        type="button"
+        class="shade-finder__chevron shade-finder__chevron--next"
+        data-carousel-next
+        aria-label="Next shades"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+
+    {%- if section.settings.show_find_my_shade_cta -%}
+      <div class="shade-finder__cta">
+        {%- if section.settings.cta_prompt != blank -%}
+          <span class="shade-finder__cta-prompt">{{ section.settings.cta_prompt | escape }}</span>
+        {%- endif -%}
+        <a href="{{ section.settings.find_my_shade_url | default: '/pages/find-my-shade' }}" class="shade-finder__cta-button">
+          <span>{{ section.settings.cta_text | escape }}</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</shade-finder>
+
+{% schema %}
+{
+  "name": "What Shade Am I",
+  "tag": "section",
+  "class": "shade-finder-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What Shade Am I?"
+    },
+    {
+      "type": "text",
+      "id": "swatches_label",
+      "label": "Swatches toggle label",
+      "default": "Swatches"
+    },
+    {
+      "type": "text",
+      "id": "models_label",
+      "label": "Models toggle label",
+      "default": "Models"
+    },
+    {
+      "type": "text",
+      "id": "usage_label",
+      "label": "Usage group label",
+      "default": "USAGE"
+    },
+    {
+      "type": "text",
+      "id": "skin_tone_label",
+      "label": "Skin tone group label",
+      "default": "SKIN TONE"
+    },
+    {
+      "type": "text",
+      "id": "empty_state_text",
+      "label": "Empty state text",
+      "default": "No shades match. Try 'All'."
+    },
+    {
+      "type": "header",
+      "content": "Find My Shade CTA"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_find_my_shade_cta",
+      "label": "Show Find My Shade CTA",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "cta_prompt",
+      "label": "CTA prompt text",
+      "default": "Still Not Sure?"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA button text",
+      "default": "FIND MY SHADE"
+    },
+    {
+      "type": "url",
+      "id": "find_my_shade_url",
+      "label": "Find My Shade URL"
+    },
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#EFEFEF"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Active / CTA color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "accent_text_color",
+      "label": "Active / CTA text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    }
+  ],
+  "blocks": [],
+  "presets": [
+    {
+      "name": "What Shade Am I"
+    }
+  ]
+}
+{% endschema %}
