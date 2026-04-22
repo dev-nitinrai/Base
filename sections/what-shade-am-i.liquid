@@ -1,7 +1,10 @@
 {{ 'section-what-shade.css' | asset_url | stylesheet_tag }}
 
 {%- liquid
-  assign shades = shop.metaobjects['agent_shade'].values
+  assign shades = metaobjects['agent_shade'].values
+  if shades == blank
+    assign shades = shop.metaobjects['agent_shade'].values
+  endif
   assign shade_count = 0
   if shades != blank
     assign shade_count = shades.size
@@ -133,12 +136,14 @@
                 assign model_img = shade.model_image.value
                 assign swatch_img = shade.swatch_image.value
               -%}
+              {%- assign card_tone = shade_tone | escape -%}
+              {%- assign card_usage = usage_joined | escape -%}
               <li
                 class="what-shade__card"
                 role="listitem"
-                data-tone="{{ shade_tone | escape }}"
-                data-usage="{{ usage_joined | escape }}"
-                x-show="matches('{{ shade_tone | escape }}', '{{ usage_joined | escape }}')"
+                data-tone="{{ card_tone }}"
+                data-usage="{{ card_usage }}"
+                x-show="(tone === 'all' || tone === '{{ card_tone }}') && (usage === 'all' || '{{ card_usage }}'.split(',').indexOf(usage) !== -1)"
                 x-transition.opacity.duration.200ms
               >
                 <div class="what-shade__media">
