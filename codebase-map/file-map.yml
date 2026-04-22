@@ -8914,14 +8914,13 @@ files:
     fix_guidance: Check gift_card object availability and enabled/expired states first, verify settings.logo fallback works,
       ensure inline styles remain for standalone rendering outside theme context
   - file: templates/index.json
-    responsibility: Defines the homepage layout and section configuration with their settings and block order
+    responsibility: Defines the homepage layout by declaring which sections render, their order, and their default
+      settings/content configuration.
     owns:
-      - Homepage section assembly and ordering
-      - Section-specific settings for hero, featured-collections, selling-points-v2, product-highlights,
-        featured-products, brand-story-v2, promo-banner, logos, and animated-features-v2
-      - Block configurations within each section (collection cards, selling points, features, product selections, story
-        content, promo content, logo images, feature cards)
-      - Visual styling parameters (color schemes, alignments, spacing, overlay settings)
+      - Homepage section composition and render order
+      - Default settings for hero, featured collections, selling points, product highlights, and other homepage sections
+      - Block definitions and block ordering within each section
+      - Color scheme, alignment, and content defaults for homepage sections
     depends_on:
       js: []
       snippets: []
@@ -8930,39 +8929,30 @@ files:
         - sections/featured-collections.liquid
         - sections/selling-points-v2.liquid
         - sections/product-highlights.liquid
-        - sections/featured-products.liquid
-        - sections/brand-story-v2.liquid
-        - sections/promo-banner.liquid
-        - sections/logos.liquid
+        - sections/animated-features.liquid
         - sections/animated-features-v2.liquid
-      global_objects:
-        - Shopify theme editor
-        - Shopify collections
-        - Shopify products
-      custom_elements: []
-    depended_on_by:
-      - Shopify theme rendering engine when displaying homepage
-      - Shopify theme editor for homepage customization
-      - layout/theme.liquid as the parent template wrapper
+        - sections/brand-story.liquid
+        - sections/brand-story-v2.liquid
+        - sections/logos.liquid
+        - sections/promo-banner.liquid
+        - sections/dynamic-grid.liquid
+        - sections/shop-by-category-v2.liquid
+        - sections/featured-products.liquid
+        - sections/related-products.liquid
+        - sections/Faq.liquid
+        - sections/Faq-metaobjects.liquid
+        - sections/announcement-bar.liquid
+        - sections/header.liquid
+        - sections/footer.liquid
     common_mistakes:
-      - Manually editing this file instead of using Shopify theme editor (changes may be overwritten)
-      - Breaking JSON syntax when adding or removing sections or blocks
-      - Referencing non-existent section types that don't have corresponding liquid files
-      - Forgetting to maintain block_order array when adding/removing blocks
-      - Using incorrect handle format for Shopify resource references (collections, products)
-    fix_guidance: Check that all section types referenced exist in sections/ directory, verify JSON syntax is valid, ensure
-      block_order arrays match actual block keys, and prefer making changes through Shopify admin to avoid overwrite
-      conflicts
-    state_ownership:
-      - Homepage visual layout state
-      - Section visibility and ordering on homepage
-      - Block-level content and configuration per section
-    key_identifiers:
-      css_classes: []
-      data_attributes: []
-      js_events_emitted: []
-      js_events_listened: []
-      custom_elements: []
+      - Editing this file manually expecting changes to persist, since Shopify admin theme editor will overwrite it
+      - Adding a section key here that does not have a matching section liquid file, causing a render error
+      - Assuming section settings defined here are the source of truth when the theme editor may have diverged
+      - Referencing a block type in blocks object that is not declared in the corresponding section schema
+      - Changing order array without updating the blocks object keys to match, causing blocks to silently disappear
+      - Treating truncated or partial JSON as complete, missing sections defined lower in the file
+    fix_guidance: Cross-reference each section type value against the available sections liquid files list, then verify
+      block types match the schema defined inside the corresponding section liquid file.
   - file: templates/list-collections.json
     responsibility: Defines the page template structure for the collections list page displaying all store collections
     owns:
@@ -9390,3 +9380,37 @@ files:
     fix_guidance: When customizer text is wrong, check if schema keys in section files match translation keys here; if
       translations are missing, add them via Shopify admin language editor or ensure schema keys exist in corresponding
       section files
+  - file: sections/new-section.liquid
+    responsibility: Renders an interactive shade-finder tool with swatch/model toggle, usage and skin-tone pill filters, and
+      a carousel of shades sourced from the agent_shade_v3 metaobject namespace.
+    owns:
+      - shade-finder section layout and scoped CSS custom properties (--sf-text, --sf-muted, --sf-accent)
+      - responsive padding via section settings (section_padding_top, section_padding_bottom)
+      - Alpine.js component root (x-data="shadeFinder()") managing view, usage, tone, carousel state
+      - heading rendering from section.settings.heading
+      - swatches/models toggle UI (view state, aria-checked, toggleView/setView)
+      - usage filter pills (all, bronzer, blush, highlighter, color_correct)
+      - skin tone filter pills (all, light, medium, dark)
+      - carousel navigation chevrons with canPrev/canNext and visibleCount logic
+      - metaobject iteration over shop.metaobjects.agent_shade_v3.values
+    depends_on:
+      js:
+        - Alpine.js (shadeFinder() component must be registered globally, likely in assets/shade-finder.js or
+          theme.liquid)
+      snippets: []
+      sections: []
+    common_mistakes:
+      - Assuming shadeFinder() Alpine component is defined inline; it is registered externally and will silently fail if
+        the JS file is missing or loaded after Alpine initializes
+      - Editing usage_options or tone_options only in the Liquid string and forgetting to sync the corresponding
+        case/when label block, leaving unlabelled pills
+      - Referencing the wrong metaobject handle (agent_shade_v3) — any typo or namespace mismatch returns an empty
+        values array with no error, causing a blank carousel
+      - Hardcoding filter values (bronzer, blush, etc.) in Liquid without matching the exact field values stored in the
+        metaobject, causing filters to never match
+      - Adding section settings in the schema without a corresponding CSS variable or Liquid reference, making the
+        setting appear functional but have no effect
+      - Forgetting x-cloak CSS rule in the stylesheet, causing Alpine template markup to flash before initialization
+    fix_guidance: Check that the shadeFinder() Alpine component is defined and loaded before Alpine starts (verify script
+      order in layout/theme.liquid), then confirm shop.metaobjects.agent_shade_v3 returns non-empty values in a test
+      render by temporarily outputting shades_count to the page.

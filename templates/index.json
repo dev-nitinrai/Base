@@ -137,6 +137,27 @@
         "enable_mobile_slider": true
       }
     },
+    "shade_finder_what": {
+      "type": "what-shade-am-i",
+      "settings": {
+        "heading": "What Shade Am I?",
+        "show_find_my_shade_cta": true,
+        "cta_label": "Still Not Sure?",
+        "cta_button_text": "FIND MY SHADE",
+        "find_my_shade_url": "/pages/find-my-shade",
+        "usage_label": "USAGE",
+        "skin_tone_label": "SKIN TONE",
+        "swatches_label": "Swatches",
+        "models_label": "Models",
+        "empty_state_text": "No shades match. Try 'All'.",
+        "bg_color": "#FFFFFF",
+        "text_color": "#000000",
+        "muted_text_color": "#555555",
+        "accent_color": "#000000",
+        "section_padding_top": 64,
+        "section_padding_bottom": 64
+      }
+    },
     "product_highlights_gUaG6E": {
       "type": "product-highlights",
       "blocks": {
@@ -185,6 +206,7 @@
     "hero_1",
     "featured_collections_hhETJ9",
     "selling_points_v2_6NgzaK",
+    "shade_finder_what",
     "product_highlights_gUaG6E"
   ]
 }

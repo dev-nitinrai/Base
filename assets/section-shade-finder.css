@@ -1,0 +1,437 @@
+.shade-finder {
+  display: block;
+  width: 100%;
+  color: var(--sf-text, #000);
+  font-family: var(--font-body-family);
+}
+
+.shade-finder__inner {
+  max-width: var(--page-width, 1400px);
+  margin-inline: auto;
+  padding-inline: clamp(16px, 4vw, 48px);
+}
+
+.shade-finder__title {
+  font-family: var(--font-heading-family);
+  font-weight: 400;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  text-align: center;
+  margin: 0 0 2rem;
+  color: var(--sf-text, #000);
+  letter-spacing: 0.01em;
+}
+
+.shade-finder__controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+  .shade-finder__controls {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+}
+
+.shade-finder__toggle-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+  order: 2;
+}
+
+@media (min-width: 768px) {
+  .shade-finder__toggle-wrap {
+    order: 0;
+  }
+}
+
+.shade-finder__toggle-label {
+  font-size: 0.875rem;
+  color: var(--sf-muted, #555);
+  cursor: pointer;
+  user-select: none;
+  letter-spacing: 0.02em;
+}
+
+.shade-finder__toggle-label.is-active {
+  color: var(--sf-text, #000);
+  font-weight: 600;
+}
+
+.shade-finder__toggle {
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+}
+
+.shade-finder__toggle-track {
+  width: 44px;
+  height: 24px;
+  background-color: #e5e5e5;
+  border: 1px solid var(--sf-text, #000);
+  border-radius: 999px;
+  position: relative;
+  display: inline-block;
+  transition: background-color 200ms ease;
+}
+
+.shade-finder__toggle-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  background-color: var(--sf-text, #000);
+  border-radius: 50%;
+  transition: transform 200ms ease;
+}
+
+.shade-finder.is-view-models .shade-finder__toggle-thumb {
+  transform: translateX(20px);
+}
+
+.shade-finder__toggle:focus-visible .shade-finder__toggle-track {
+  outline: 2px solid var(--sf-accent, #000);
+  outline-offset: 2px;
+}
+
+.shade-finder__filters {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  width: 100%;
+  order: 1;
+}
+
+@media (min-width: 768px) {
+  .shade-finder__filters {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 2rem;
+    flex: 1;
+    width: auto;
+    order: 0;
+  }
+}
+
+.shade-finder__filter-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+@media (min-width: 768px) {
+  .shade-finder__filter-group {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+  }
+
+  .shade-finder__filter-group--usage {
+    margin-inline-end: auto;
+  }
+}
+
+.shade-finder__filter-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--sf-text, #000);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.shade-finder__pills {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.shade-finder__pill {
+  font-family: inherit;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--sf-text, #000);
+  background-color: #fff;
+  color: var(--sf-text, #000);
+  cursor: pointer;
+  transition: background-color 180ms ease, color 180ms ease;
+  min-height: 36px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.shade-finder__pill.is-active {
+  background-color: var(--sf-accent, #000);
+  color: #fff;
+  border-color: var(--sf-accent, #000);
+}
+
+.shade-finder__pill:focus-visible {
+  outline: 2px solid var(--sf-accent, #000);
+  outline-offset: 2px;
+}
+
+.shade-finder__carousel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.shade-finder__viewport {
+  position: relative;
+  overflow: hidden;
+  flex: 1;
+  min-width: 0;
+}
+
+.shade-finder__track {
+  display: flex;
+  gap: 1rem;
+  will-change: transform;
+  transition: transform 350ms ease;
+}
+
+.shade-finder__carousel.is-centered .shade-finder__track {
+  justify-content: center;
+}
+
+.shade-finder__card {
+  flex: 0 0 calc((100% - 3rem) / 4);
+  min-width: 0;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: opacity 180ms ease;
+}
+
+.shade-finder__card[hidden] {
+  display: none;
+}
+
+@media (max-width: 767.98px) {
+  .shade-finder__card {
+    flex: 0 0 83%;
+  }
+
+  .shade-finder__track {
+    gap: 0.75rem;
+  }
+}
+
+.shade-finder__media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background-color: #f4f4f4;
+}
+
+.shade-finder__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 200ms ease;
+}
+
+.shade-finder__image--swatch {
+  opacity: 1;
+}
+
+.shade-finder__image--model {
+  opacity: 0;
+}
+
+.shade-finder.is-view-models .shade-finder__image--swatch {
+  opacity: 0;
+}
+
+.shade-finder.is-view-models .shade-finder__image--model {
+  opacity: 1;
+}
+
+.shade-finder__image--placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ececec;
+}
+
+.shade-finder__placeholder-svg {
+  width: 60%;
+  height: 60%;
+  opacity: 0.3;
+}
+
+.shade-finder__card-title {
+  font-family: var(--font-body-family);
+  font-weight: 700;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0;
+  color: var(--sf-text, #000);
+}
+
+.shade-finder__card-desc {
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: var(--sf-muted, #555);
+  margin: 0;
+  font-weight: 400;
+}
+
+.shade-finder__chevron {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  color: var(--sf-text, #000);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 150ms ease;
+}
+
+.shade-finder__chevron:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+.shade-finder__chevron.is-hidden {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.shade-finder__chevron:focus-visible {
+  outline: 2px solid var(--sf-accent, #000);
+  outline-offset: 2px;
+  border-radius: 50%;
+}
+
+@media (max-width: 767.98px) {
+  .shade-finder__carousel {
+    gap: 0;
+  }
+
+  .shade-finder__chevron {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    width: 36px;
+    height: 36px;
+    background-color: rgba(255, 255, 255, 0.85);
+    border-radius: 50%;
+  }
+
+  .shade-finder__chevron--prev {
+    left: 4px;
+    top: 38%;
+  }
+
+  .shade-finder__chevron--next {
+    right: calc(17% + 4px);
+    top: 38%;
+  }
+}
+
+.shade-finder__empty {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--sf-muted, #555);
+  font-size: 0.95rem;
+  width: 100%;
+}
+
+.shade-finder__empty[hidden] {
+  display: none;
+}
+
+.shade-finder__carousel.is-empty .shade-finder__track {
+  display: none;
+}
+
+.shade-finder__cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2.5rem;
+  flex-wrap: wrap;
+}
+
+@media (min-width: 768px) {
+  .shade-finder__cta {
+    justify-content: flex-end;
+  }
+}
+
+.shade-finder__cta-label {
+  font-size: 0.9rem;
+  color: var(--sf-muted, #555);
+  font-style: italic;
+}
+
+.shade-finder__cta-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.5rem;
+  background-color: var(--sf-accent, #000);
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 600;
+  transition: opacity 150ms ease;
+}
+
+.shade-finder__cta-button:hover,
+.shade-finder__cta-button:focus-visible {
+  opacity: 0.85;
+  color: #fff;
+}
+
+.shade-finder__cta-button:focus-visible {
+  outline: 2px solid var(--sf-accent, #000);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shade-finder__image,
+  .shade-finder__toggle-thumb,
+  .shade-finder__track,
+  .shade-finder__pill,
+  .shade-finder__cta-button,
+  .shade-finder__card {
+    transition: none !important;
+  }
+}
