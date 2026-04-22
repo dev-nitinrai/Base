@@ -390,11 +390,13 @@
     justify-content: center;
   }
 
-  .shade-picker__pill {
+  .shade-picker .shade-picker__pill,
+  .shade-picker button.shade-picker__pill {
+    -webkit-appearance: none;
     appearance: none;
-    background: #fff;
-    border: 1px solid #000;
-    color: #000;
+    background-color: #ffffff;
+    border: 1px solid #000000;
+    color: #000000;
     border-radius: 999px;
     padding: 0.5rem 1rem;
     font-size: 0.75rem;
@@ -403,16 +405,24 @@
     cursor: pointer;
     min-height: 44px;
     line-height: 1;
+    font-family: inherit;
     transition: background-color 180ms ease, color 180ms ease;
   }
 
-  .shade-picker__pill:hover {
-    background: rgba(0, 0, 0, 0.05);
+  .shade-picker .shade-picker__pill:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: #000000;
   }
 
-  .shade-picker__pill.is-active {
-    background: #000;
-    color: #fff;
+  .shade-picker .shade-picker__pill.is-active,
+  .shade-picker button.shade-picker__pill.is-active {
+    background-color: #000000;
+    color: #ffffff;
+  }
+
+  .shade-picker .shade-picker__pill.is-active:hover {
+    background-color: #000000;
+    color: #ffffff;
   }
 
   .shade-picker__pill:focus-visible {
