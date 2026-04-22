@@ -61,6 +61,25 @@
     "text": "Text"
   },
   "sections": {
+    "shade_picker": {
+      "name": "What Shade Am I",
+      "settings": {
+        "header_cta": "Find My Shade CTA",
+        "header_spacing": "Spacing",
+        "show_cta": {
+          "label": "Show Find My Shade CTA"
+        },
+        "cta_url": {
+          "label": "Find My Shade URL"
+        },
+        "padding_top": {
+          "label": "Top padding"
+        },
+        "padding_bottom": {
+          "label": "Bottom padding"
+        }
+      }
+    },
     "all": {
       "colors": {
         "label": "Colors",
@@ -1377,6 +1396,6 @@
       "title": "Title",
       "subtitle": "Subtitle",
       "normal": "Normal text"
-    },
+    }
   }
 }

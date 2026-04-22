@@ -8914,14 +8914,12 @@ files:
     fix_guidance: Check gift_card object availability and enabled/expired states first, verify settings.logo fallback works,
       ensure inline styles remain for standalone rendering outside theme context
   - file: templates/index.json
-    responsibility: Defines the homepage layout and section configuration with their settings and block order
+    responsibility: Defines the homepage layout by declaring which sections render, in what order, and with what default settings.
     owns:
-      - Homepage section assembly and ordering
-      - Section-specific settings for hero, featured-collections, selling-points-v2, product-highlights,
-        featured-products, brand-story-v2, promo-banner, logos, and animated-features-v2
-      - Block configurations within each section (collection cards, selling points, features, product selections, story
-        content, promo content, logo images, feature cards)
-      - Visual styling parameters (color schemes, alignments, spacing, overlay settings)
+      - Homepage section composition and ordering
+      - Default settings and content for each homepage section instance
+      - Block definitions and block ordering within each section
+      - Section instance IDs (e.g. hero_1, featured_collections_hhETJ9)
     depends_on:
       js: []
       snippets: []
@@ -8930,39 +8928,18 @@ files:
         - sections/featured-collections.liquid
         - sections/selling-points-v2.liquid
         - sections/product-highlights.liquid
-        - sections/featured-products.liquid
-        - sections/brand-story-v2.liquid
-        - sections/promo-banner.liquid
-        - sections/logos.liquid
-        - sections/animated-features-v2.liquid
-      global_objects:
-        - Shopify theme editor
-        - Shopify collections
-        - Shopify products
-      custom_elements: []
-    depended_on_by:
-      - Shopify theme rendering engine when displaying homepage
-      - Shopify theme editor for homepage customization
-      - layout/theme.liquid as the parent template wrapper
     common_mistakes:
-      - Manually editing this file instead of using Shopify theme editor (changes may be overwritten)
-      - Breaking JSON syntax when adding or removing sections or blocks
-      - Referencing non-existent section types that don't have corresponding liquid files
-      - Forgetting to maintain block_order array when adding/removing blocks
-      - Using incorrect handle format for Shopify resource references (collections, products)
-    fix_guidance: Check that all section types referenced exist in sections/ directory, verify JSON syntax is valid, ensure
-      block_order arrays match actual block keys, and prefer making changes through Shopify admin to avoid overwrite
-      conflicts
-    state_ownership:
-      - Homepage visual layout state
-      - Section visibility and ordering on homepage
-      - Block-level content and configuration per section
-    key_identifiers:
-      css_classes: []
-      data_attributes: []
-      js_events_emitted: []
-      js_events_listened: []
-      custom_elements: []
+      - Manually editing this file expecting changes to persist, since Shopify admin theme editor auto-overwrites it
+      - Referencing a section type that does not have a matching sections/*.liquid file, causing a render failure
+      - Adding a new section instance without ensuring the section type value exactly matches the liquid filename
+        (case-sensitive)
+      - Assuming block settings here override section-level schema defaults rather than supplying initial values
+      - Editing section order here without updating the top-level order array, causing sections to be ignored or
+        duplicated
+      - Confusing this file as the source of truth for section logic or styling, which lives entirely in the section
+        liquid files
+    fix_guidance: Cross-reference the type field of each section entry against the sections/ directory filenames; then check
+      the matching liquid file schema for valid setting keys before editing any values here.
   - file: templates/list-collections.json
     responsibility: Defines the page template structure for the collections list page displaying all store collections
     owns:
@@ -9310,83 +9287,134 @@ files:
     fix_guidance: Check translation keys exist in locales/en.default.schema.json, verify settings_data.json contains actual
       values, ensure color scheme roles map correctly to CSS variables in snippets/css-variables.liquid
   - file: locales/en.default.json
-    responsibility: Stores English language translations for all user-facing text and labels throughout the Shopify theme.
+    responsibility: Provides all English UI string translations and labels used across the theme's sections, snippets, and
+      layouts via Liquid's `t` filter.
     owns:
-      - All English translation strings for UI elements (buttons, labels, error messages)
-      - Customer account and authentication text (login, register, reset password)
-      - Cart and checkout related messaging
-      - Product and collection page labels
+      - 404 page text (title, not_found, back_to_shopping)
+      - Blog and article comment form labels and status messages
+      - Cart labels (checkout, remove, discount, shipping policy, estimated total)
+      - Customer account strings (login, register, reset password, activate account, addresses, orders, order detail)
+      - General accessibility and UI strings (aria labels, pagination, search, product UI)
       - Form validation and error messages
-      - Blog and article interface text
-      - Navigation and menu labels
-      - Footer and general UI text
+      - Password page strings
+      - Section-level labels referenced by Liquid t-filter calls throughout all sections
     depends_on:
       js: []
       snippets: []
-      sections: []
-      global_objects:
-        - Shopify theme translation system (t filter in Liquid)
-      custom_elements: []
-    depended_on_by:
-      - All .liquid template and section files that use translation filters
-      - Shopify admin language editor
-      - Any JavaScript that references translation keys
-      - All customer-facing UI components (cart, product cards, forms, etc.)
-    key_identifiers:
-      css_classes: []
-      data_attributes: []
-      js_events_emitted: []
-      js_events_listened: []
-      custom_elements: []
-    state_ownership:
-      - none
+      sections:
+        - sections/404.liquid
+        - sections/article.liquid
+        - sections/blog.liquid
+        - sections/blogs.liquid
+        - sections/cart.liquid
+        - sections/account.liquid
+        - sections/activate-account.liquid
+        - sections/addresses.liquid
+        - sections/login.liquid
+        - sections/order.liquid
+        - sections/register.liquid
+        - sections/reset-password.liquid
+        - sections/search.liquid
+        - sections/product.liquid
+        - sections/password.liquid
+        - sections/predictive-results.liquid
+        - sections/related-products.liquid
+        - sections/collection.liquid
+        - sections/featured-products.liquid
     common_mistakes:
-      - Modifying translation keys without updating corresponding Liquid template references
-      - Adding translations without matching schema counterpart in en.default.schema.json
-      - Forgetting that this file may be auto-regenerated by Shopify admin language editor
-      - Hardcoding text in templates instead of using translation keys from this file
-      - Not maintaining consistency in terminology across different sections
-    fix_guidance: When text displays incorrectly or is missing, search for the translation key (e.g., cart.checkout,
-      customer.login_page.title) in Liquid files using {{ 't' filter, verify the key exists in this JSON structure, and
-      ensure nested object paths match exactly.
+      - Adding new translation keys here without adding matching keys to all other locale files, causing missing
+        translation fallbacks or silent empty strings in non-English storefronts
+      - Editing this file manually when Shopify admin language editor overwrites changes on next sync
+      - Using hardcoded strings in Liquid files instead of t-filter references, making translations non-functional
+      - Assuming key paths match section schema label keys — schema labels are separate from t-filter translation keys
+      - Deleting or renaming keys without searching all Liquid files for existing t-filter references, causing broken
+        translations
+      - Confusing nested key paths (e.g. customer.order vs customer.orders) when referencing in Liquid t calls
+    fix_guidance: "Search all .liquid files for the t-filter pattern (e.g. 't: \"cart.checkout\"') to find which section
+      consumes a broken key, then verify the exact dot-notation path matches the JSON hierarchy here."
   - file: locales/en.default.schema.json
-    responsibility: Provides default English translations for all Shopify theme editor schema settings, labels, and section
-      configurations
+    responsibility: Provides all English translation strings for Shopify theme editor schema labels, section settings, and
+      UI controls used across the theme customizer.
     owns:
-      - All translatable strings for theme customizer UI (section names, setting labels, help text)
-      - Schema labels for general UI elements (heading, body, layout, colors, typography)
-      - Setting labels for all sections (header, footer, product, collection, etc.)
-      - Block and group naming conventions
-      - Help text and info tooltips for theme settings
-      - Option labels for dropdowns and radio buttons in theme editor
+      - Editor-facing label text for all section settings
+      - General UI terminology (general.* keys)
+      - Shared label definitions (labels.* keys)
+      - Section-specific setting names and option labels (sections.* keys)
+      - Theme customizer dropdown options and info text
     depends_on:
       js: []
       snippets: []
-      sections: []
-      global_objects:
-        - Shopify theme editor schema system
-        - Shopify admin language editor
-      custom_elements: []
-    depended_on_by:
-      - config/settings_schema.json (references translation keys)
-      - All section files with schema blocks (sections/*.liquid)
-      - Shopify theme editor UI
-      - Theme customization interface
-      - Shopify admin language editor system
-    key_identifiers:
-      css_classes: []
-      data_attributes: []
-      js_events_emitted: []
-      js_events_listened: []
-      custom_elements: []
-    state_ownership:
-      - none (static translation data only)
+      sections:
+        - sections/header.liquid
+        - sections/footer.liquid
+        - sections/hero.liquid
+        - sections/hero-v2.liquid
+        - sections/announcement-bar.liquid
+        - sections/product.liquid
+        - sections/collection.liquid
+        - sections/cart.liquid
+        - sections/search.liquid
+        - sections/blog.liquid
+        - sections/article.liquid
+        - sections/page.liquid
+        - sections/password.liquid
+        - sections/Faq.liquid
+        - sections/Faq-metaobjects.liquid
+        - sections/animated-features.liquid
+        - sections/animated-features-v2.liquid
+        - sections/brand-story.liquid
+        - sections/brand-story-v2.liquid
+        - sections/featured-collections.liquid
+        - sections/featured-collections-v2.liquid
+        - sections/selling-points.liquid
+        - sections/selling-points-v2.liquid
+        - sections/shop-by-category-v2.liquid
+        - sections/dynamic-grid.liquid
+        - sections/logos.liquid
+        - sections/promo-banner.liquid
     common_mistakes:
-      - Editing this file directly when it's auto-generated by Shopify admin
-      - Not understanding that changes may be overwritten by language editor
-      - Adding translation keys that don't match schema definitions in section files
-      - Forgetting to add corresponding translations when adding new schema settings
-      - Not maintaining consistent naming conventions across translation keys
-    fix_guidance: When customizer text is wrong, check if schema keys in section files match translation keys here; if
-      translations are missing, add them via Shopify admin language editor or ensure schema keys exist in corresponding
-      section files
+      - Editing this file manually when it is marked auto-generated, causing changes to be silently overwritten by
+        Shopify admin
+      - Adding translation keys here that are never referenced in any section schema, creating orphaned strings
+      - Confusing this file with locales/en.default.json (storefront-facing translations) and placing customer-visible
+        strings here instead
+      - Referencing a key path in a section schema that does not exactly match the nested key structure here, causing
+        the customizer to show raw key paths instead of labels
+      - Assuming shade_picker section strings are globally reused when they are scoped only to that section
+    fix_guidance: "Cross-reference the exact dot-notation key path used in a section's schema t: field against the nested
+      JSON structure here; mismatches appear as untranslated keys in the theme editor."
+  - file: sections/new-section.liquid
+    responsibility: Renders an interactive shade picker section that pulls from a metaobject source, supports swatch/model
+      view toggling, and filters shades by usage type and skin tone using Alpine.js reactivity.
+    owns:
+      - Shade picker section layout and CSS custom properties for padding
+      - View toggle switch (swatches vs models) driven by Alpine.js `view` state
+      - Usage filter pill group (all, bronzer, blush, highlighter, color_correct)
+      - Skin tone filter pill group (all, light, medium, dark)
+      - Carousel wrapper with conditional chevron and centering classes based on `visibleCount`
+      - Metaobject data fetch from `shop.metaobjects['agent_shade_v2']`
+      - Alpine.js component instance scoped by sanitized `section.id` as `shadePicker_{{ alpine_id }}`
+      - Section-scoped CSS via `#shade-picker-{{ section.id }}` and CSS variables
+      - Locale string bindings for all user-facing labels via `t` filter
+    depends_on:
+      js:
+        - Alpine.js global (expects `shadePicker_{{ alpine_id }}` factory function registered externally)
+        - External JS file defining `shadePicker_*` Alpine component with `view`, `usage`, `skin`, `visibleCount`, and
+          `toggleView()` properties
+      snippets: []
+      sections: []
+    common_mistakes:
+      - Assuming the Alpine component is defined inline — it is registered externally and must match the sanitized
+        `alpine_id` naming convention using underscores, not hyphens
+      - Editing usage or skin filter values only in Liquid without updating the corresponding Alpine.js component logic
+        that filters against those string values
+      - Missing or mismatched locale keys under `sections.shade_picker.*` causing silent empty strings rather than errors
+      - Assuming `shop.metaobjects['agent_shade_v2'].values` is always populated — if the metaobject definition is
+        missing or empty, `shade_count` will be 0 and the carousel block will not render
+      - "Failing to account for the `x-cloak` directive requiring a corresponding CSS rule `[x-cloak] { display: none }`
+        in the stylesheet to prevent flash of un-initialized markup"
+      - Modifying `section.id` formatting without updating the `alpine_id` sanitization logic, breaking the Alpine
+        component binding
+    fix_guidance: "Check the externally registered Alpine.js component name matches `shadePicker_{{ section.id | replace:
+      '-', '_' | replace: '.', '_' }}`, verify the `agent_shade_v2` metaobject exists and has published entries, and
+      confirm all `sections.shade_picker.*` locale keys are present in locale JSON files."
