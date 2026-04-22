@@ -138,7 +138,7 @@
       }
     },
     "shade_finder_what": {
-      "type": "new-section",
+      "type": "what-shade-am-i",
       "settings": {
         "heading": "What Shade Am I?",
         "show_find_my_shade_cta": true,
