@@ -9390,3 +9390,72 @@ files:
     fix_guidance: When customizer text is wrong, check if schema keys in section files match translation keys here; if
       translations are missing, add them via Shopify admin language editor or ensure schema keys exist in corresponding
       section files
+  - file: assets/section-what-shade-am-i.css
+    responsibility: Provides all visual styling for the 'What Shade Am I' product finder section, including carousel layout,
+      filter pills, toggle switch, card display, and responsive behavior.
+    owns:
+      - .what-shade root container and CSS custom property theming (--wsa-bg, --wsa-text, --wsa-accent,
+        --wsa-accent-text)
+      - .what-shade__inner responsive max-width layout
+      - .what-shade__title heading typography
+      - .what-shade__controls flex layout for filters and toggles
+      - .what-shade__toggle and .what-shade__switch accessible toggle button with track/thumb animation
+      - .what-shade__pills and .what-shade__pill filter pill buttons including .is-active state
+      - .what-shade__carousel and .what-shade__viewport overflow container
+      - .what-shade__track sliding flex list with .is-centered modifier
+      - .what-shade__card responsive flex cards with .is-filtering-out opacity transition and [hidden] support
+      - .what-shade__media aspect-ratio image container with .what-shade__img opacity-based image switching (.is-active)
+      - .what-shade__name and .what-shade__desc card text styling
+      - .what-shade__nav carousel navigation button (partially truncated)
+    depends_on:
+      js:
+        - assets/section-what-shade-am-i.js (assumed, drives .is-active, .is-filtering-out, .is-centered, aria-checked
+          states)
+      snippets: []
+      sections:
+        - sections/product.liquid (likely renders .what-shade section markup consuming these styles)
+    common_mistakes:
+      - Editing --wsa-accent or --wsa-text CSS variables here instead of in the section's Liquid schema settings where
+        they are defined
+      - Assuming .is-active on images or .is-filtering-out on cards is CSS-only when these classes are toggled
+        exclusively by JavaScript
+      - Expecting .what-shade__track.is-centered to apply when filtered results are few without understanding JS must
+        add/remove the class
+      - Overriding clamp() font-size or padding values with fixed px values and breaking fluid responsive scaling
+      - Modifying aria-checked toggle styles here without updating corresponding JS that sets the aria-checked attribute
+      - Assuming the truncated .what-shade__nav styles are complete; the full nav button styles may be missing from this
+        view
+    fix_guidance: Check the paired JavaScript file for class toggling logic first; verify CSS custom properties are set at
+      the section schema or :root level before debugging visual regressions.
+  - file: assets/section-what-shade-am-i.js
+    responsibility: Provides client-side interactivity for the 'What Shade Am I' section, including card filtering by skin
+      tone and usage, paginated carousel navigation, and swatches/list view toggling.
+    owns:
+      - WhatShadeSection class
+      - Filter pill active state and aria-pressed management
+      - Card visibility toggling via hidden attribute and is-filtering-out CSS class
+      - Carousel translate/pagination logic for mobile (1-per-view) and desktop (4-per-view)
+      - View toggle between swatches and list modes
+      - Empty state show/hide logic
+      - Debounced resize handler for layout recalculation
+    depends_on:
+      js: []
+      snippets: []
+      sections:
+        - sections/product-highlights.liquid
+    common_mistakes:
+      - Assuming the section liquid file is named section-what-shade-am-i.liquid when it likely renders via
+        sections/product-highlights.liquid or a custom-section with matching data attributes
+      - Editing card DOM structure in liquid without updating corresponding data attribute selectors (data-card,
+        data-skin-tone, data-usage, data-track, data-viewport, data-filter, data-nav, data-view-toggle,
+        data-toggle-label, data-empty)
+      - Expecting CSS transition classes like is-filtering-out to work without corresponding CSS definitions in the
+        theme stylesheet
+      - Overlooking that the file is truncated and the navigate, toggleView, updateToggleLabels, showNav, hideNav,
+        showEmptyState, and hideEmptyState methods may be incomplete or missing
+      - Hardcoding perView as 4 on desktop and not accounting for viewport edge cases between 768px and wider breakpoints
+      - Not accounting for gap being NaN when track gap is not explicitly set in CSS, causing incorrect translateX
+        calculations
+    fix_guidance: Check data attribute presence in the section liquid template first, then verify CSS classes is-active,
+      is-filtering-out, is-centered are defined in the theme stylesheet; review the untruncated file for missing method
+      implementations before debugging carousel offset errors.
