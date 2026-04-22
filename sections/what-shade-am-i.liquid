@@ -1,0 +1,1015 @@
+{%- liquid
+  assign shades = shop.metaobjects.agent_shade.values
+  assign shade_count = shades | size
+  assign pad_top = section.settings.section_padding_top
+  assign pad_bottom = section.settings.section_padding_bottom
+  assign default_view = section.settings.default_view | default: 'swatches'
+  assign show_cta = section.settings.show_find_my_shade_cta
+  assign cta_url = section.settings.find_my_shade_url
+
+  assign use_placeholders = false
+  if shade_count == 0
+    assign use_placeholders = true
+  else
+    assign named_count = 0
+    for shade in shades
+      assign nm = shade.name.value | default: '' | strip
+      if nm != ''
+        assign named_count = named_count | plus: 1
+      endif
+    endfor
+    if named_count == 0
+      assign use_placeholders = true
+    endif
+  endif
+-%}
+
+<section
+  class="what-shade-am-i"
+  data-default-view="{{ default_view }}"
+  style="--ws-pad-top: {{ pad_top }}px; --ws-pad-bottom: {{ pad_bottom }}px; --ws-bg: {{ section.settings.bg_color }}; --ws-text: {{ section.settings.text_color }}; --ws-accent: {{ section.settings.accent_color }}; --ws-accent-text: {{ section.settings.accent_text_color }};"
+  aria-labelledby="what-shade-title-{{ section.id }}"
+>
+  <div class="what-shade-am-i__inner">
+    <h2 id="what-shade-title-{{ section.id }}" class="what-shade-am-i__title">
+      {{ section.settings.heading | default: 'What Shade Am I?' | escape }}
+    </h2>
+
+    <div class="what-shade-am-i__toolbar">
+      <div class="what-shade-am-i__toolbar-toggle">
+        <div class="what-shade-am-i__toggle-wrap">
+          <span class="what-shade-am-i__toggle-label" data-toggle-side="swatches">
+            {{ section.settings.swatches_label | default: 'Swatches' | escape }}
+          </span>
+          <button
+            type="button"
+            class="what-shade-am-i__toggle"
+            role="switch"
+            aria-checked="{% if default_view == 'models' %}true{% else %}false{% endif %}"
+            aria-label="{{ section.settings.swatches_label | default: 'Swatches' | escape }} / {{ section.settings.models_label | default: 'Models' | escape }}"
+            data-view-toggle
+          >
+            <span class="what-shade-am-i__toggle-thumb" aria-hidden="true"></span>
+          </button>
+          <span class="what-shade-am-i__toggle-label" data-toggle-side="models">
+            {{ section.settings.models_label | default: 'Models' | escape }}
+          </span>
+        </div>
+      </div>
+
+      <div class="what-shade-am-i__toolbar-filters">
+        <div class="what-shade-am-i__filters" role="group" aria-label="Filter shades">
+          <div class="what-shade-am-i__filter-group" data-filter-group="usage">
+            <span class="what-shade-am-i__filter-label">USAGE</span>
+            <div class="what-shade-am-i__pills" role="group" aria-label="Filter by usage">
+              <button type="button" class="what-shade-am-i__pill is-active" data-filter-group="usage" data-filter-value="all" aria-pressed="true">ALL</button>
+              <button type="button" class="what-shade-am-i__pill" data-filter-group="usage" data-filter-value="bronzer" aria-pressed="false">BRONZER</button>
+              <button type="button" class="what-shade-am-i__pill" data-filter-group="usage" data-filter-value="blush" aria-pressed="false">BLUSH</button>
+              <button type="button" class="what-shade-am-i__pill" data-filter-group="usage" data-filter-value="highlighter" aria-pressed="false">HIGHLIGHTER</button>
+              <button type="button" class="what-shade-am-i__pill" data-filter-group="usage" data-filter-value="color_correct" aria-pressed="false">COLOR CORRECT</button>
+            </div>
+          </div>
+
+          <div class="what-shade-am-i__filter-group" data-filter-group="skin_tone">
+            <span class="what-shade-am-i__filter-label">SKIN TONE</span>
+            <div class="what-shade-am-i__pills" role="group" aria-label="Filter by skin tone">
+              <button type="button" class="what-shade-am-i__pill is-active" data-filter-group="skin_tone" data-filter-value="all" aria-pressed="true">ALL</button>
+              <button type="button" class="what-shade-am-i__pill" data-filter-group="skin_tone" data-filter-value="light" aria-pressed="false">LIGHT</button>
+              <button type="button" class="what-shade-am-i__pill" data-filter-group="skin_tone" data-filter-value="medium" aria-pressed="false">MEDIUM</button>
+              <button type="button" class="what-shade-am-i__pill" data-filter-group="skin_tone" data-filter-value="dark" aria-pressed="false">DARK</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="what-shade-am-i__carousel" data-shade-count="{{ shade_count }}">
+      <button type="button" class="what-shade-am-i__arrow what-shade-am-i__arrow--prev" data-arrow="prev" aria-label="Previous shades">
+        <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
+          <path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <div class="what-shade-am-i__viewport" data-viewport>
+        <ul class="what-shade-am-i__track" data-track>
+          {%- if use_placeholders -%}
+            {%- comment -%}
+              Fallback demo cards shown when the agent_shade metaobject has no active entries yet.
+              Ensures the section still renders a visible carousel during design/preview so
+              merchants can see the layout before seeding their own shade entries.
+            {%- endcomment -%}
+            {%- assign placeholder_names = 'Au Naturel,Happy Hour,Magic Hour,Golden Hour,Starlight,Sunset' | split: ',' -%}
+            {%- assign placeholder_descs = 'is a clear balm with subtle opal pearl for all skin tones,a cool sheer pink with silver shimmer for fair to medium tan skin tones,is a cool sheer bronze with silver shimmer for light to medium-dark skin,is a warm sheer gold with multidimensional shimmer for all skin tones,a soft champagne highlighter for medium to dark skin tones,a warm terracotta bronzer for all skin tones' | split: ',' -%}
+            {%- assign placeholder_usage = 'blush,blush highlighter,bronzer,highlighter,highlighter,bronzer' | split: ',' -%}
+            {%- assign placeholder_tones = 'light,medium,medium,dark,dark,light' | split: ',' -%}
+            {%- for name in placeholder_names -%}
+              {%- assign idx = forloop.index0 -%}
+              <li
+                class="what-shade-am-i__card"
+                data-card
+                data-usage="{{ placeholder_usage[idx] }}"
+                data-skin-tone="{{ placeholder_tones[idx] }}"
+                data-index="{{ idx }}"
+              >
+                <div class="what-shade-am-i__media">
+                  <div class="what-shade-am-i__media-layer what-shade-am-i__media-layer--swatches" data-media-layer="swatches">
+                    <div class="what-shade-am-i__placeholder what-shade-am-i__placeholder--{{ idx | modulo: 4 }}" aria-hidden="true"></div>
+                  </div>
+                  <div class="what-shade-am-i__media-layer what-shade-am-i__media-layer--models" data-media-layer="models" aria-hidden="true">
+                    <div class="what-shade-am-i__placeholder what-shade-am-i__placeholder--{{ idx | modulo: 4 }}" aria-hidden="true"></div>
+                  </div>
+                </div>
+                <h3 class="what-shade-am-i__card-title">{{ name | strip | upcase }}</h3>
+                <p class="what-shade-am-i__card-desc">{{ placeholder_descs[idx] | strip }}</p>
+              </li>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for shade in shades -%}
+              {%- liquid
+                assign shade_name = shade.name.value | default: ''
+                assign shade_desc = shade.description.value | default: ''
+                assign model_img = shade.model_image.value
+                assign swatch_img = shade.swatch_image.value
+                assign skin_tone = shade.skin_tone.value | default: '' | downcase
+
+                assign usage_list = shade.usage_tags.value
+                assign usage_data = ''
+                if usage_list
+                  for tag in usage_list
+                    assign tag_clean = tag | downcase | strip
+                    assign usage_data = usage_data | append: tag_clean | append: ' '
+                  endfor
+                endif
+                assign usage_data = usage_data | strip
+              -%}
+              <li
+                class="what-shade-am-i__card"
+                data-card
+                data-usage="{{ usage_data }}"
+                data-skin-tone="{{ skin_tone }}"
+                data-index="{{ forloop.index0 }}"
+              >
+                <div class="what-shade-am-i__media">
+                  <div class="what-shade-am-i__media-layer what-shade-am-i__media-layer--swatches" data-media-layer="swatches">
+                    {%- if swatch_img != blank -%}
+                      {{ swatch_img | image_url: width: 800 | image_tag: loading: 'lazy', widths: '300,500,700,900', sizes: '(min-width: 768px) 22vw, 80vw', alt: shade_name }}
+                    {%- else -%}
+                      <div class="what-shade-am-i__placeholder what-shade-am-i__placeholder--{{ forloop.index0 | modulo: 4 }}" aria-hidden="true"></div>
+                    {%- endif -%}
+                  </div>
+                  <div class="what-shade-am-i__media-layer what-shade-am-i__media-layer--models" data-media-layer="models" aria-hidden="true">
+                    {%- if model_img != blank -%}
+                      {{ model_img | image_url: width: 800 | image_tag: loading: 'lazy', widths: '300,500,700,900', sizes: '(min-width: 768px) 22vw, 80vw', alt: shade_name }}
+                    {%- else -%}
+                      <div class="what-shade-am-i__placeholder what-shade-am-i__placeholder--{{ forloop.index0 | modulo: 4 }}" aria-hidden="true"></div>
+                    {%- endif -%}
+                  </div>
+                </div>
+                <h3 class="what-shade-am-i__card-title">{{ shade_name | escape }}</h3>
+                {%- if shade_desc != blank -%}
+                  <p class="what-shade-am-i__card-desc">{{ shade_desc | newline_to_br }}</p>
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+          {%- endif -%}
+        </ul>
+
+        <div class="what-shade-am-i__empty" data-empty hidden>
+          <p>{{ section.settings.empty_state_text | default: "No shades match. Try 'All'." | escape }}</p>
+        </div>
+      </div>
+
+      <button type="button" class="what-shade-am-i__arrow what-shade-am-i__arrow--next" data-arrow="next" aria-label="Next shades">
+        <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
+          <path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+
+    {%- if show_cta -%}
+      <div class="what-shade-am-i__cta-row">
+        <span class="what-shade-am-i__cta-helper">{{ section.settings.still_not_sure_text | default: 'Still Not Sure?' | escape }}</span>
+        <a class="what-shade-am-i__cta" href="{{ cta_url | default: '/pages/find-my-shade' }}">
+          <span>{{ section.settings.find_my_shade_label | default: 'FIND MY SHADE' | escape }}</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+            <path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .what-shade-am-i {
+    display: block;
+    width: 100%;
+    padding-top: var(--ws-pad-top, 60px);
+    padding-bottom: var(--ws-pad-bottom, 60px);
+    background-color: var(--ws-bg, #eeeeee);
+    color: var(--ws-text, #000000);
+    font-family: var(--font-body-family, inherit);
+    -webkit-font-smoothing: antialiased;
+    box-sizing: border-box;
+  }
+
+  .what-shade-am-i *,
+  .what-shade-am-i *::before,
+  .what-shade-am-i *::after {
+    box-sizing: border-box;
+  }
+
+  .what-shade-am-i__inner {
+    max-width: 1440px;
+    margin-inline: auto;
+    padding-inline: clamp(16px, 4vw, 48px);
+  }
+
+  .what-shade-am-i .what-shade-am-i__title {
+    display: block;
+    width: 100%;
+    font-family: var(--font-heading-family, 'Times New Roman', serif);
+    font-weight: 400;
+    font-size: 2.5rem;
+    line-height: 1.15;
+    text-align: center;
+    margin: 0 0 2rem 0;
+    letter-spacing: -0.01em;
+  }
+
+  @media (min-width: 768px) {
+    .what-shade-am-i .what-shade-am-i__title {
+      font-size: 2.75rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .what-shade-am-i .what-shade-am-i__title {
+      font-size: 2rem;
+    }
+  }
+
+  .what-shade-am-i__toolbar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    margin-block: 0 2.5rem;
+  }
+
+  .what-shade-am-i__toolbar-toggle,
+  .what-shade-am-i__toolbar-filters {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Mobile order per spec: filters (skin tone top, usage below) then toggle */
+  @media (max-width: 767px) {
+    .what-shade-am-i__toolbar-filters {
+      order: 1;
+    }
+    .what-shade-am-i__toolbar-toggle {
+      order: 2;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .what-shade-am-i__toolbar {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+    .what-shade-am-i__toolbar-toggle {
+      flex: 1 1 0;
+      justify-content: flex-start;
+    }
+    .what-shade-am-i__toolbar-filters {
+      flex: 1 1 0;
+      justify-content: flex-end;
+    }
+  }
+
+  .what-shade-am-i__toggle-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .what-shade-am-i__toggle-label {
+    font-size: 0.95rem;
+    color: var(--ws-text, #000);
+    opacity: 0.85;
+    transition: opacity 180ms ease;
+    cursor: default;
+    user-select: none;
+  }
+
+  .what-shade-am-i[data-active-view="swatches"] .what-shade-am-i__toggle-label[data-toggle-side="swatches"],
+  .what-shade-am-i[data-active-view="models"] .what-shade-am-i__toggle-label[data-toggle-side="models"] {
+    opacity: 1;
+    font-weight: 600;
+  }
+
+  .what-shade-am-i__toggle {
+    position: relative;
+    width: 48px;
+    height: 26px;
+    border-radius: 999px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    background: #d8d8d8;
+    padding: 0;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background-color 200ms ease;
+  }
+
+  .what-shade-am-i__toggle[aria-checked="true"] {
+    background: #b8b8b8;
+  }
+
+  .what-shade-am-i__toggle-thumb {
+    position: absolute;
+    top: 50%;
+    left: 3px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #fff;
+    transform: translateY(-50%);
+    transition: left 200ms ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  }
+
+  .what-shade-am-i__toggle[aria-checked="true"] .what-shade-am-i__toggle-thumb {
+    left: calc(100% - 23px);
+  }
+
+  .what-shade-am-i__toggle:focus-visible {
+    outline: 2px solid var(--ws-accent, #000);
+    outline-offset: 2px;
+  }
+
+  .what-shade-am-i__filters {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+  }
+
+  /* Mobile: SKIN TONE on top, USAGE below */
+  @media (max-width: 767px) {
+    .what-shade-am-i__filters [data-filter-group="skin_tone"] {
+      order: 1;
+    }
+    .what-shade-am-i__filters [data-filter-group="usage"] {
+      order: 2;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .what-shade-am-i__filters {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+  }
+
+  .what-shade-am-i__filter-group {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .what-shade-am-i__filter-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--ws-text, #000);
+    white-space: nowrap;
+  }
+
+  .what-shade-am-i__pills {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .what-shade-am-i .what-shade-am-i__pill {
+    font-family: inherit;
+    font-size: 0.875rem;
+    line-height: 1;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.65rem 1.25rem;
+    border-radius: 4px;
+    border: 1px solid #000;
+    background: #fff;
+    color: #000;
+    cursor: pointer;
+    transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;
+    white-space: nowrap;
+    min-height: 40px;
+  }
+
+  .what-shade-am-i__pill:hover {
+    background: rgba(0, 0, 0, 0.06);
+  }
+
+  .what-shade-am-i__pill.is-active {
+    background: var(--ws-accent, #000);
+    color: var(--ws-accent-text, #fff);
+    border-color: var(--ws-accent, #000);
+  }
+
+  .what-shade-am-i__pill:focus-visible {
+    outline: 2px solid var(--ws-accent, #000);
+    outline-offset: 2px;
+  }
+
+  .what-shade-am-i__carousel {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .what-shade-am-i__carousel {
+      gap: 1rem;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .what-shade-am-i__carousel {
+      gap: 0;
+    }
+  }
+
+  .what-shade-am-i__arrow {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    color: var(--ws-text, #000);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 180ms ease, background-color 180ms ease;
+    z-index: 2;
+  }
+
+  .what-shade-am-i__arrow:hover {
+    background: rgba(0, 0, 0, 0.06);
+  }
+
+  .what-shade-am-i__arrow:focus-visible {
+    outline: 2px solid var(--ws-accent, #000);
+    outline-offset: 2px;
+  }
+
+  .what-shade-am-i__arrow[disabled] {
+    opacity: 0.25;
+    cursor: not-allowed;
+  }
+
+  .what-shade-am-i__carousel[data-arrows-hidden="true"] .what-shade-am-i__arrow {
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  @media (max-width: 767px) {
+    .what-shade-am-i__arrow {
+      position: absolute;
+      top: 38%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.85);
+      width: 36px;
+      height: 36px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+    }
+    .what-shade-am-i__arrow--prev { left: 4px; }
+    .what-shade-am-i__arrow--next { right: calc(16.66% + 4px); }
+  }
+
+  .what-shade-am-i__viewport {
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .what-shade-am-i__track {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 1rem;
+    transition: transform 350ms cubic-bezier(0.22, 0.61, 0.36, 1);
+    will-change: transform;
+  }
+
+  .what-shade-am-i__carousel[data-centered="true"] .what-shade-am-i__track {
+    justify-content: center;
+  }
+
+  .what-shade-am-i__card {
+    flex: 0 0 calc((100% - 3rem) / 4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: opacity 250ms ease;
+  }
+
+  @media (max-width: 767px) {
+    .what-shade-am-i__card {
+      flex: 0 0 83.333%;
+    }
+  }
+
+  .what-shade-am-i__card[hidden] {
+    display: none !important;
+  }
+
+  .what-shade-am-i__media {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: #e0e0e0;
+  }
+
+  .what-shade-am-i__media-layer {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 200ms ease;
+  }
+
+  .what-shade-am-i__media-layer img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Default to swatches visible before JS initialises */
+  .what-shade-am-i:not([data-active-view]) .what-shade-am-i__media-layer--swatches,
+  .what-shade-am-i[data-active-view="swatches"] .what-shade-am-i__media-layer--swatches,
+  .what-shade-am-i[data-active-view="models"] .what-shade-am-i__media-layer--models {
+    opacity: 1;
+  }
+
+  .what-shade-am-i__placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #d8d8d8 0%, #ededed 100%);
+  }
+
+  .what-shade-am-i__placeholder--0 {
+    background: linear-gradient(135deg, #f2e2d8 0%, #e8cdbd 100%);
+  }
+
+  .what-shade-am-i__placeholder--1 {
+    background: linear-gradient(135deg, #f0d5cf 0%, #d9b3a8 100%);
+  }
+
+  .what-shade-am-i__placeholder--2 {
+    background: linear-gradient(135deg, #d4a98f 0%, #a87a60 100%);
+  }
+
+  .what-shade-am-i__placeholder--3 {
+    background: linear-gradient(135deg, #e6c88a 0%, #c9a04d 100%);
+  }
+
+  .what-shade-am-i .what-shade-am-i__card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin: 1rem 0 0.5rem 0;
+    line-height: 1.2;
+  }
+
+  .what-shade-am-i .what-shade-am-i__card-desc {
+    font-size: 0.9rem;
+    font-weight: 400;
+    line-height: 1.45;
+    color: rgba(0, 0, 0, 0.7);
+    max-width: 90%;
+    margin: 0;
+  }
+
+  .what-shade-am-i__empty {
+    padding: 3rem 1rem;
+    text-align: center;
+    font-size: 1rem;
+    color: rgba(0, 0, 0, 0.65);
+  }
+
+  .what-shade-am-i__cta-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+  }
+
+  @media (min-width: 768px) {
+    .what-shade-am-i__cta-row {
+      justify-content: flex-end;
+    }
+  }
+
+  .what-shade-am-i__cta-helper {
+    font-size: 0.95rem;
+    color: var(--ws-text, #000);
+  }
+
+  .what-shade-am-i__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.85rem 1.5rem;
+    background: var(--ws-accent, #000);
+    color: var(--ws-accent-text, #fff);
+    text-decoration: none;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 600;
+    transition: opacity 180ms ease;
+    min-height: 44px;
+  }
+
+  .what-shade-am-i__cta:hover {
+    opacity: 0.85;
+  }
+
+  .what-shade-am-i__cta:focus-visible {
+    outline: 2px solid var(--ws-accent, #000);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .what-shade-am-i__track,
+    .what-shade-am-i__media-layer,
+    .what-shade-am-i__toggle,
+    .what-shade-am-i__toggle-thumb,
+    .what-shade-am-i__card {
+      transition: none !important;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (function () {
+    const sections = document.querySelectorAll('.what-shade-am-i');
+    sections.forEach(initShadeSection);
+
+    function initShadeSection(root) {
+      if (root.dataset.initialized === 'true') return;
+      root.dataset.initialized = 'true';
+
+      const track = root.querySelector('[data-track]');
+      const viewport = root.querySelector('[data-viewport]');
+      const empty = root.querySelector('[data-empty]');
+      const carousel = root.querySelector('.what-shade-am-i__carousel');
+      const prevArrow = root.querySelector('[data-arrow="prev"]');
+      const nextArrow = root.querySelector('[data-arrow="next"]');
+      const toggle = root.querySelector('[data-view-toggle]');
+      const toggleLabels = root.querySelectorAll('.what-shade-am-i__toggle-label');
+      const pills = root.querySelectorAll('.what-shade-am-i__pill');
+      const allCards = Array.from(root.querySelectorAll('[data-card]'));
+
+      const state = {
+        view: root.dataset.defaultView === 'models' ? 'models' : 'swatches',
+        filters: { usage: 'all', skin_tone: 'all' },
+        currentIndex: 0,
+        visibleCards: allCards.slice(),
+      };
+
+      applyView();
+      applyFilters();
+
+      toggle.addEventListener('click', () => {
+        state.view = state.view === 'swatches' ? 'models' : 'swatches';
+        applyView();
+      });
+
+      toggleLabels.forEach((label) => {
+        label.addEventListener('click', () => {
+          const side = label.dataset.toggleSide;
+          if (side === state.view) return;
+          state.view = side;
+          applyView();
+        });
+      });
+
+      pills.forEach((pill) => {
+        pill.addEventListener('click', () => {
+          const group = pill.dataset.filterGroup;
+          const value = pill.dataset.filterValue;
+          state.filters[group] = value;
+          root.querySelectorAll(`.what-shade-am-i__pill[data-filter-group="${group}"]`).forEach((p) => {
+            const isActive = p === pill;
+            p.classList.toggle('is-active', isActive);
+            p.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+          });
+          state.currentIndex = 0;
+          applyFilters();
+        });
+      });
+
+      prevArrow.addEventListener('click', () => {
+        const perView = getPerView();
+        state.currentIndex = Math.max(0, state.currentIndex - perView);
+        updateTransform();
+      });
+
+      nextArrow.addEventListener('click', () => {
+        const perView = getPerView();
+        const max = Math.max(0, state.visibleCards.length - perView);
+        state.currentIndex = Math.min(max, state.currentIndex + perView);
+        updateTransform();
+      });
+
+      let resizeTimer;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          const perView = getPerView();
+          const max = Math.max(0, state.visibleCards.length - perView);
+          state.currentIndex = Math.min(state.currentIndex, max);
+          updateTransform();
+          updateArrowsVisibility();
+        }, 150);
+      });
+
+      function getPerView() {
+        return window.matchMedia('(min-width: 768px)').matches ? 4 : 1;
+      }
+
+      function applyView() {
+        root.dataset.activeView = state.view;
+        toggle.setAttribute('aria-checked', state.view === 'models' ? 'true' : 'false');
+      }
+
+      function applyFilters() {
+        const usage = state.filters.usage;
+        const skin = state.filters.skin_tone;
+
+        state.visibleCards = allCards.filter((card) => {
+          const cardUsage = (card.dataset.usage || '').split(/\s+/).filter(Boolean);
+          const cardSkin = (card.dataset.skinTone || '').trim();
+          const usageOk = usage === 'all' || cardUsage.includes(usage);
+          const skinOk = skin === 'all' || cardSkin === skin;
+          return usageOk && skinOk;
+        });
+
+        allCards.forEach((card) => {
+          const show = state.visibleCards.includes(card);
+          card.hidden = !show;
+        });
+
+        const count = state.visibleCards.length;
+        if (count === 0) {
+          track.style.display = 'none';
+          empty.hidden = false;
+        } else {
+          track.style.display = '';
+          empty.hidden = true;
+        }
+
+        const perView = getPerView();
+        state.currentIndex = Math.min(state.currentIndex, Math.max(0, count - perView));
+
+        updateArrowsVisibility();
+        updateTransform();
+      }
+
+      function updateArrowsVisibility() {
+        const count = state.visibleCards.length;
+        const perView = getPerView();
+        const isDesktop = window.matchMedia('(min-width: 768px)').matches;
+
+        let hideArrows = false;
+        let centered = false;
+
+        if (count === 0) {
+          hideArrows = true;
+        } else if (isDesktop && count >= 2 && count <= 3) {
+          hideArrows = true;
+          centered = true;
+        } else if (count === 1) {
+          hideArrows = true;
+          centered = true;
+        }
+
+        carousel.dataset.arrowsHidden = hideArrows ? 'true' : 'false';
+        carousel.dataset.centered = centered ? 'true' : 'false';
+
+        if (!hideArrows) {
+          prevArrow.disabled = state.currentIndex <= 0;
+          nextArrow.disabled = state.currentIndex >= Math.max(0, count - perView);
+        }
+      }
+
+      function updateTransform() {
+        if (state.visibleCards.length === 0) return;
+        const centered = carousel.dataset.centered === 'true';
+
+        if (centered) {
+          track.style.transform = 'translateX(0)';
+          updateArrowsVisibility();
+          return;
+        }
+
+        const firstCard = state.visibleCards[0];
+        if (!firstCard) return;
+        const cardWidth = firstCard.offsetWidth;
+        const gap = parseFloat(getComputedStyle(track).gap) || 0;
+        const offset = state.currentIndex * (cardWidth + gap);
+        track.style.transform = `translateX(-${offset}px)`;
+        updateArrowsVisibility();
+      }
+    }
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "What Shade Am I?",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What Shade Am I?"
+    },
+    {
+      "type": "paragraph",
+      "content": "Shade cards are pulled from the 'agent_shade' metaobject definition. Add or edit entries in Settings → Custom data → Metaobjects."
+    },
+    {
+      "type": "header",
+      "content": "Find My Shade CTA"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_find_my_shade_cta",
+      "label": "Show \"Find My Shade\" CTA",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "still_not_sure_text",
+      "label": "Helper text",
+      "default": "Still Not Sure?"
+    },
+    {
+      "type": "text",
+      "id": "find_my_shade_label",
+      "label": "Button label",
+      "default": "FIND MY SHADE"
+    },
+    {
+      "type": "url",
+      "id": "find_my_shade_url",
+      "label": "Button URL"
+    },
+    {
+      "type": "header",
+      "content": "Toggle Labels"
+    },
+    {
+      "type": "text",
+      "id": "swatches_label",
+      "label": "Swatches label",
+      "default": "Swatches"
+    },
+    {
+      "type": "text",
+      "id": "models_label",
+      "label": "Models label",
+      "default": "Models"
+    },
+    {
+      "type": "select",
+      "id": "default_view",
+      "label": "Default view",
+      "options": [
+        {
+          "value": "swatches",
+          "label": "Swatches"
+        },
+        {
+          "value": "models",
+          "label": "Models"
+        }
+      ],
+      "default": "swatches"
+    },
+    {
+      "type": "header",
+      "content": "Empty State"
+    },
+    {
+      "type": "text",
+      "id": "empty_state_text",
+      "label": "Empty state message",
+      "default": "No shades match. Try 'All'."
+    },
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#EEEEEE"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Active pill color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "accent_text_color",
+      "label": "Active pill text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    }
+  ],
+  "blocks": [],
+  "presets": [
+    {
+      "name": "What Shade Am I?",
+      "settings": {
+        "heading": "What Shade Am I?",
+        "show_find_my_shade_cta": true,
+        "still_not_sure_text": "Still Not Sure?",
+        "find_my_shade_label": "FIND MY SHADE",
+        "find_my_shade_url": "/pages/find-my-shade",
+        "swatches_label": "Swatches",
+        "models_label": "Models",
+        "default_view": "swatches",
+        "empty_state_text": "No shades match. Try 'All'.",
+        "bg_color": "#EEEEEE",
+        "text_color": "#000000",
+        "accent_color": "#000000",
+        "accent_text_color": "#FFFFFF",
+        "section_padding_top": 60,
+        "section_padding_bottom": 60
+      }
+    }
+  ]
+}
+{% endschema %}

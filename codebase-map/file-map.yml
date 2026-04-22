@@ -8914,14 +8914,13 @@ files:
     fix_guidance: Check gift_card object availability and enabled/expired states first, verify settings.logo fallback works,
       ensure inline styles remain for standalone rendering outside theme context
   - file: templates/index.json
-    responsibility: Defines the homepage layout and section configuration with their settings and block order
+    responsibility: Defines the homepage layout by declaring which sections render, their order, and all
+      configuration/content settings for the root index route.
     owns:
-      - Homepage section assembly and ordering
-      - Section-specific settings for hero, featured-collections, selling-points-v2, product-highlights,
-        featured-products, brand-story-v2, promo-banner, logos, and animated-features-v2
-      - Block configurations within each section (collection cards, selling points, features, product selections, story
-        content, promo content, logo images, feature cards)
-      - Visual styling parameters (color schemes, alignments, spacing, overlay settings)
+      - Homepage section composition and render order
+      - Per-section settings and content values for the index page
+      - Block definitions and block ordering within each section
+      - Color scheme, layout, and content overrides specific to the homepage
     depends_on:
       js: []
       snippets: []
@@ -8930,39 +8929,17 @@ files:
         - sections/featured-collections.liquid
         - sections/selling-points-v2.liquid
         - sections/product-highlights.liquid
-        - sections/featured-products.liquid
-        - sections/brand-story-v2.liquid
-        - sections/promo-banner.liquid
-        - sections/logos.liquid
-        - sections/animated-features-v2.liquid
-      global_objects:
-        - Shopify theme editor
-        - Shopify collections
-        - Shopify products
-      custom_elements: []
-    depended_on_by:
-      - Shopify theme rendering engine when displaying homepage
-      - Shopify theme editor for homepage customization
-      - layout/theme.liquid as the parent template wrapper
     common_mistakes:
-      - Manually editing this file instead of using Shopify theme editor (changes may be overwritten)
-      - Breaking JSON syntax when adding or removing sections or blocks
-      - Referencing non-existent section types that don't have corresponding liquid files
-      - Forgetting to maintain block_order array when adding/removing blocks
-      - Using incorrect handle format for Shopify resource references (collections, products)
-    fix_guidance: Check that all section types referenced exist in sections/ directory, verify JSON syntax is valid, ensure
-      block_order arrays match actual block keys, and prefer making changes through Shopify admin to avoid overwrite
-      conflicts
-    state_ownership:
-      - Homepage visual layout state
-      - Section visibility and ordering on homepage
-      - Block-level content and configuration per section
-    key_identifiers:
-      css_classes: []
-      data_attributes: []
-      js_events_emitted: []
-      js_events_listened: []
-      custom_elements: []
+      - Manually editing this file expecting changes to persist, as Shopify admin or theme editor will overwrite it
+      - Adding a section type that does not have a corresponding section file in the sections/ directory
+      - Referencing collection or page handles that do not exist in the store, causing silent empty states
+      - Assuming block settings are validated at save time rather than silently ignored if keys are unrecognized
+      - Editing section order here without understanding that header and footer are controlled by header-group.json and
+        footer-group.json and cannot be added here
+      - Forgetting that the what-shade-am-i section type has no matching file in the provided file list, indicating a
+        custom or missing section
+    fix_guidance: Cross-reference each type value against the available sections/ files first, then validate collection/page
+      handles in the Shopify admin before adjusting settings.
   - file: templates/list-collections.json
     responsibility: Defines the page template structure for the collections list page displaying all store collections
     owns:
@@ -9390,3 +9367,36 @@ files:
     fix_guidance: When customizer text is wrong, check if schema keys in section files match translation keys here; if
       translations are missing, add them via Shopify admin language editor or ensure schema keys exist in corresponding
       section files
+  - file: sections/what-shade-am-i.liquid
+    responsibility: Renders an interactive shade-finder section with swatch/model toggle, usage and skin-tone filter pills,
+      and a carousel of shades sourced from the agent_shade metaobject.
+    owns:
+      - what-shade-am-i section markup and CSS custom property theming
+      - swatch/model view toggle (role=switch, aria-checked)
+      - usage and skin_tone filter pill groups with aria-pressed state
+      - shade carousel viewport, track, and prev/next arrow buttons
+      - shade card rendering loop over shop.metaobjects.agent_shade.values
+      - "section settings: heading, labels, bg/text/accent colors, padding, default_view, show_find_my_shade_cta,
+        find_my_shade_url"
+    depends_on:
+      js:
+        - asset file expected to handle view toggle, filter logic, carousel scroll, and aria-checked/aria-pressed
+          updates (not visible in snippet)
+      snippets: []
+      sections: []
+    common_mistakes:
+      - Assuming shade fields (name, description, model_image, swatch_image) are always populated; metaobject entries
+        with missing fields silently produce empty strings or nil, breaking card rendering without obvious errors
+      - Referencing shop.metaobjects.agent_shade without confirming the metaobject definition handle is exactly
+        'agent_shade'; a handle mismatch returns empty values with no Liquid error
+      - Treating the truncated swatch_ima field assignment as complete; the field key is cut off and likely should be
+        swatch_image, causing the swatch image to never render
+      - Expecting filter pills to work without JavaScript; all filter, toggle, and carousel behaviour requires JS that
+        is not inline in this file
+      - Hardcoding filter values (bronzer, blush, highlighter, color_correct, light, medium, dark) in markup while
+        expecting them to match metaobject field values exactly, including underscores vs spaces
+      - Setting default_view via section.settings with a Liquid default fallback but not syncing the aria-checked
+        initial state correctly when the setting is absent
+    fix_guidance: Check the metaobject handle and field keys in Shopify admin first, then verify the truncated swatch_ima
+      assignment is completed as swatch_image; trace JS asset for toggle/filter/carousel wiring if interactivity is
+      broken.
