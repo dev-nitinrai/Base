@@ -1,0 +1,27 @@
+{
+  "sections": {
+    "what-shade-am-i_moa5eb7c": {
+      "type": "what-shade-am-i",
+      "settings": {
+        "heading": "What Shade Am I?",
+        "show_find_my_shade_cta": true,
+        "still_not_sure_text": "Still Not Sure?",
+        "find_my_shade_label": "FIND MY SHADE",
+        "find_my_shade_url": "/pages/find-my-shade",
+        "swatches_label": "Swatches",
+        "models_label": "Models",
+        "default_view": "swatches",
+        "empty_state_text": "No shades match. Try 'All'.",
+        "bg_color": "#EEEEEE",
+        "text_color": "#000000",
+        "accent_color": "#000000",
+        "accent_text_color": "#FFFFFF",
+        "section_padding_top": 60,
+        "section_padding_bottom": 60
+      }
+    }
+  },
+  "order": [
+    "what-shade-am-i_moa5eb7c"
+  ]
+}

@@ -3655,6 +3655,105 @@ sections:
       - slideshow.liquid
       - product-recommendations.liquid
       - multicolumn.liquid
+  - file: sections/what-shade-am-i.liquid
+    name: what-shade-am-i
+    label: What Shade Am I?
+    visual_role: What Shade Am I? section
+    settings:
+      - type: header
+      - id: heading
+        type: text
+        label: Heading
+      - type: paragraph
+      - type: header
+      - id: show_find_my_shade_cta
+        type: checkbox
+        label: Show "Find My Shade" CTA
+      - id: still_not_sure_text
+        type: text
+        label: Helper text
+      - id: find_my_shade_label
+        type: text
+        label: Button label
+      - id: find_my_shade_url
+        type: url
+        label: Button URL
+      - type: header
+      - id: swatches_label
+        type: text
+        label: Swatches label
+      - id: models_label
+        type: text
+        label: Models label
+      - id: default_view
+        type: select
+        label: Default view
+      - type: header
+      - id: empty_state_text
+        type: text
+        label: Empty state message
+      - type: header
+      - id: bg_color
+        type: color
+        label: Background color
+      - id: text_color
+        type: color
+        label: Text color
+      - id: accent_color
+        type: color
+        label: Active pill color
+      - id: accent_text_color
+        type: color
+        label: Active pill text color
+      - id: section_padding_top
+        type: range
+        label: Top padding
+      - id: section_padding_bottom
+        type: range
+        label: Bottom padding
+    blocks: []
+    max_blocks: null
+    templates_allowed:
+      - "*"
+    presets:
+      - What Shade Am I?
+    uses_image: true
+    uses_video: false
+    uses_slider: false
+    uses_grid: true
+    uses_tabs: false
+    uses_accordion: false
+    uses_form: false
+    layout_type: grid
+    mockup_keywords:
+      - shade finder
+      - swatch grid
+      - model view toggle
+      - skin tone filter
+      - beauty shade selector
+      - filter pills
+      - bronzer blush highlighter
+      - what shade am i
+      - shade matching tool
+      - cosmetics shade guide
+    when_to_use: Use this section when a mockup shows a shade discovery or matching tool with a swatch/model toggle view,
+      filter pills for usage and skin tone, and a grid of shades pulled from metaobjects.
+    when_to_create_new: Create a new section if the mockup requires a quiz-style shade finder flow, a fundamentally
+      different layout without toggle/filter pill UI, or shade data sourced from products or variants rather than
+      metaobjects.
+    requires_new_section_if:
+      - Shade data comes from product variants or collections instead of agent_shade metaobjects
+      - No toggle between swatches and model views is needed
+      - Filters use dropdowns, sliders, or accordions instead of pill buttons
+      - Requires a multi-step quiz or recommendation engine flow
+      - Layout is a horizontal scrolling carousel rather than a filterable grid
+      - Shade matching relies on user-uploaded photos or camera input
+    similar_sections:
+      - shade-finder.liquid
+      - product-shade-selector.liquid
+      - foundation-finder.liquid
+      - color-match.liquid
+      - swatch-grid.liquid
 snippets:
   - file: snippets/component-article-card.liquid
     name: component-article-card
