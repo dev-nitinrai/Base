@@ -3655,6 +3655,103 @@ sections:
       - slideshow.liquid
       - product-recommendations.liquid
       - multicolumn.liquid
+  - file: sections/what-shade-am-i.liquid
+    name: what-shade-am-i
+    label: What Shade Am I?
+    visual_role: What Shade Am I? section
+    settings:
+      - type: header
+      - id: heading
+        type: text
+        label: Heading
+      - id: swatches_label
+        type: text
+        label: Swatches toggle label
+      - id: models_label
+        type: text
+        label: Models toggle label
+      - id: usage_label
+        type: text
+        label: Usage filter label
+      - id: skin_tone_label
+        type: text
+        label: Skin tone filter label
+      - id: empty_state_text
+        type: text
+        label: Empty state message
+      - type: header
+      - id: show_find_my_shade_cta
+        type: checkbox
+        label: Show Find My Shade CTA
+      - id: find_my_shade_prompt
+        type: text
+        label: CTA prompt text
+      - id: find_my_shade_text
+        type: text
+        label: CTA button text
+      - id: find_my_shade_url
+        type: url
+        label: CTA URL
+      - type: header
+      - id: bg_color
+        type: color
+        label: Background color
+      - id: text_color
+        type: color
+        label: Text color
+      - id: accent_color
+        type: color
+        label: Active pill / CTA color
+      - id: accent_text_color
+        type: color
+        label: Active pill / CTA text color
+      - id: padding_top
+        type: range
+        label: Top padding
+      - id: padding_bottom
+        type: range
+        label: Bottom padding
+    blocks: []
+    max_blocks: null
+    templates_allowed:
+      - "*"
+    presets:
+      - What Shade Am I?
+    uses_image: true
+    uses_video: false
+    uses_slider: false
+    uses_grid: false
+    uses_tabs: false
+    uses_accordion: false
+    uses_form: false
+    layout_type: block
+    mockup_keywords:
+      - shade finder
+      - foundation matcher
+      - swatch filter
+      - skin tone selector
+      - beauty filter
+      - shade swatches
+      - model view toggle
+      - bronzer blush highlighter
+      - cosmetics shade tool
+      - product shade picker
+    when_to_use: Use this section when a mockup shows an interactive shade/color finder tool with filter pills (usage type,
+      skin tone), a swatches/models view toggle, and a grid of cosmetic product shades.
+    when_to_create_new: Create a new section if the mockup requires a quiz-style shade recommendation flow, a fundamentally
+      different layout without filter pills and toggle, or shade matching tied to non-cosmetic products.
+    requires_new_section_if:
+      - Mockup includes a multi-step quiz or questionnaire for shade matching
+      - Mockup shows shade results tied to a product variant selector or add-to-cart flow
+      - Mockup requires a search/text-input based shade lookup
+      - Mockup has no view toggle and no filter pill groups
+      - Mockup displays shades in a carousel-only format without swatch grid
+      - Mockup requires real-time skin tone detection via camera or image upload
+    similar_sections:
+      - sections/product-swatches.liquid
+      - sections/shade-grid.liquid
+      - sections/foundation-finder.liquid
+      - sections/color-selector.liquid
 snippets:
   - file: snippets/component-article-card.liquid
     name: component-article-card
@@ -4357,6 +4454,14 @@ assets:
       registers_elements: []
       listens_events: []
       minified_vendor: false
+    - file: assets/section-what-shade-am-i.js
+      name: section-what-shade-am-i.js
+      size_lines: 113
+      exports_class: []
+      registers_elements: []
+      listens_events:
+        - alpine:init
+        - resize
   css:
     - file: assets/cart.css
       name: cart.css
@@ -4487,3 +4592,6 @@ assets:
     - file: assets/swiper7.4.1.min.css
       name: swiper7.4.1.min.css
       size_lines: 13
+    - file: assets/section-what-shade-am-i.css
+      name: section-what-shade-am-i.css
+      size_lines: 395
