@@ -2,15 +2,23 @@
 
 {%- liquid
   assign shades = shop.metaobjects['agent_shade'].values
+  assign shade_count = 0
+  if shades != blank
+    assign shade_count = shades.size
+  endif
   assign pad_top = section.settings.section_padding_top | default: 80
   assign pad_bottom = section.settings.section_padding_bottom | default: 80
+
+  assign bg_color = section.settings.bg_color
+  assign fg_color = section.settings.text_color
+  assign muted_color = section.settings.muted_text_color
 -%}
 
 {%- style -%}
   #shopify-section-{{ section.id }} .what-shade {
-    --ws-bg: {{ section.settings.bg_color.red }},{{ section.settings.bg_color.green }},{{ section.settings.bg_color.blue }};
-    --ws-fg: {{ section.settings.text_color.red }},{{ section.settings.text_color.green }},{{ section.settings.text_color.blue }};
-    --ws-muted: {{ section.settings.muted_text_color.red }},{{ section.settings.muted_text_color.green }},{{ section.settings.muted_text_color.blue }};
+    --ws-bg: {% if bg_color != blank %}{{ bg_color.red }},{{ bg_color.green }},{{ bg_color.blue }}{% else %}255,255,255{% endif %};
+    --ws-fg: {% if fg_color != blank %}{{ fg_color.red }},{{ fg_color.green }},{{ fg_color.blue }}{% else %}0,0,0{% endif %};
+    --ws-muted: {% if muted_color != blank %}{{ muted_color.red }},{{ muted_color.green }},{{ muted_color.blue }}{% else %}102,102,102{% endif %};
     --ws-pad-top: {{ pad_top | times: 0.6 | round: 0 }}px;
     --ws-pad-bottom: {{ pad_bottom | times: 0.6 | round: 0 }}px;
   }
@@ -25,7 +33,6 @@
 <section
   class="what-shade"
   x-data="whatShade()"
-  x-cloak
   aria-labelledby="what-shade-heading-{{ section.id }}"
 >
   <div class="page-width what-shade__inner">
@@ -48,7 +55,7 @@
           type="button"
           class="what-shade__toggle"
           role="switch"
-          :aria-checked="view === 'models'"
+          :aria-checked="view === 'models' ? 'true' : 'false'"
           @click="toggleView()"
           aria-label="{{ section.settings.toggle_label_swatches | escape }} / {{ section.settings.toggle_label_models | escape }}"
         >
@@ -69,34 +76,34 @@
         <fieldset class="what-shade__filter-group what-shade__filter-group--usage">
           <legend class="what-shade__filter-legend">USAGE</legend>
           <div class="what-shade__pill-row" role="group" aria-label="Filter by usage">
-            <button type="button" class="what-shade__pill" :class="{ 'is-active': usage === 'all' }" :aria-pressed="usage === 'all'" @click="usage = 'all'">ALL</button>
-            <button type="button" class="what-shade__pill" :class="{ 'is-active': usage === 'bronzer' }" :aria-pressed="usage === 'bronzer'" @click="usage = 'bronzer'">BRONZER</button>
-            <button type="button" class="what-shade__pill" :class="{ 'is-active': usage === 'blush' }" :aria-pressed="usage === 'blush'" @click="usage = 'blush'">BLUSH</button>
-            <button type="button" class="what-shade__pill" :class="{ 'is-active': usage === 'highlighter' }" :aria-pressed="usage === 'highlighter'" @click="usage = 'highlighter'">HIGHLIGHTER</button>
-            <button type="button" class="what-shade__pill" :class="{ 'is-active': usage === 'color_correct' }" :aria-pressed="usage === 'color_correct'" @click="usage = 'color_correct'">COLOR CORRECT</button>
+            <button type="button" class="what-shade__pill" :class="{ 'is-active': usage === 'all' }" :aria-pressed="usage === 'all' ? 'true' : 'false'" @click="usage = 'all'">ALL</button>
+            <button type="button" class="what-shade__pill" :class="{ 'is-active': usage === 'bronzer' }" :aria-pressed="usage === 'bronzer' ? 'true' : 'false'" @click="usage = 'bronzer'">BRONZER</button>
+            <button type="button" class="what-shade__pill" :class="{ 'is-active': usage === 'blush' }" :aria-pressed="usage === 'blush' ? 'true' : 'false'" @click="usage = 'blush'">BLUSH</button>
+            <button type="button" class="what-shade__pill" :class="{ 'is-active': usage === 'highlighter' }" :aria-pressed="usage === 'highlighter' ? 'true' : 'false'" @click="usage = 'highlighter'">HIGHLIGHTER</button>
+            <button type="button" class="what-shade__pill" :class="{ 'is-active': usage === 'color_correct' }" :aria-pressed="usage === 'color_correct' ? 'true' : 'false'" @click="usage = 'color_correct'">COLOR CORRECT</button>
           </div>
         </fieldset>
 
         <fieldset class="what-shade__filter-group what-shade__filter-group--tone">
           <legend class="what-shade__filter-legend">SKIN TONE</legend>
           <div class="what-shade__pill-row" role="group" aria-label="Filter by skin tone">
-            <button type="button" class="what-shade__pill" :class="{ 'is-active': tone === 'all' }" :aria-pressed="tone === 'all'" @click="tone = 'all'">ALL</button>
-            <button type="button" class="what-shade__pill" :class="{ 'is-active': tone === 'light' }" :aria-pressed="tone === 'light'" @click="tone = 'light'">LIGHT</button>
-            <button type="button" class="what-shade__pill" :class="{ 'is-active': tone === 'medium' }" :aria-pressed="tone === 'medium'" @click="tone = 'medium'">MEDIUM</button>
-            <button type="button" class="what-shade__pill" :class="{ 'is-active': tone === 'dark' }" :aria-pressed="tone === 'dark'" @click="tone = 'dark'">DARK</button>
+            <button type="button" class="what-shade__pill" :class="{ 'is-active': tone === 'all' }" :aria-pressed="tone === 'all' ? 'true' : 'false'" @click="tone = 'all'">ALL</button>
+            <button type="button" class="what-shade__pill" :class="{ 'is-active': tone === 'light' }" :aria-pressed="tone === 'light' ? 'true' : 'false'" @click="tone = 'light'">LIGHT</button>
+            <button type="button" class="what-shade__pill" :class="{ 'is-active': tone === 'medium' }" :aria-pressed="tone === 'medium' ? 'true' : 'false'" @click="tone = 'medium'">MEDIUM</button>
+            <button type="button" class="what-shade__pill" :class="{ 'is-active': tone === 'dark' }" :aria-pressed="tone === 'dark' ? 'true' : 'false'" @click="tone = 'dark'">DARK</button>
           </div>
         </fieldset>
       </div>
     </div>
 
-    {%- if shades == blank or shades.size == 0 -%}
+    {%- if shade_count == 0 -%}
       <div class="what-shade__setup-notice">
-        <p><strong>Set up your shades.</strong> Create entries of type <code>agent_shade</code> in Settings → Custom data → Metaobjects.</p>
+        <p><strong>No shades published yet.</strong> Create entries of type <code>agent_shade</code> in Settings &rarr; Custom data &rarr; Metaobjects, then publish them so they appear here.</p>
       </div>
     {%- else -%}
       <div
         class="what-shade__carousel"
-        :class="{ 'has-nav': visibleCount >= 4, 'center-few': visibleCount > 0 && visibleCount < 4 }"
+        :class="{ 'has-nav': visibleCount >= 4, 'center-few': visibleCount > 0 && visibleCount < 4, 'is-empty': visibleCount === 0 }"
       >
         <button
           type="button"
@@ -115,13 +122,13 @@
           <ul class="what-shade__track" x-ref="track" role="list">
             {%- for shade in shades -%}
               {%- liquid
-                assign shade_name = shade.name.value | default: ''
+                assign shade_name = shade.name.value | default: shade.handle | default: ''
                 assign shade_desc = shade.description.value | default: ''
-                assign shade_tone = shade.skin_tone.value | default: '' | downcase
-                assign usage_list = shade.usage_tags.value
+                assign shade_tone = shade.skin_tone.value | default: '' | downcase | strip
+                assign usage_raw = shade.usage_tags.value
                 assign usage_joined = ''
-                if usage_list != blank
-                  assign usage_joined = usage_list | join: ','
+                if usage_raw != blank
+                  assign usage_joined = usage_raw | join: ',' | downcase
                 endif
                 assign model_img = shade.model_image.value
                 assign swatch_img = shade.swatch_image.value
@@ -130,8 +137,8 @@
                 class="what-shade__card"
                 role="listitem"
                 data-tone="{{ shade_tone | escape }}"
-                data-usage="{{ usage_joined | downcase | escape }}"
-                x-show="matches('{{ shade_tone | escape }}', '{{ usage_joined | downcase | escape }}')"
+                data-usage="{{ usage_joined | escape }}"
+                x-show="matches('{{ shade_tone | escape }}', '{{ usage_joined | escape }}')"
                 x-transition.opacity.duration.200ms
               >
                 <div class="what-shade__media">
@@ -160,7 +167,7 @@
                     {%- endif -%}
                   </div>
                 </div>
-                <h3 class="what-shade__name">{{ shade_name | escape }}</h3>
+                <h3 class="what-shade__name">{{ shade_name | escape | upcase }}</h3>
                 {%- if shade_desc != blank -%}
                   <p class="what-shade__desc">{{ shade_desc | newline_to_br }}</p>
                 {%- endif -%}
@@ -214,14 +221,19 @@
       atStart: true,
       atEnd: false,
       _scrollHandler: null,
+      _resizeHandler: null,
       init() {
         this.$nextTick(() => {
           this.recount();
           const track = this.$refs.track;
           if (track) {
             this._scrollHandler = () => this.updateEdges();
+            this._resizeHandler = () => {
+              this.recount();
+              this.updateEdges();
+            };
             track.addEventListener('scroll', this._scrollHandler, { passive: true });
-            window.addEventListener('resize', this._scrollHandler);
+            window.addEventListener('resize', this._resizeHandler);
             this.updateEdges();
           }
         });
@@ -232,7 +244,9 @@
         const track = this.$refs.track;
         if (track && this._scrollHandler) {
           track.removeEventListener('scroll', this._scrollHandler);
-          window.removeEventListener('resize', this._scrollHandler);
+        }
+        if (this._resizeHandler) {
+          window.removeEventListener('resize', this._resizeHandler);
         }
       },
       toggleView() {

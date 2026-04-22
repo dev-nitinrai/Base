@@ -5,10 +5,6 @@
   padding-bottom: var(--ws-pad-bottom);
 }
 
-.what-shade[x-cloak] {
-  display: none;
-}
-
 .what-shade__inner {
   display: flex;
   flex-direction: column;
