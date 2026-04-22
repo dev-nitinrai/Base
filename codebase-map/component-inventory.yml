@@ -3655,6 +3655,96 @@ sections:
       - slideshow.liquid
       - product-recommendations.liquid
       - multicolumn.liquid
+  - file: sections/new-section.liquid
+    name: new-section
+    label: What Shade Am I
+    visual_role: What Shade Am I section
+    settings:
+      - type: header
+      - id: heading
+        type: text
+        label: Heading
+      - type: header
+      - id: show_find_my_shade_cta
+        type: checkbox
+        label: Show Find My Shade CTA
+      - id: cta_label
+        type: text
+        label: CTA Label
+      - id: cta_button_text
+        type: text
+        label: CTA Button Text
+      - id: find_my_shade_url
+        type: url
+        label: Find My Shade URL
+      - type: header
+      - id: toggle_label_swatches
+        type: text
+        label: Swatches Label
+      - id: toggle_label_models
+        type: text
+        label: Models Label
+      - type: header
+      - id: empty_state_text
+        type: text
+        label: Empty State Text
+      - type: header
+      - id: bg_color
+        type: color
+        label: Background Color
+      - id: text_color
+        type: color
+        label: Text Color
+      - id: muted_text_color
+        type: color
+        label: Description Color
+      - id: section_padding_top
+        type: range
+        label: Top Padding
+      - id: section_padding_bottom
+        type: range
+        label: Bottom Padding
+    blocks: []
+    max_blocks: null
+    templates_allowed:
+      - "*"
+    presets:
+      - What Shade Am I
+    uses_image: true
+    uses_video: false
+    uses_slider: false
+    uses_grid: true
+    uses_tabs: false
+    uses_accordion: false
+    uses_form: false
+    layout_type: block
+    mockup_keywords:
+      - shade finder
+      - foundation match
+      - swatch toggle
+      - model view
+      - shade filter
+      - bronzer blush highlighter
+      - skin tone selector
+      - beauty shade guide
+      - color swatches
+      - usage filter pills
+    when_to_use: Use this section when a mockup shows a shade-matching or foundation-finder experience with toggleable
+      swatch/model views and filterable pill buttons for product usage categories.
+    when_to_create_new: Create a new section if the mockup requires a quiz-style shade recommender, a slider-based skin tone
+      picker, or lacks the swatch/model toggle paradigm entirely.
+    requires_new_section_if:
+      - Mockup includes a step-by-step quiz flow rather than a toggle+filter layout
+      - Mockup requires shade matching via image upload or AI skin analysis
+      - Mockup shows shades tied to product variants rather than metaobjects
+      - Mockup needs more than three filter categories (usage, undertone, depth) in a tabbed interface
+      - Mockup displays shades in a horizontal scrolling carousel rather than a grid
+      - Mockup requires video backgrounds per shade card
+    similar_sections:
+      - section-shade-finder.liquid
+      - section-color-swatches.liquid
+      - section-foundation-finder.liquid
+      - section-product-filter-grid.liquid
 snippets:
   - file: snippets/component-article-card.liquid
     name: component-article-card
@@ -4487,3 +4577,6 @@ assets:
     - file: assets/swiper7.4.1.min.css
       name: swiper7.4.1.min.css
       size_lines: 13
+    - file: assets/section-what-shade.css
+      name: section-what-shade.css
+      size_lines: 493
