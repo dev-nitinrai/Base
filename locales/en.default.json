@@ -307,7 +307,9 @@
       "empty_state": "No shades match. Try 'All'.",
       "setup_notice": "Add shade entries in the Shopify admin under Content to populate this section.",
       "cta_label": "Still not sure?",
-      "cta_button": "Find my shade"
+      "cta_button": "Find my shade",
+      "placeholder_swatch": "Swatch",
+      "placeholder_model": "Model"
     }
   },
   "products": {

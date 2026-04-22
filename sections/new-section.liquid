@@ -151,7 +151,9 @@
                       alt: shade_name
                     }}
                   {%- else -%}
-                    <div class="shade-card__placeholder" aria-hidden="true"></div>
+                    <div class="shade-card__placeholder" aria-hidden="true">
+                      <span class="shade-card__placeholder-label">{{ 'sections.shade_picker.placeholder_swatch' | t }}</span>
+                    </div>
                   {%- endif -%}
                 </div>
                 <div
@@ -166,7 +168,9 @@
                       alt: shade_name
                     }}
                   {%- else -%}
-                    <div class="shade-card__placeholder" aria-hidden="true"></div>
+                    <div class="shade-card__placeholder" aria-hidden="true">
+                      <span class="shade-card__placeholder-label">{{ 'sections.shade_picker.placeholder_model' | t }}</span>
+                    </div>
                   {%- endif -%}
                 </div>
               </div>
@@ -441,16 +445,23 @@
   .shade-picker .shade-picker__pills button.shade-picker__pill {
     -webkit-appearance: none;
     appearance: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    min-width: 0;
+    height: auto;
+    min-height: 40px;
     background-color: #ffffff;
     border: 1px solid #000000;
     color: #000000;
     border-radius: 999px;
-    padding: 0.5rem 1rem;
+    padding: 0.625rem 1.125rem;
     font-size: 0.75rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
+    white-space: nowrap;
     cursor: pointer;
-    min-height: 44px;
     line-height: 1;
     font-family: inherit;
     text-decoration: none;
@@ -595,7 +606,34 @@
   .shade-card__placeholder {
     width: 100%;
     height: 100%;
-    background: repeating-linear-gradient(45deg, #f0f0f0 0 12px, #e5e5e5 12px 24px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6875rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(0, 0, 0, 0.55);
+    font-weight: 600;
+  }
+
+  .shade-card__image--swatch .shade-card__placeholder {
+    background:
+      radial-gradient(circle at 50% 50%, #c9a77e 0%, #c9a77e 38%, transparent 39%),
+      linear-gradient(135deg, #f6ece0 0%, #e9d5b9 100%);
+  }
+
+  .shade-card__image--model .shade-card__placeholder {
+    background:
+      radial-gradient(ellipse at 50% 38%, #d8b892 0%, #d8b892 14%, transparent 15%),
+      linear-gradient(180deg, #efe3d3 0%, #d8c2a4 100%);
+  }
+
+  .shade-card__placeholder-label {
+    display: inline-block;
+    padding: 0.25rem 0.625rem;
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 999px;
+    transform: translateY(40%);
   }
 
   .shade-card__name {
