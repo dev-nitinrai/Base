@@ -9,6 +9,15 @@
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  max-width: var(--page-width, 1400px);
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+@media screen and (min-width: 768px) {
+  .what-shade__inner {
+    padding-inline: 2rem;
+  }
 }
 
 .what-shade__heading {
@@ -202,7 +211,8 @@
 .what-shade__media {
   position: relative;
   width: 100%;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 1 / 1;
+  max-height: 320px;
   background-color: rgb(var(--ws-fg) / 0.05);
   overflow: hidden;
   border-radius: 2px;
