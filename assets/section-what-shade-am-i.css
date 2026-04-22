@@ -361,6 +361,15 @@
     width: 100%;
   }
 
+  /* SKIN TONE on top, USAGE below on mobile (markup order: USAGE first, SKIN TONE second) */
+  .shade-finder__filter-group:nth-child(1) {
+    order: 2;
+  }
+
+  .shade-finder__filter-group:nth-child(2) {
+    order: 1;
+  }
+
   .shade-finder__filter-group:last-child {
     margin-inline-start: 0;
   }
