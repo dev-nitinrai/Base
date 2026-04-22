@@ -3655,6 +3655,106 @@ sections:
       - slideshow.liquid
       - product-recommendations.liquid
       - multicolumn.liquid
+  - file: sections/new-section.liquid
+    name: new-section
+    label: What Shade Am I
+    visual_role: What Shade Am I section
+    settings:
+      - type: header
+      - id: heading
+        type: text
+        label: Heading
+      - type: header
+      - id: show_find_my_shade_cta
+        type: checkbox
+        label: Show Find My Shade CTA
+      - id: cta_label
+        type: text
+        label: CTA Helper Text
+      - id: cta_button_text
+        type: text
+        label: CTA Button Text
+      - id: find_my_shade_url
+        type: url
+        label: Find My Shade URL
+      - type: header
+      - id: usage_label
+        type: text
+        label: Usage Filter Label
+      - id: skin_tone_label
+        type: text
+        label: Skin Tone Filter Label
+      - id: swatches_label
+        type: text
+        label: Swatches Toggle Label
+      - id: models_label
+        type: text
+        label: Models Toggle Label
+      - id: empty_state_text
+        type: text
+        label: Empty State Message
+      - type: header
+      - id: bg_color
+        type: color
+        label: Background Color
+      - id: text_color
+        type: color
+        label: Text Color
+      - id: muted_text_color
+        type: color
+        label: Description Text Color
+      - id: accent_color
+        type: color
+        label: Accent / Active Color
+      - id: section_padding_top
+        type: range
+        label: Top Padding
+      - id: section_padding_bottom
+        type: range
+        label: Bottom Padding
+    blocks: []
+    max_blocks: null
+    templates_allowed:
+      - "*"
+    presets:
+      - What Shade Am I
+    uses_image: true
+    uses_video: false
+    uses_slider: false
+    uses_grid: true
+    uses_tabs: false
+    uses_accordion: false
+    uses_form: false
+    layout_type: block
+    mockup_keywords:
+      - shade finder
+      - shade quiz
+      - color match
+      - skin tone filter
+      - swatch toggle
+      - model view
+      - beauty filter
+      - makeup shade selector
+      - bronzer blush highlighter
+      - pill filter buttons
+    when_to_use: Use this section when a mockup shows an interactive shade or color-matching tool with toggleable
+      swatch/model views, pill-style category filters (bronzer, blush, highlighter, color correct), and skin tone
+      filtering driven by metaobject data.
+    when_to_create_new: Create a new section if the mockup requires a shade finder driven by product variants instead of
+      metaobjects, lacks the swatch/model toggle paradigm, or uses a quiz-style multi-step flow rather than filter
+      pills.
+    requires_new_section_if:
+      - Shade data comes from product variants or collections rather than shop metaobjects
+      - No swatch/model view toggle is present
+      - Filter categories differ significantly from bronzer/blush/highlighter/color_correct
+      - A multi-step quiz or recommendation engine flow is required
+      - Skin tone filter UI is replaced by a different input mechanism (e.g., sliders or dropdowns)
+      - Results display as a product grid rather than shade swatches or model images
+    similar_sections:
+      - sections/shade-finder.liquid
+      - sections/color-match.liquid
+      - sections/foundation-finder.liquid
+      - sections/product-filter-grid.liquid
 snippets:
   - file: snippets/component-article-card.liquid
     name: component-article-card
