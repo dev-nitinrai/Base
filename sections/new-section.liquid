@@ -111,8 +111,10 @@
           type="button"
           class="shade-picker__chevron shade-picker__chevron--prev"
           aria-label="{{ 'sections.shade_picker.prev_label' | t }}"
-          @click="scrollBy(-1)"
+          @click="scrollByPage(-1)"
           x-show="visibleCount > 4"
+          :disabled="atStart"
+          :aria-disabled="atStart ? 'true' : 'false'"
         >
           <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
             <path d="M15 6 L9 12 L15 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -180,8 +182,10 @@
           type="button"
           class="shade-picker__chevron shade-picker__chevron--next"
           aria-label="{{ 'sections.shade_picker.next_label' | t }}"
-          @click="scrollBy(1)"
+          @click="scrollByPage(1)"
           x-show="visibleCount > 4"
+          :disabled="atEnd"
+          :aria-disabled="atEnd ? 'true' : 'false'"
         >
           <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
             <path d="M9 6 L15 12 L9 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -222,10 +226,34 @@
       usage: 'all',
       skin: 'all',
       visibleCount: 0,
+      atStart: true,
+      atEnd: true,
+      _onScroll: null,
+      _onResize: null,
       init() {
-        this.$nextTick(() => this.applyFilters());
+        this.$nextTick(() => {
+          this.applyFilters();
+          this.updateEdges();
+        });
         this.$watch('usage', () => this.applyFilters());
         this.$watch('skin', () => this.applyFilters());
+
+        const track = this.$refs.track;
+        if (track) {
+          this._onScroll = () => this.updateEdges();
+          this._onResize = () => this.updateEdges();
+          track.addEventListener('scroll', this._onScroll, { passive: true });
+          window.addEventListener('resize', this._onResize);
+        }
+      },
+      destroy() {
+        const track = this.$refs.track;
+        if (track && this._onScroll) {
+          track.removeEventListener('scroll', this._onScroll);
+        }
+        if (this._onResize) {
+          window.removeEventListener('resize', this._onResize);
+        }
       },
       toggleView() {
         this.view = this.view === 'swatches' ? 'models' : 'swatches';
@@ -246,8 +274,21 @@
         });
         this.visibleCount = visible;
         track.scrollTo({ left: 0, behavior: 'auto' });
+        this.$nextTick(() => this.updateEdges());
       },
-      scrollBy(direction) {
+      updateEdges() {
+        const track = this.$refs.track;
+        if (!track) {
+          this.atStart = true;
+          this.atEnd = true;
+          return;
+        }
+        const maxScroll = track.scrollWidth - track.clientWidth;
+        // Treat within 2px as fully at edge to avoid sub-pixel rounding issues.
+        this.atStart = track.scrollLeft <= 2;
+        this.atEnd = maxScroll <= 2 || track.scrollLeft >= maxScroll - 2;
+      },
+      scrollByPage(direction) {
         const track = this.$refs.track;
         if (!track) return;
         const firstVisible = track.querySelector('.shade-card:not(.is-filtered-out)');
@@ -255,8 +296,13 @@
         const cardWidth = firstVisible.getBoundingClientRect().width;
         const style = window.getComputedStyle(track);
         const gap = parseFloat(style.columnGap || style.gap || '0') || 0;
-        const step = (cardWidth + gap) * (window.innerWidth >= 768 ? 4 : 1);
-        track.scrollBy({ left: direction * step, behavior: 'smooth' });
+        const perView = window.innerWidth >= 768 ? 4 : 1;
+        const step = (cardWidth + gap) * perView;
+        const maxScroll = track.scrollWidth - track.clientWidth;
+        let target = track.scrollLeft + direction * step;
+        if (target < 0) target = 0;
+        if (target > maxScroll) target = maxScroll;
+        track.scrollTo({ left: target, behavior: 'smooth' });
       }
     };
   };
@@ -391,7 +437,8 @@
   }
 
   .shade-picker .shade-picker__pill,
-  .shade-picker button.shade-picker__pill {
+  .shade-picker button.shade-picker__pill,
+  .shade-picker .shade-picker__pills button.shade-picker__pill {
     -webkit-appearance: none;
     appearance: none;
     background-color: #ffffff;
@@ -406,21 +453,30 @@
     min-height: 44px;
     line-height: 1;
     font-family: inherit;
+    text-decoration: none;
     transition: background-color 180ms ease, color 180ms ease;
   }
 
-  .shade-picker .shade-picker__pill:hover {
+  .shade-picker .shade-picker__pill,
+  .shade-picker .shade-picker__pills .shade-picker__pill {
+    color: #000000;
+  }
+
+  .shade-picker .shade-picker__pill:hover,
+  .shade-picker .shade-picker__pills button.shade-picker__pill:hover {
     background-color: rgba(0, 0, 0, 0.05);
     color: #000000;
   }
 
   .shade-picker .shade-picker__pill.is-active,
-  .shade-picker button.shade-picker__pill.is-active {
+  .shade-picker button.shade-picker__pill.is-active,
+  .shade-picker .shade-picker__pills button.shade-picker__pill.is-active {
     background-color: #000000;
     color: #ffffff;
   }
 
-  .shade-picker .shade-picker__pill.is-active:hover {
+  .shade-picker .shade-picker__pill.is-active:hover,
+  .shade-picker .shade-picker__pills button.shade-picker__pill.is-active:hover {
     background-color: #000000;
     color: #ffffff;
   }
@@ -461,6 +517,19 @@
   .shade-picker__chevron:focus-visible {
     outline: 2px solid #000;
     outline-offset: 2px;
+  }
+
+  .shade-picker__chevron:disabled,
+  .shade-picker__chevron[aria-disabled='true'] {
+    opacity: 0.3;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .shade-picker__chevron:disabled:hover,
+  .shade-picker__chevron[aria-disabled='true']:hover {
+    background: #fff;
+    color: #000;
   }
 
   .shade-picker__track {
