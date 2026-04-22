@@ -137,6 +137,15 @@
         "enable_mobile_slider": true
       }
     },
+    "shade_picker_main": {
+      "type": "new-section",
+      "settings": {
+        "show_find_my_shade_cta": true,
+        "find_my_shade_url": "/pages/find-my-shade",
+        "section_padding_top": 64,
+        "section_padding_bottom": 64
+      }
+    },
     "product_highlights_gUaG6E": {
       "type": "product-highlights",
       "blocks": {
@@ -185,6 +194,7 @@
     "hero_1",
     "featured_collections_hhETJ9",
     "selling_points_v2_6NgzaK",
+    "shade_picker_main",
     "product_highlights_gUaG6E"
   ]
 }

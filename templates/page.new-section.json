@@ -1,0 +1,23 @@
+{
+  "sections": {
+    "new-section_moa6bx5u": {
+      "type": "new-section",
+      "settings": {
+        "heading": "What Shade Am I?",
+        "show_find_my_shade_cta": true,
+        "cta_label": "Still Not Sure?",
+        "cta_button_text": "FIND MY SHADE",
+        "find_my_shade_url": "/pages/find-my-shade",
+        "bg_color": "#FFFFFF",
+        "text_color": "#000000",
+        "muted_text_color": "#555555",
+        "accent_color": "#000000",
+        "section_padding_top": 64,
+        "section_padding_bottom": 64
+      }
+    }
+  },
+  "order": [
+    "new-section_moa6bx5u"
+  ]
+}

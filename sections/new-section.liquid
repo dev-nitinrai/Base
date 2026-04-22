@@ -1,0 +1,765 @@
+{%- liquid
+  assign shade_entries = shop.metaobjects['agent_shade_v2'].values
+  assign shade_count = shade_entries | size
+  assign alpine_id = section.id | replace: '-', '_' | replace: '.', '_'
+-%}
+
+{%- style -%}
+  #shade-picker-{{ section.id }} {
+    --shade-padding-top: {{ section.settings.section_padding_top | default: 64 }}px;
+    --shade-padding-bottom: {{ section.settings.section_padding_bottom | default: 64 }}px;
+  }
+{%- endstyle -%}
+
+<section
+  id="shade-picker-{{ section.id }}"
+  class="shade-picker"
+  x-data="shadePicker_{{ alpine_id }}()"
+  x-cloak
+>
+  <div class="shade-picker__inner page-width">
+    <h2 class="shade-picker__title">{{ 'sections.shade_picker.title' | t }}</h2>
+
+    <div class="shade-picker__toolbar">
+      <div class="shade-picker__toolbar-left">
+        <div class="shade-picker__view-toggle" role="group" aria-label="{{ 'sections.shade_picker.view_toggle_label' | t }}">
+          <span
+            class="shade-picker__view-label"
+            :class="{ 'is-active': view === 'swatches' }"
+            aria-hidden="true"
+          >{{ 'sections.shade_picker.view_swatches' | t }}</span>
+          <button
+            type="button"
+            class="shade-picker__switch"
+            role="switch"
+            :aria-checked="view === 'models' ? 'true' : 'false'"
+            aria-label="{{ 'sections.shade_picker.view_toggle_label' | t }}"
+            @click="toggleView()"
+          >
+            <span class="shade-picker__switch-track" :class="{ 'is-on': view === 'models' }">
+              <span class="shade-picker__switch-thumb"></span>
+            </span>
+          </button>
+          <span
+            class="shade-picker__view-label"
+            :class="{ 'is-active': view === 'models' }"
+            aria-hidden="true"
+          >{{ 'sections.shade_picker.view_models' | t }}</span>
+        </div>
+      </div>
+
+      <div class="shade-picker__toolbar-right">
+        <fieldset class="shade-picker__filter-group shade-picker__filter-group--usage">
+          <legend class="shade-picker__filter-legend">{{ 'sections.shade_picker.usage_label' | t }}</legend>
+          <div class="shade-picker__pills">
+            {%- assign usage_options = 'all,bronzer,blush,highlighter,color_correct' | split: ',' -%}
+            {%- for opt in usage_options -%}
+              {%- case opt -%}
+                {%- when 'all' -%}
+                  {%- assign usage_label = 'sections.shade_picker.usage_values.all' | t -%}
+                {%- when 'bronzer' -%}
+                  {%- assign usage_label = 'sections.shade_picker.usage_values.bronzer' | t -%}
+                {%- when 'blush' -%}
+                  {%- assign usage_label = 'sections.shade_picker.usage_values.blush' | t -%}
+                {%- when 'highlighter' -%}
+                  {%- assign usage_label = 'sections.shade_picker.usage_values.highlighter' | t -%}
+                {%- when 'color_correct' -%}
+                  {%- assign usage_label = 'sections.shade_picker.usage_values.color_correct' | t -%}
+              {%- endcase -%}
+              <button
+                type="button"
+                class="shade-picker__pill"
+                :aria-pressed="usage === '{{ opt }}' ? 'true' : 'false'"
+                :class="{ 'is-active': usage === '{{ opt }}' }"
+                @click="usage = '{{ opt }}'"
+              >{{ usage_label }}</button>
+            {%- endfor -%}
+          </div>
+        </fieldset>
+
+        <fieldset class="shade-picker__filter-group shade-picker__filter-group--skin">
+          <legend class="shade-picker__filter-legend">{{ 'sections.shade_picker.skin_tone_label' | t }}</legend>
+          <div class="shade-picker__pills">
+            {%- assign skin_options = 'all,light,medium,dark' | split: ',' -%}
+            {%- for opt in skin_options -%}
+              {%- case opt -%}
+                {%- when 'all' -%}
+                  {%- assign skin_label = 'sections.shade_picker.skin_values.all' | t -%}
+                {%- when 'light' -%}
+                  {%- assign skin_label = 'sections.shade_picker.skin_values.light' | t -%}
+                {%- when 'medium' -%}
+                  {%- assign skin_label = 'sections.shade_picker.skin_values.medium' | t -%}
+                {%- when 'dark' -%}
+                  {%- assign skin_label = 'sections.shade_picker.skin_values.dark' | t -%}
+              {%- endcase -%}
+              <button
+                type="button"
+                class="shade-picker__pill"
+                :aria-pressed="skin === '{{ opt }}' ? 'true' : 'false'"
+                :class="{ 'is-active': skin === '{{ opt }}' }"
+                @click="skin = '{{ opt }}'"
+              >{{ skin_label }}</button>
+            {%- endfor -%}
+          </div>
+        </fieldset>
+      </div>
+    </div>
+
+    {%- if shade_count > 0 -%}
+      <div class="shade-picker__carousel-wrap" :class="{ 'has-chevrons': visibleCount > 4, 'is-centered': visibleCount > 0 && visibleCount <= 3 }">
+        <button
+          type="button"
+          class="shade-picker__chevron shade-picker__chevron--prev"
+          aria-label="{{ 'sections.shade_picker.prev_label' | t }}"
+          @click="scrollBy(-1)"
+          x-show="visibleCount > 4"
+        >
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+            <path d="M15 6 L9 12 L15 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <div class="shade-picker__track" x-ref="track">
+          {%- for entry in shade_entries -%}
+            {%- liquid
+              assign usage_list = entry.usage_tags.value
+              assign usage_joined = usage_list | join: ' '
+              assign skin_val = entry.skin_tone.value
+              assign shade_name = entry.name.value
+              assign shade_desc = entry.description.value
+              assign model_img = entry.model_image.value
+              assign swatch_img = entry.swatch_image.value
+            -%}
+            <article
+              class="shade-card"
+              data-usage="{{ usage_joined | escape }}"
+              data-skin="{{ skin_val | escape }}"
+              aria-labelledby="shade-{{ section.id }}-{{ forloop.index }}-name"
+            >
+              <div class="shade-card__media">
+                <div
+                  class="shade-card__image shade-card__image--swatch"
+                  :class="{ 'is-hidden': view !== 'swatches' }"
+                >
+                  {%- if swatch_img != blank -%}
+                    {{ swatch_img | image_url: width: 600 | image_tag:
+                      loading: 'lazy',
+                      widths: '300,450,600,900',
+                      sizes: '(min-width: 768px) 25vw, 80vw',
+                      alt: shade_name
+                    }}
+                  {%- else -%}
+                    <div class="shade-card__placeholder" aria-hidden="true"></div>
+                  {%- endif -%}
+                </div>
+                <div
+                  class="shade-card__image shade-card__image--model"
+                  :class="{ 'is-hidden': view !== 'models' }"
+                >
+                  {%- if model_img != blank -%}
+                    {{ model_img | image_url: width: 600 | image_tag:
+                      loading: 'lazy',
+                      widths: '300,450,600,900',
+                      sizes: '(min-width: 768px) 25vw, 80vw',
+                      alt: shade_name
+                    }}
+                  {%- else -%}
+                    <div class="shade-card__placeholder" aria-hidden="true"></div>
+                  {%- endif -%}
+                </div>
+              </div>
+              <h3 id="shade-{{ section.id }}-{{ forloop.index }}-name" class="shade-card__name">{{ shade_name | escape }}</h3>
+              {%- if shade_desc != blank -%}
+                <p class="shade-card__description">{{ shade_desc | escape | newline_to_br }}</p>
+              {%- endif -%}
+            </article>
+          {%- endfor -%}
+        </div>
+
+        <button
+          type="button"
+          class="shade-picker__chevron shade-picker__chevron--next"
+          aria-label="{{ 'sections.shade_picker.next_label' | t }}"
+          @click="scrollBy(1)"
+          x-show="visibleCount > 4"
+        >
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+            <path d="M9 6 L15 12 L9 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <p
+          class="shade-picker__empty"
+          x-show="visibleCount === 0"
+          x-cloak
+        >{{ 'sections.shade_picker.empty_state' | t }}</p>
+      </div>
+    {%- else -%}
+      <div class="shade-picker__setup-notice">
+        <p>{{ 'sections.shade_picker.setup_notice' | t }}</p>
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.show_find_my_shade_cta -%}
+      {%- assign cta_url = section.settings.find_my_shade_url | default: '/pages/find-my-shade' -%}
+      <div class="shade-picker__cta">
+        <span class="shade-picker__cta-label">{{ 'sections.shade_picker.cta_label' | t }}</span>
+        <a href="{{ cta_url }}" class="shade-picker__cta-button">
+          {{ 'sections.shade_picker.cta_button' | t }}
+          <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false">
+            <path d="M9 6 L15 12 L9 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+<script>
+  window['shadePicker_{{ alpine_id }}'] = function () {
+    return {
+      view: 'swatches',
+      usage: 'all',
+      skin: 'all',
+      visibleCount: 0,
+      init() {
+        this.$nextTick(() => this.applyFilters());
+        this.$watch('usage', () => this.applyFilters());
+        this.$watch('skin', () => this.applyFilters());
+      },
+      toggleView() {
+        this.view = this.view === 'swatches' ? 'models' : 'swatches';
+      },
+      applyFilters() {
+        const track = this.$refs.track;
+        if (!track) return;
+        const cards = track.querySelectorAll('.shade-card');
+        let visible = 0;
+        cards.forEach((card) => {
+          const cardUsage = (card.dataset.usage || '').split(/\s+/).filter(Boolean);
+          const cardSkin = (card.dataset.skin || '').trim();
+          const usagePass = this.usage === 'all' || cardUsage.includes(this.usage);
+          const skinPass = this.skin === 'all' || cardSkin === this.skin;
+          const pass = usagePass && skinPass;
+          card.classList.toggle('is-filtered-out', !pass);
+          if (pass) visible++;
+        });
+        this.visibleCount = visible;
+        track.scrollTo({ left: 0, behavior: 'auto' });
+      },
+      scrollBy(direction) {
+        const track = this.$refs.track;
+        if (!track) return;
+        const firstVisible = track.querySelector('.shade-card:not(.is-filtered-out)');
+        if (!firstVisible) return;
+        const cardWidth = firstVisible.getBoundingClientRect().width;
+        const style = window.getComputedStyle(track);
+        const gap = parseFloat(style.columnGap || style.gap || '0') || 0;
+        const step = (cardWidth + gap) * (window.innerWidth >= 768 ? 4 : 1);
+        track.scrollBy({ left: direction * step, behavior: 'smooth' });
+      }
+    };
+  };
+</script>
+
+{% stylesheet %}
+  .shade-picker {
+    padding-top: var(--shade-padding-top, 64px);
+    padding-bottom: var(--shade-padding-bottom, 64px);
+    color: #000;
+    background-color: #fff;
+  }
+
+  .shade-picker__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .shade-picker__title {
+    font-family: var(--font-heading-family, serif);
+    font-weight: var(--font-heading-weight, 400);
+    font-size: 2.5rem;
+    text-align: center;
+    margin: 0 0 1rem;
+    letter-spacing: 0.01em;
+  }
+
+  .shade-picker__toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  .shade-picker__toolbar-left,
+  .shade-picker__toolbar-right {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    width: 100%;
+  }
+
+  .shade-picker__toolbar-right {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .shade-picker__view-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .shade-picker__view-label {
+    font-size: 0.875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(0, 0, 0, 0.5);
+    transition: color 200ms ease;
+  }
+
+  .shade-picker__view-label.is-active {
+    color: #000;
+    font-weight: 600;
+  }
+
+  .shade-picker__switch {
+    display: inline-block;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    line-height: 0;
+  }
+
+  .shade-picker__switch-track {
+    display: inline-block;
+    position: relative;
+    width: 44px;
+    height: 24px;
+    border-radius: 999px;
+    background: #e5e5e5;
+    border: 1px solid #000;
+    transition: background-color 200ms ease;
+  }
+
+  .shade-picker__switch-track.is-on {
+    background: #000;
+  }
+
+  .shade-picker__switch-thumb {
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    transition: transform 200ms ease;
+  }
+
+  .shade-picker__switch-track.is-on .shade-picker__switch-thumb {
+    transform: translateX(20px);
+  }
+
+  .shade-picker__filter-group {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .shade-picker__filter-legend {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(0, 0, 0, 0.6);
+    padding: 0;
+  }
+
+  .shade-picker__pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+
+  .shade-picker__pill {
+    appearance: none;
+    background: #fff;
+    border: 1px solid #000;
+    color: #000;
+    border-radius: 999px;
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    min-height: 44px;
+    line-height: 1;
+    transition: background-color 180ms ease, color 180ms ease;
+  }
+
+  .shade-picker__pill:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }
+
+  .shade-picker__pill.is-active {
+    background: #000;
+    color: #fff;
+  }
+
+  .shade-picker__pill:focus-visible {
+    outline: 2px solid #000;
+    outline-offset: 2px;
+  }
+
+  .shade-picker__carousel-wrap {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .shade-picker__chevron {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid #000;
+    background: #fff;
+    color: #000;
+    cursor: pointer;
+    padding: 0;
+    transition: background-color 180ms ease, color 180ms ease;
+  }
+
+  .shade-picker__chevron:hover {
+    background: #000;
+    color: #fff;
+  }
+
+  .shade-picker__chevron:focus-visible {
+    outline: 2px solid #000;
+    outline-offset: 2px;
+  }
+
+  .shade-picker__track {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 0.25rem 0 0.5rem;
+  }
+
+  .shade-picker__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .shade-picker__carousel-wrap.is-centered .shade-picker__track {
+    justify-content: center;
+  }
+
+  .shade-card {
+    flex: 0 0 calc((100% - 1.5rem * 3) / 4);
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    gap: 0.75rem;
+    min-width: 0;
+    transition: opacity 180ms ease, transform 180ms ease;
+  }
+
+  .shade-card.is-filtered-out {
+    display: none;
+  }
+
+  .shade-card__media {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background: #f2f2f2;
+  }
+
+  .shade-card__image {
+    position: absolute;
+    inset: 0;
+    transition: opacity 200ms ease;
+  }
+
+  .shade-card__image.is-hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .shade-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .shade-card__placeholder {
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(45deg, #f0f0f0 0 12px, #e5e5e5 12px 24px);
+  }
+
+  .shade-card__name {
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0;
+    color: #000;
+  }
+
+  .shade-card__description {
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    margin: 0;
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  .shade-picker__empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 2rem 1rem;
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 0.9375rem;
+  }
+
+  .shade-picker__setup-notice {
+    text-align: center;
+    padding: 2rem 1rem;
+    border: 1px dashed rgba(0, 0, 0, 0.2);
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 0.9375rem;
+  }
+
+  .shade-picker__cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .shade-picker__cta-label {
+    font-size: 0.875rem;
+    color: rgba(0, 0, 0, 0.7);
+  }
+
+  .shade-picker__cta-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #000;
+    color: #fff;
+    text-decoration: none;
+    padding: 0.875rem 1.5rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 600;
+    min-height: 44px;
+    transition: background-color 180ms ease;
+  }
+
+  .shade-picker__cta-button:hover {
+    background: rgba(0, 0, 0, 0.85);
+  }
+
+  .shade-picker__cta-button:focus-visible {
+    outline: 2px solid #000;
+    outline-offset: 2px;
+  }
+
+  @media (min-width: 768px) {
+    .shade-picker__toolbar {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 2rem;
+    }
+
+    .shade-picker__toolbar-left {
+      flex: 0 0 auto;
+      justify-content: flex-start;
+      width: auto;
+    }
+
+    .shade-picker__toolbar-right {
+      flex: 1 1 auto;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      width: auto;
+    }
+
+    .shade-picker__filter-group {
+      flex-direction: row;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .shade-picker__filter-group--usage {
+      margin-right: auto;
+    }
+
+    .shade-picker__filter-group--skin {
+      margin-left: auto;
+    }
+
+    .shade-picker__pills {
+      justify-content: flex-start;
+    }
+
+    .shade-picker__cta {
+      justify-content: flex-end;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .shade-picker__title {
+      font-size: 1.875rem;
+    }
+
+    .shade-picker__toolbar-right {
+      order: 1;
+    }
+
+    .shade-picker__toolbar-left {
+      order: 2;
+    }
+
+    .shade-picker__filter-group--skin {
+      order: 1;
+    }
+
+    .shade-picker__filter-group--usage {
+      order: 2;
+    }
+
+    .shade-picker__toolbar-right {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .shade-picker__track {
+      gap: 1rem;
+      scroll-padding-inline-start: var(--page-margin, 16px);
+    }
+
+    .shade-card {
+      flex: 0 0 calc(100% / 1.2 - 1rem);
+    }
+
+    .shade-picker__carousel-wrap {
+      grid-template-columns: 1fr;
+    }
+
+    .shade-picker__chevron {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 2;
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    .shade-picker__chevron--prev {
+      left: 0.25rem;
+    }
+
+    .shade-picker__chevron--next {
+      right: 0.25rem;
+    }
+
+    .shade-picker__cta {
+      justify-content: center;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .shade-card__image,
+    .shade-picker__switch-thumb,
+    .shade-picker__switch-track,
+    .shade-picker__pill,
+    .shade-picker__chevron,
+    .shade-picker__cta-button {
+      transition: none;
+    }
+    .shade-picker__track {
+      scroll-behavior: auto;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "What shade am I?",
+  "tag": "section",
+  "class": "section-shade-picker",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Find my shade CTA"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_find_my_shade_cta",
+      "label": "Show find my shade CTA",
+      "default": true
+    },
+    {
+      "type": "url",
+      "id": "find_my_shade_url",
+      "label": "Find my shade URL"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "presets": [
+    {
+      "name": "What shade am I?"
+    }
+  ]
+}
+{% endschema %}

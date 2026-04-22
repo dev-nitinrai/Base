@@ -3655,6 +3655,68 @@ sections:
       - slideshow.liquid
       - product-recommendations.liquid
       - multicolumn.liquid
+  - file: sections/new-section.liquid
+    name: new-section
+    label: What shade am I?
+    visual_role: What shade am I? section
+    settings:
+      - type: header
+      - id: show_find_my_shade_cta
+        type: checkbox
+        label: Show find my shade CTA
+      - id: find_my_shade_url
+        type: url
+        label: Find my shade URL
+      - type: header
+      - id: section_padding_top
+        type: range
+        label: Top padding
+      - id: section_padding_bottom
+        type: range
+        label: Bottom padding
+    blocks: []
+    max_blocks: null
+    templates_allowed:
+      - "*"
+    presets:
+      - What shade am I?
+    uses_image: true
+    uses_video: false
+    uses_slider: false
+    uses_grid: true
+    uses_tabs: false
+    uses_accordion: false
+    uses_form: false
+    layout_type: grid
+    mockup_keywords:
+      - shade finder
+      - foundation match
+      - skin tone picker
+      - swatch grid
+      - model view toggle
+      - beauty filter
+      - makeup shade selector
+      - color filter pills
+      - bronzer blush highlighter
+      - metaobject shades
+    when_to_use: Use this section when a mockup shows an interactive shade-matching or foundation-finder tool with
+      filterable swatches or model images, a view toggle between swatches and model photos, and category filter pills
+      (e.g., bronzer, blush, highlighter).
+    when_to_create_new: Create a new section if the mockup requires a shade finder driven by a quiz or skin-tone
+      questionnaire, lacks the swatch/model toggle pattern, uses a different data source than the agent_shade_v2
+      metaobject type, or needs a significantly different filter taxonomy.
+    requires_new_section_if:
+      - Shade data comes from product variants or a different metaobject namespace than agent_shade_v2
+      - No swatch/model view toggle is present in the design
+      - Filter categories differ substantially from bronzer, blush, highlighter, color_correct
+      - Design includes a quiz or step-by-step shade recommendation flow
+      - Layout requires a side-by-side comparison or try-on AR integration
+      - No Alpine.js interactivity is desired and a static or Stimulus-based approach is needed
+    similar_sections:
+      - sections/shade-finder.liquid
+      - sections/foundation-match.liquid
+      - sections/product-shade-selector.liquid
+      - sections/color-swatch-grid.liquid
 snippets:
   - file: snippets/component-article-card.liquid
     name: component-article-card
