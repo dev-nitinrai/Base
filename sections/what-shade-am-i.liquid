@@ -20,44 +20,48 @@
     </h2>
 
     <div class="what-shade-am-i__toolbar">
-      <div class="what-shade-am-i__toggle-wrap">
-        <span class="what-shade-am-i__toggle-label" data-toggle-side="swatches">
-          {{ section.settings.swatches_label | default: 'Swatches' | escape }}
-        </span>
-        <button
-          type="button"
-          class="what-shade-am-i__toggle"
-          role="switch"
-          aria-checked="{% if default_view == 'models' %}true{% else %}false{% endif %}"
-          aria-label="{{ section.settings.swatches_label | default: 'Swatches' | escape }} / {{ section.settings.models_label | default: 'Models' | escape }}"
-          data-view-toggle
-        >
-          <span class="what-shade-am-i__toggle-thumb" aria-hidden="true"></span>
-        </button>
-        <span class="what-shade-am-i__toggle-label" data-toggle-side="models">
-          {{ section.settings.models_label | default: 'Models' | escape }}
-        </span>
+      <div class="what-shade-am-i__toolbar-toggle">
+        <div class="what-shade-am-i__toggle-wrap">
+          <span class="what-shade-am-i__toggle-label" data-toggle-side="swatches">
+            {{ section.settings.swatches_label | default: 'Swatches' | escape }}
+          </span>
+          <button
+            type="button"
+            class="what-shade-am-i__toggle"
+            role="switch"
+            aria-checked="{% if default_view == 'models' %}true{% else %}false{% endif %}"
+            aria-label="{{ section.settings.swatches_label | default: 'Swatches' | escape }} / {{ section.settings.models_label | default: 'Models' | escape }}"
+            data-view-toggle
+          >
+            <span class="what-shade-am-i__toggle-thumb" aria-hidden="true"></span>
+          </button>
+          <span class="what-shade-am-i__toggle-label" data-toggle-side="models">
+            {{ section.settings.models_label | default: 'Models' | escape }}
+          </span>
+        </div>
       </div>
 
-      <div class="what-shade-am-i__filters" role="group" aria-label="Filter shades">
-        <div class="what-shade-am-i__filter-group" data-filter-group="usage">
-          <span class="what-shade-am-i__filter-label">USAGE</span>
-          <div class="what-shade-am-i__pills" role="group" aria-label="Filter by usage">
-            <button type="button" class="what-shade-am-i__pill is-active" data-filter-group="usage" data-filter-value="all" aria-pressed="true">ALL</button>
-            <button type="button" class="what-shade-am-i__pill" data-filter-group="usage" data-filter-value="bronzer" aria-pressed="false">BRONZER</button>
-            <button type="button" class="what-shade-am-i__pill" data-filter-group="usage" data-filter-value="blush" aria-pressed="false">BLUSH</button>
-            <button type="button" class="what-shade-am-i__pill" data-filter-group="usage" data-filter-value="highlighter" aria-pressed="false">HIGHLIGHTER</button>
-            <button type="button" class="what-shade-am-i__pill" data-filter-group="usage" data-filter-value="color_correct" aria-pressed="false">COLOR CORRECT</button>
+      <div class="what-shade-am-i__toolbar-filters">
+        <div class="what-shade-am-i__filters" role="group" aria-label="Filter shades">
+          <div class="what-shade-am-i__filter-group" data-filter-group="usage">
+            <span class="what-shade-am-i__filter-label">USAGE</span>
+            <div class="what-shade-am-i__pills" role="group" aria-label="Filter by usage">
+              <button type="button" class="what-shade-am-i__pill is-active" data-filter-group="usage" data-filter-value="all" aria-pressed="true">ALL</button>
+              <button type="button" class="what-shade-am-i__pill" data-filter-group="usage" data-filter-value="bronzer" aria-pressed="false">BRONZER</button>
+              <button type="button" class="what-shade-am-i__pill" data-filter-group="usage" data-filter-value="blush" aria-pressed="false">BLUSH</button>
+              <button type="button" class="what-shade-am-i__pill" data-filter-group="usage" data-filter-value="highlighter" aria-pressed="false">HIGHLIGHTER</button>
+              <button type="button" class="what-shade-am-i__pill" data-filter-group="usage" data-filter-value="color_correct" aria-pressed="false">COLOR CORRECT</button>
+            </div>
           </div>
-        </div>
 
-        <div class="what-shade-am-i__filter-group" data-filter-group="skin_tone">
-          <span class="what-shade-am-i__filter-label">SKIN TONE</span>
-          <div class="what-shade-am-i__pills" role="group" aria-label="Filter by skin tone">
-            <button type="button" class="what-shade-am-i__pill is-active" data-filter-group="skin_tone" data-filter-value="all" aria-pressed="true">ALL</button>
-            <button type="button" class="what-shade-am-i__pill" data-filter-group="skin_tone" data-filter-value="light" aria-pressed="false">LIGHT</button>
-            <button type="button" class="what-shade-am-i__pill" data-filter-group="skin_tone" data-filter-value="medium" aria-pressed="false">MEDIUM</button>
-            <button type="button" class="what-shade-am-i__pill" data-filter-group="skin_tone" data-filter-value="dark" aria-pressed="false">DARK</button>
+          <div class="what-shade-am-i__filter-group" data-filter-group="skin_tone">
+            <span class="what-shade-am-i__filter-label">SKIN TONE</span>
+            <div class="what-shade-am-i__pills" role="group" aria-label="Filter by skin tone">
+              <button type="button" class="what-shade-am-i__pill is-active" data-filter-group="skin_tone" data-filter-value="all" aria-pressed="true">ALL</button>
+              <button type="button" class="what-shade-am-i__pill" data-filter-group="skin_tone" data-filter-value="light" aria-pressed="false">LIGHT</button>
+              <button type="button" class="what-shade-am-i__pill" data-filter-group="skin_tone" data-filter-value="medium" aria-pressed="false">MEDIUM</button>
+              <button type="button" class="what-shade-am-i__pill" data-filter-group="skin_tone" data-filter-value="dark" aria-pressed="false">DARK</button>
+            </div>
           </div>
         </div>
       </div>
@@ -166,29 +170,56 @@
   }
 
   .what-shade-am-i__title {
+    display: block;
+    width: 100%;
     font-family: var(--font-heading-family, 'Times New Roman', serif);
     font-weight: 400;
     font-size: clamp(2rem, 4vw, 2.75rem);
     text-align: center;
-    margin: 0 0 1.5rem 0;
+    margin: 0 0 2rem 0;
     letter-spacing: -0.01em;
   }
 
   .what-shade-am-i__toolbar {
-    display: grid;
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    row-gap: 1.25rem;
-    margin-block: 1rem 2.5rem;
+    gap: 1.25rem;
+    margin-block: 0 2.5rem;
+  }
+
+  .what-shade-am-i__toolbar-toggle,
+  .what-shade-am-i__toolbar-filters {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Mobile order per spec: filters (skin tone top, usage below) then toggle */
+  @media (max-width: 767px) {
+    .what-shade-am-i__toolbar-filters {
+      order: 1;
+    }
+    .what-shade-am-i__toolbar-toggle {
+      order: 2;
+    }
   }
 
   @media (min-width: 768px) {
     .what-shade-am-i__toolbar {
-      grid-template-columns: auto 1fr;
-      column-gap: 2rem;
-      margin-block: -3rem 2.5rem;
-      position: relative;
-      z-index: 2;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+    .what-shade-am-i__toolbar-toggle {
+      flex: 1 1 0;
+      justify-content: flex-start;
+    }
+    .what-shade-am-i__toolbar-filters {
+      flex: 1 1 0;
+      justify-content: flex-end;
     }
   }
 
@@ -196,13 +227,6 @@
     display: inline-flex;
     align-items: center;
     gap: 0.75rem;
-    justify-self: center;
-  }
-
-  @media (min-width: 768px) {
-    .what-shade-am-i__toggle-wrap {
-      justify-self: start;
-    }
   }
 
   .what-shade-am-i__toggle-label {
@@ -267,13 +291,24 @@
     width: 100%;
   }
 
+  /* Mobile: SKIN TONE on top, USAGE below */
+  @media (max-width: 767px) {
+    .what-shade-am-i__filters [data-filter-group="skin_tone"] {
+      order: 1;
+    }
+    .what-shade-am-i__filters [data-filter-group="usage"] {
+      order: 2;
+    }
+  }
+
   @media (min-width: 768px) {
     .what-shade-am-i__filters {
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
-      gap: 1.25rem;
+      gap: 1.5rem;
       flex-wrap: wrap;
+      width: 100%;
     }
   }
 
