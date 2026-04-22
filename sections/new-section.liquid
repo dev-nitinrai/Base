@@ -106,13 +106,13 @@
     </div>
 
     {%- if shade_count > 0 -%}
-      <div class="shade-picker__carousel-wrap" :class="{ 'has-chevrons': visibleCount > 4, 'is-centered': visibleCount > 0 && visibleCount <= 3 }">
+      <div class="shade-picker__carousel-wrap" :class="{ 'has-chevrons': showChevrons, 'is-centered': visibleCount > 0 && visibleCount <= 3 && !isMobile }">
         <button
           type="button"
           class="shade-picker__chevron shade-picker__chevron--prev"
           aria-label="{{ 'sections.shade_picker.prev_label' | t }}"
           @click="scrollByPage(-1)"
-          x-show="visibleCount > 4"
+          x-show="showChevrons"
           :disabled="atStart"
           :aria-disabled="atStart ? 'true' : 'false'"
         >
@@ -187,7 +187,7 @@
           class="shade-picker__chevron shade-picker__chevron--next"
           aria-label="{{ 'sections.shade_picker.next_label' | t }}"
           @click="scrollByPage(1)"
-          x-show="visibleCount > 4"
+          x-show="showChevrons"
           :disabled="atEnd"
           :aria-disabled="atEnd ? 'true' : 'false'"
         >
@@ -232,9 +232,15 @@
       visibleCount: 0,
       atStart: true,
       atEnd: true,
+      isMobile: false,
       _onScroll: null,
       _onResize: null,
+      get showChevrons() {
+        if (this.visibleCount === 0) return false;
+        return this.isMobile ? this.visibleCount > 1 : this.visibleCount > 4;
+      },
       init() {
+        this.isMobile = window.matchMedia('(max-width: 767px)').matches;
         this.$nextTick(() => {
           this.applyFilters();
           this.updateEdges();
@@ -245,7 +251,10 @@
         const track = this.$refs.track;
         if (track) {
           this._onScroll = () => this.updateEdges();
-          this._onResize = () => this.updateEdges();
+          this._onResize = () => {
+            this.isMobile = window.matchMedia('(max-width: 767px)').matches;
+            this.updateEdges();
+          };
           track.addEventListener('scroll', this._onScroll, { passive: true });
           window.addEventListener('resize', this._onResize);
         }
@@ -300,7 +309,7 @@
         const cardWidth = firstVisible.getBoundingClientRect().width;
         const style = window.getComputedStyle(track);
         const gap = parseFloat(style.columnGap || style.gap || '0') || 0;
-        const perView = window.innerWidth >= 768 ? 4 : 1;
+        const perView = this.isMobile ? 1 : 4;
         const step = (cardWidth + gap) * perView;
         const maxScroll = track.scrollWidth - track.clientWidth;
         let target = track.scrollLeft + direction * step;

@@ -371,5 +371,36 @@
       "title": "Page not found",
       "subtext": "404"
     }
+  },
+  "sections": {
+    "shade_picker": {
+      "title": "What Shade Am I?",
+      "view_toggle_label": "Toggle between swatches and models",
+      "view_swatches": "Swatches",
+      "view_models": "Models",
+      "usage_label": "Usage",
+      "usage_values": {
+        "all": "All",
+        "bronzer": "Bronzer",
+        "blush": "Blush",
+        "highlighter": "Highlighter",
+        "color_correct": "Color correct"
+      },
+      "skin_tone_label": "Skin tone",
+      "skin_values": {
+        "all": "All",
+        "light": "Light",
+        "medium": "Medium",
+        "dark": "Dark"
+      },
+      "prev_label": "Previous shades",
+      "next_label": "Next shades",
+      "empty_state": "No shades match. Try 'All'.",
+      "setup_notice": "Add shade entries to the 'Agent shade v2' metaobject definition to populate this section.",
+      "cta_label": "Still Not Sure?",
+      "cta_button": "Find my shade",
+      "placeholder_swatch": "Swatch",
+      "placeholder_model": "Model"
+    }
   }
 }
