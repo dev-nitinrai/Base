@@ -1,0 +1,27 @@
+{
+  "sections": {
+    "new-section_mobrymfd": {
+      "type": "new-section",
+      "settings": {
+        "heading": "What Shade Am I?",
+        "show_find_my_shade_cta": true,
+        "still_not_sure_label": "Still Not Sure?",
+        "find_my_shade_text": "FIND MY SHADE",
+        "find_my_shade_url": "/pages/find-my-shade",
+        "toggle_label_swatches": "Swatches",
+        "toggle_label_models": "Models",
+        "empty_state_text": "No shades match. Try 'All'.",
+        "bg_color": "#FFFFFF",
+        "text_color": "#000000",
+        "muted_text_color": "#555555",
+        "button_color": "#000000",
+        "button_text_color": "#FFFFFF",
+        "section_padding_top": 60,
+        "section_padding_bottom": 60
+      }
+    }
+  },
+  "order": [
+    "new-section_mobrymfd"
+  ]
+}

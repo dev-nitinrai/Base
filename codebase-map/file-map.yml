@@ -8914,14 +8914,14 @@ files:
     fix_guidance: Check gift_card object availability and enabled/expired states first, verify settings.logo fallback works,
       ensure inline styles remain for standalone rendering outside theme context
   - file: templates/index.json
-    responsibility: Defines the homepage layout and section configuration with their settings and block order
+    responsibility: Defines the homepage layout by declaring which sections appear, their order, and their default settings
+      as a JSON data file consumed by Shopify's section rendering system.
     owns:
-      - Homepage section assembly and ordering
-      - Section-specific settings for hero, featured-collections, selling-points-v2, product-highlights,
-        featured-products, brand-story-v2, promo-banner, logos, and animated-features-v2
-      - Block configurations within each section (collection cards, selling points, features, product selections, story
-        content, promo content, logo images, feature cards)
-      - Visual styling parameters (color schemes, alignments, spacing, overlay settings)
+      - Homepage section composition and ordering
+      - Default settings values for each homepage section instance
+      - Block definitions and block ordering within each section
+      - Named section instances (hero_1, featured_collections_hhETJ9, selling_points_v2_6NgzaK, what_shade_am_i,
+        product_highlights_gUaG6E)
     depends_on:
       js: []
       snippets: []
@@ -8930,39 +8930,22 @@ files:
         - sections/featured-collections.liquid
         - sections/selling-points-v2.liquid
         - sections/product-highlights.liquid
-        - sections/featured-products.liquid
-        - sections/brand-story-v2.liquid
-        - sections/promo-banner.liquid
-        - sections/logos.liquid
-        - sections/animated-features-v2.liquid
-      global_objects:
-        - Shopify theme editor
-        - Shopify collections
-        - Shopify products
-      custom_elements: []
-    depended_on_by:
-      - Shopify theme rendering engine when displaying homepage
-      - Shopify theme editor for homepage customization
-      - layout/theme.liquid as the parent template wrapper
     common_mistakes:
-      - Manually editing this file instead of using Shopify theme editor (changes may be overwritten)
-      - Breaking JSON syntax when adding or removing sections or blocks
-      - Referencing non-existent section types that don't have corresponding liquid files
-      - Forgetting to maintain block_order array when adding/removing blocks
-      - Using incorrect handle format for Shopify resource references (collections, products)
-    fix_guidance: Check that all section types referenced exist in sections/ directory, verify JSON syntax is valid, ensure
-      block_order arrays match actual block keys, and prefer making changes through Shopify admin to avoid overwrite
-      conflicts
-    state_ownership:
-      - Homepage visual layout state
-      - Section visibility and ordering on homepage
-      - Block-level content and configuration per section
-    key_identifiers:
-      css_classes: []
-      data_attributes: []
-      js_events_emitted: []
-      js_events_listened: []
-      custom_elements: []
+      - Editing this file directly expecting changes to persist, since Shopify admin theme editor overwrites it
+        automatically
+      - Referencing a section type that does not have a corresponding sections/*.liquid file in the theme
+      - Assuming the section type value (e.g. "new-section") maps to an existing liquid file when it does not
+        (what_shade_am_i references type "new-section" which has no matching sections/new-section.liquid in the file
+        list)
+      - Confusing section instance IDs (e.g. "featured_collections_hhETJ9") with section file names, causing incorrect
+        edits to the wrong file
+      - Modifying block_order without updating or including a corresponding block key in the blocks object, causing
+        silent rendering failures
+      - Setting collection values to empty strings and expecting fallback behavior that may not be implemented in the
+        section liquid
+    fix_guidance: Cross-reference each type value against the sections/ file list first to confirm the liquid file exists,
+      then inspect the corresponding sections/*.liquid file for available settings schema before changing any settings
+      values here.
   - file: templates/list-collections.json
     responsibility: Defines the page template structure for the collections list page displaying all store collections
     owns:
@@ -9390,3 +9373,113 @@ files:
     fix_guidance: When customizer text is wrong, check if schema keys in section files match translation keys here; if
       translations are missing, add them via Shopify admin language editor or ensure schema keys exist in corresponding
       section files
+  - file: sections/new-section.liquid
+    responsibility: Renders a metaobject-driven 'What Shade Am I?' carousel with swatch/model toggle and usage/skin-tone
+      pill filters, pulling shade data from the agent_shade_v6 metaobject namespace.
+    owns:
+      - Metaobject query via shop.metaobjects.agent_shade_v6.values
+      - Swatch/model view toggle button (data-view-toggle, role=switch)
+      - Usage filter pills (all, bronzer, blush, highlighter, color_correct)
+      - Skin tone filter pills (all, light, medium, dark)
+      - Carousel markup (data-carousel, data-carousel-track, data-carousel-viewport)
+      - Previous/next chevron navigation buttons
+      - Scoped CSS custom properties (--shade-text, --shade-muted, --shade-bg, --shade-active-bg, --shade-active-text)
+      - Responsive section padding via inline style block
+      - "Section settings: heading, bg_color, text_color, muted_text_color, button_color, button_text_color,
+        toggle_label_swatches, toggle_label_models, section_padding_top, section_padding_bottom"
+    depends_on:
+      js:
+        - section-what-shade.js (handles carousel logic, toggle state, filter behavior, aria-checked updates)
+      snippets: []
+      sections: []
+    common_mistakes:
+      - Referencing the wrong metaobject namespace — the handle must be exactly agent_shade_v6, not a variation like
+        agent_shade or shade_v6
+      - Assuming filter pill state is managed in Liquid — all active/inactive aria-pressed toggling is handled entirely
+        in section-what-shade.js
+      - Editing filter values (e.g. bronzer, color_correct) only in Liquid without mirroring the exact strings expected
+        by the JS data-filter-value comparisons
+      - Adding new CSS variables in the style block but omitting them from the schema settings, causing them to render
+        as empty strings
+      - Treating shade_count check as a content guard only — if metaobject entries exist but fields are missing, the for
+        loop will still iterate and render broken cards
+      - "Forgetting that section padding is halved (times: 0.75) on mobile — setting padding values without accounting
+        for this scaling"
+    fix_guidance: Check shop.metaobjects.agent_shade_v6 namespace first for data issues, then inspect section-what-shade.js
+      for filter/toggle/carousel logic bugs, and verify schema settings match every CSS variable and data attribute used
+      in markup.
+  - file: assets/section-what-shade.css
+    responsibility: Provides all visual styling for the 'What Shade Am I?' interactive shade-finder section, including the
+      toggle switch, filter pills, and carousel layout.
+    owns:
+      - .what-shade root container and inner layout
+      - .what-shade__title heading typography
+      - .what-shade__controls responsive row layout
+      - .what-shade__toggle-wrap, .what-shade__toggle, .what-shade__toggle-track, .what-shade__toggle-thumb — custom
+        toggle switch
+      - .what-shade__toggle-label active/muted state driven by data-view attribute
+      - .what-shade__filters, .what-shade__filter-group, .what-shade__filter-legend — filter panel layout
+      - .what-shade__pills and .what-shade__pill — filter pill buttons including active/pressed states
+      - .what-shade__carousel, .what-shade__viewport, .what-shade__track — carousel scroll container and transition
+      - .what-shade__card — carousel item sizing and flex layout
+      - "CSS custom properties consumed: --shade-text, --shade-muted, --shade-active-bg, --shade-active-text,
+        --font-heading-family"
+      - Responsive breakpoint at 768px for controls, filters, and pills alignment
+    depends_on:
+      js:
+        - JavaScript must set aria-checked='true' on .what-shade__toggle to drive thumb translation and track color
+        - JavaScript must set data-view='swatches'|'models' on .what-shade__toggle-wrap to activate correct label
+        - JavaScript must add .is-active or aria-pressed='true' on .what-shade__pill for active pill styling
+        - JavaScript must set data-centered='true' on .what-shade__carousel when track items fit without scrolling
+        - JavaScript must manage .what-shade__track transform for carousel pagination
+      snippets: []
+      sections:
+        - sections/new-section.liquid (referenced in file comment — the actual section liquid file that renders this
+          CSS's HTML structure)
+    common_mistakes:
+      - Assuming this file applies to an existing listed section — the comment names sections/new-section.liquid which
+        does not appear in the theme file list, so agents may incorrectly map it to another section
+      - Defining or overriding --shade-text, --shade-muted, --shade-active-bg, --shade-active-text in this file — these
+        are consumed here but must be declared in the section liquid or theme global CSS
+      - Expecting CSS alone to drive toggle or pill state — all state classes and aria attributes must be set by
+        JavaScript
+      - Hardcoding pixel widths on .what-shade__card without accounting for the gap variable in the calc() expression
+      - Targeting .what-shade__toggle with display or position overrides that break the track/thumb absolute positioning
+        relationship
+    fix_guidance: Check that the companion section liquid file (sections/new-section.liquid or its actual deployed name)
+      declares the required CSS custom properties and that the section's JavaScript correctly sets aria-checked,
+      data-view, aria-pressed, and data-centered attributes before debugging visual regressions.
+  - file: assets/section-what-shade.js
+    responsibility: Drives all client-side interactivity for the 'What Shade Am I?' section, including view toggling
+      (swatches/models), filter pill state, carousel navigation, DOM reordering of filtered cards, and responsive
+      per-view recalculation.
+    owns:
+      - "[data-what-shade] section root initialization"
+      - View toggle (swatches vs models) aria and CSS class state
+      - Filter pill active state and aria-pressed management
+      - Carousel index, track transform updates, and chevron enable/disable logic
+      - Card visibility filtering via data-usage and data-tone attributes
+      - DOM reordering of cards after filter application
+      - Empty state ([data-empty]) show/hide
+      - Responsive perView computation (1 mobile / 4 desktop)
+      - Debounced resize handler
+    depends_on:
+      js: []
+      snippets: []
+      sections:
+        - sections/product.liquid
+        - sections/featured-products.liquid
+    common_mistakes:
+      - Assuming the section liquid file is named new-section.liquid per the comment header rather than recognizing it
+        targets any section rendering [data-what-shade]
+      - Missing that applyFilters physically reorders DOM nodes inside the track, so any external code referencing card
+        indices by DOM position will get stale results after filtering
+      - Overlooking the truncated carouselEl.setAttribut call which is incomplete and will throw a runtime TypeError if
+        carouselEl exists
+      - Assuming perView is static; it recomputes on resize and resets index to 0, which can surprise agents patching
+        carousel logic
+      - Conflating data-usage (comma-separated list) with data-tone (single value) when writing filter logic patches
+      - Not accounting for hidden cards still being present in the DOM track after filtering, only moved to the end
+    fix_guidance: Start with the truncated carouselEl.setAttribut line (likely setAttribute missing arguments) then verify
+      data-what-shade is present on the section root element in the corresponding liquid file before debugging any
+      interaction failures.

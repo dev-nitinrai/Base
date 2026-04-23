@@ -1,0 +1,349 @@
+{% comment %} /sections/new-section.liquid — "What Shade Am I?" metaobject-driven carousel {% endcomment %}
+
+{{ 'section-what-shade.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'section-what-shade.js' | asset_url }}" defer="defer"></script>
+
+{%- style -%}
+  .shade-section-{{ section.id }} {
+    padding-top: {{ section.settings.section_padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.section_padding_bottom | times: 0.75 | round: 0 }}px;
+    background-color: {{ section.settings.bg_color }};
+    color: {{ section.settings.text_color }};
+    --shade-text: {{ section.settings.text_color }};
+    --shade-muted: {{ section.settings.muted_text_color }};
+    --shade-bg: {{ section.settings.bg_color }};
+    --shade-active-bg: {{ section.settings.button_color }};
+    --shade-active-text: {{ section.settings.button_text_color }};
+  }
+
+  @media screen and (min-width: 768px) {
+    .shade-section-{{ section.id }} {
+      padding-top: {{ section.settings.section_padding_top }}px;
+      padding-bottom: {{ section.settings.section_padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+{%- liquid
+  assign shades = shop.metaobjects.agent_shade_v6.values
+  assign shade_count = shades | size
+-%}
+
+<section
+  class="what-shade shade-section-{{ section.id }}"
+  aria-labelledby="what-shade-heading-{{ section.id }}"
+  data-what-shade
+>
+  <div class="page-width what-shade__inner">
+    <h2 id="what-shade-heading-{{ section.id }}" class="what-shade__title">
+      {{ section.settings.heading | escape }}
+    </h2>
+
+    {%- if shade_count > 0 -%}
+      <div class="what-shade__controls">
+        <div class="what-shade__toggle-wrap">
+          <span class="what-shade__toggle-label" data-toggle-side="swatches" aria-hidden="true">
+            {{ section.settings.toggle_label_swatches | escape }}
+          </span>
+          <button
+            type="button"
+            class="what-shade__toggle"
+            role="switch"
+            aria-checked="false"
+            data-view-toggle
+            aria-label="{{ section.settings.toggle_label_swatches | escape }} / {{ section.settings.toggle_label_models | escape }}"
+          >
+            <span class="what-shade__toggle-track">
+              <span class="what-shade__toggle-thumb" aria-hidden="true"></span>
+            </span>
+          </button>
+          <span class="what-shade__toggle-label" data-toggle-side="models" aria-hidden="true">
+            {{ section.settings.toggle_label_models | escape }}
+          </span>
+        </div>
+
+        <div class="what-shade__filters">
+          <fieldset class="what-shade__filter-group what-shade__filter-group--usage" data-filter-group="usage">
+            <legend class="what-shade__filter-legend">USAGE</legend>
+            <div class="what-shade__pills">
+              <button type="button" class="what-shade__pill is-active" data-filter-value="all" aria-pressed="true">ALL</button>
+              <button type="button" class="what-shade__pill" data-filter-value="bronzer" aria-pressed="false">BRONZER</button>
+              <button type="button" class="what-shade__pill" data-filter-value="blush" aria-pressed="false">BLUSH</button>
+              <button type="button" class="what-shade__pill" data-filter-value="highlighter" aria-pressed="false">HIGHLIGHTER</button>
+              <button type="button" class="what-shade__pill" data-filter-value="color_correct" aria-pressed="false">COLOR CORRECT</button>
+            </div>
+          </fieldset>
+
+          <fieldset class="what-shade__filter-group what-shade__filter-group--tone" data-filter-group="tone">
+            <legend class="what-shade__filter-legend">SKIN TONE</legend>
+            <div class="what-shade__pills">
+              <button type="button" class="what-shade__pill is-active" data-filter-value="all" aria-pressed="true">ALL</button>
+              <button type="button" class="what-shade__pill" data-filter-value="light" aria-pressed="false">LIGHT</button>
+              <button type="button" class="what-shade__pill" data-filter-value="medium" aria-pressed="false">MEDIUM</button>
+              <button type="button" class="what-shade__pill" data-filter-value="dark" aria-pressed="false">DARK</button>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+
+      <div class="what-shade__carousel" data-carousel>
+        <button
+          type="button"
+          class="what-shade__chevron what-shade__chevron--prev"
+          data-carousel-prev
+          aria-label="Previous shades"
+        >
+          <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
+            <path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <div class="what-shade__viewport" data-carousel-viewport>
+          <ul class="what-shade__track" data-carousel-track>
+            {%- for shade in shades -%}
+              {%- liquid
+                assign usage_tags = shade.usage_tags.value | default: blank
+                assign usage_joined = ''
+                if usage_tags != blank
+                  assign usage_joined = usage_tags | join: ','
+                endif
+                assign skin_tone = shade.skin_tone.value | default: '' | downcase
+                assign model_img = shade.model_image.value
+                assign swatch_img = shade.swatch_image.value
+                assign shade_name = shade.name.value | default: ''
+                assign shade_desc = shade.description.value | default: ''
+              -%}
+              <li
+                class="what-shade__card"
+                data-card
+                data-usage="{{ usage_joined | downcase }}"
+                data-tone="{{ skin_tone }}"
+              >
+                <div class="what-shade__media" data-media>
+                  <div class="what-shade__media-layer what-shade__media-layer--swatches is-visible" data-media-swatches>
+                    {%- if swatch_img != blank -%}
+                      {{ swatch_img | image_url: width: 600 | image_tag:
+                        loading: 'lazy',
+                        width: swatch_img.width,
+                        height: swatch_img.height,
+                        sizes: '(min-width: 768px) 25vw, 80vw',
+                        widths: '300, 450, 600, 900',
+                        alt: shade_name,
+                        class: 'what-shade__image'
+                      }}
+                    {%- else -%}
+                      <div class="what-shade__placeholder" aria-hidden="true">
+                        {{ 'image' | placeholder_svg_tag: 'what-shade__placeholder-svg' }}
+                      </div>
+                    {%- endif -%}
+                  </div>
+                  <div class="what-shade__media-layer what-shade__media-layer--models" data-media-models>
+                    {%- if model_img != blank -%}
+                      {{ model_img | image_url: width: 600 | image_tag:
+                        loading: 'lazy',
+                        width: model_img.width,
+                        height: model_img.height,
+                        sizes: '(min-width: 768px) 25vw, 80vw',
+                        widths: '300, 450, 600, 900',
+                        alt: shade_name,
+                        class: 'what-shade__image'
+                      }}
+                    {%- else -%}
+                      <div class="what-shade__placeholder" aria-hidden="true">
+                        {{ 'image' | placeholder_svg_tag: 'what-shade__placeholder-svg' }}
+                      </div>
+                    {%- endif -%}
+                  </div>
+                </div>
+                <h3 class="what-shade__card-name">{{ shade_name | escape | upcase }}</h3>
+                {%- if shade_desc != blank -%}
+                  <p class="what-shade__card-desc">{{ shade_desc | escape | newline_to_br }}</p>
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+
+          <p class="what-shade__empty" data-empty hidden>
+            {{ section.settings.empty_state_text | escape }}
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="what-shade__chevron what-shade__chevron--next"
+          data-carousel-next
+          aria-label="Next shades"
+        >
+          <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
+            <path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+
+      {%- if section.settings.show_find_my_shade_cta -%}
+        <div class="what-shade__cta-row">
+          <span class="what-shade__cta-label">{{ section.settings.still_not_sure_label | escape }}</span>
+          <a class="what-shade__cta" href="{{ section.settings.find_my_shade_url }}">
+            {{ section.settings.find_my_shade_text | escape }}
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+              <path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+      {%- endif -%}
+    {%- else -%}
+      <p class="what-shade__empty what-shade__empty--setup">
+        {{ section.settings.empty_state_text | escape }}
+      </p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "What Shade Am I?",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What Shade Am I?"
+    },
+    {
+      "type": "header",
+      "content": "Find My Shade CTA"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_find_my_shade_cta",
+      "label": "Show Find My Shade CTA",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "still_not_sure_label",
+      "label": "Label text",
+      "default": "Still Not Sure?"
+    },
+    {
+      "type": "text",
+      "id": "find_my_shade_text",
+      "label": "Button text",
+      "default": "FIND MY SHADE"
+    },
+    {
+      "type": "url",
+      "id": "find_my_shade_url",
+      "label": "Button URL",
+      "default": "/pages/find-my-shade"
+    },
+    {
+      "type": "header",
+      "content": "Toggle Labels"
+    },
+    {
+      "type": "text",
+      "id": "toggle_label_swatches",
+      "label": "Swatches label",
+      "default": "Swatches"
+    },
+    {
+      "type": "text",
+      "id": "toggle_label_models",
+      "label": "Models label",
+      "default": "Models"
+    },
+    {
+      "type": "header",
+      "content": "Empty State"
+    },
+    {
+      "type": "text",
+      "id": "empty_state_text",
+      "label": "Empty state message",
+      "default": "No shades match. Try 'All'."
+    },
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "muted_text_color",
+      "label": "Description color",
+      "default": "#555555"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Active pill background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Active pill text",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    }
+  ],
+  "blocks": [],
+  "presets": [
+    {
+      "name": "What Shade Am I?",
+      "settings": {
+        "heading": "What Shade Am I?",
+        "show_find_my_shade_cta": true,
+        "still_not_sure_label": "Still Not Sure?",
+        "find_my_shade_text": "FIND MY SHADE",
+        "find_my_shade_url": "/pages/find-my-shade",
+        "toggle_label_swatches": "Swatches",
+        "toggle_label_models": "Models",
+        "empty_state_text": "No shades match. Try 'All'.",
+        "bg_color": "#FFFFFF",
+        "text_color": "#000000",
+        "muted_text_color": "#555555",
+        "button_color": "#000000",
+        "button_text_color": "#FFFFFF",
+        "section_padding_top": 60,
+        "section_padding_bottom": 60
+      }
+    }
+  ]
+}
+{% endschema %}
