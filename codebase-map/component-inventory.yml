@@ -3655,6 +3655,106 @@ sections:
       - slideshow.liquid
       - product-recommendations.liquid
       - multicolumn.liquid
+  - file: sections/new-section.liquid
+    name: new-section
+    label: What Shade Am I?
+    visual_role: What Shade Am I? section
+    settings:
+      - type: header
+      - id: heading
+        type: text
+        label: Heading
+      - type: header
+      - id: show_find_my_shade_cta
+        type: checkbox
+        label: Show Find My Shade CTA
+      - id: still_not_sure_label
+        type: text
+        label: Label text
+      - id: find_my_shade_text
+        type: text
+        label: Button text
+      - id: find_my_shade_url
+        type: url
+        label: Button URL
+      - type: header
+      - id: toggle_label_swatches
+        type: text
+        label: Swatches label
+      - id: toggle_label_models
+        type: text
+        label: Models label
+      - type: header
+      - id: empty_state_text
+        type: text
+        label: Empty state message
+      - type: header
+      - id: bg_color
+        type: color
+        label: Background color
+      - id: text_color
+        type: color
+        label: Text color
+      - id: muted_text_color
+        type: color
+        label: Description color
+      - id: button_color
+        type: color
+        label: Active pill background
+      - id: button_text_color
+        type: color
+        label: Active pill text
+      - id: section_padding_top
+        type: range
+        label: Top padding
+      - id: section_padding_bottom
+        type: range
+        label: Bottom padding
+    blocks: []
+    max_blocks: null
+    templates_allowed:
+      - "*"
+    presets:
+      - What Shade Am I?
+    uses_image: true
+    uses_video: false
+    uses_slider: false
+    uses_grid: false
+    uses_tabs: false
+    uses_accordion: false
+    uses_form: false
+    layout_type: block
+    mockup_keywords:
+      - shade finder
+      - foundation match
+      - skin tone carousel
+      - swatch toggle
+      - model view
+      - color filter
+      - beauty shade selector
+      - metaobject carousel
+      - pill filter
+      - shade quiz
+    when_to_use: Use this section when a mockup shows an interactive shade-matching or skin-tone selector with a
+      swatch/model view toggle, pill-based category filters (bronzer, blush, highlighter, etc.), and a carousel of shade
+      entries driven by metaobject data.
+    when_to_create_new: Create a new section if the mockup requires a quiz-style multi-step flow, product-variant-based
+      shade data instead of metaobjects, a grid layout without a carousel, or filter categories that differ
+      significantly from bronzer/blush/highlighter/color-correct.
+    requires_new_section_if:
+      - Shade data comes from product variants or collections rather than a metaobject definition named agent_shade_v6
+      - The UI uses a multi-step quiz or recommendation engine instead of a toggle + filter approach
+      - The layout is a static grid with no carousel or swipe interaction
+      - Filter taxonomy includes categories beyond bronzer, blush, highlighter, and color correct
+      - A secondary skin-undertone axis filter (cool/warm/neutral) is required alongside the usage filter
+      - The section needs to embed a third-party shade-matching tool or iframe
+      - Model images and swatch images are managed outside of metaobjects (e.g., hardcoded blocks or product media)
+    similar_sections:
+      - sections/shade-finder.liquid
+      - sections/foundation-finder.liquid
+      - sections/skin-tone-selector.liquid
+      - sections/product-shade-carousel.liquid
+      - sections/color-match.liquid
 snippets:
   - file: snippets/component-article-card.liquid
     name: component-article-card
@@ -4357,6 +4457,14 @@ assets:
       registers_elements: []
       listens_events: []
       minified_vendor: false
+    - file: assets/section-what-shade.js
+      name: section-what-shade.js
+      size_lines: 186
+      exports_class: []
+      registers_elements: []
+      listens_events:
+        - click
+        - resize
   css:
     - file: assets/cart.css
       name: cart.css
@@ -4487,3 +4595,6 @@ assets:
     - file: assets/swiper7.4.1.min.css
       name: swiper7.4.1.min.css
       size_lines: 13
+    - file: assets/section-what-shade.css
+      name: section-what-shade.css
+      size_lines: 473
