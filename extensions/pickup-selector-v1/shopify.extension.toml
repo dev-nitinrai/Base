@@ -1,0 +1,18 @@
+api_version = "2026-01"
+
+[[extensions]]
+name = "Pickup Selector"
+handle = "pickup-selector-v1"
+type = "ui_extension"
+
+[[extensions.targeting]]
+module = "./src/Checkout.tsx"
+target = "purchase.checkout.cart-line-item.render-after"
+
+[[extensions.metafields]]
+namespace = "hammermade_pickup"
+key = "enabled"
+
+[[extensions.metafields]]
+namespace = "hammermade_pickup"
+key = "locations"
