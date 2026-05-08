@@ -1,0 +1,8 @@
+{
+  "pickup": {
+    "checkbox_label": "Pick up this item from the store",
+    "dropdown_label": "Select pickup location",
+    "ship_option": "Ship to address",
+    "unavailable": "Pickup is not available for this item"
+  }
+}
